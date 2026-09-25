@@ -1,3 +1,6 @@
 allowBuilds:
   sharp: false
   unrs-resolver: false
+# 本机（Windows / E: 盘）环境下 isolated 符号链接创建不稳定，
+# 使用 hoisted 扁平 node_modules，保证 pnpm install / pnpm dev 可复现。
+nodeLinker: hoisted
