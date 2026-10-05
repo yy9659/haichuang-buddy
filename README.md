@@ -1,101 +1,112 @@
 <div align="center">
 
-<img src="docs/images/readme-banner.svg" alt="海创Buddy：一个人，也可以拥有一支AI经营团队" width="100%" />
+<img src="docs/images/readme-banner.svg" alt="海创Buddy：一个人，也可以拥有一支 AI 经营团队" width="100%" />
 
 # 海创Buddy · Haichuang Buddy
 
 ### 一个人，也可以拥有一支 AI 经营团队。
 
-**面向连江海产 OPC 商户的 AI 经营工作台**
+面向海产小商户与 OPC 个体经营者的 AI 经营工作台。<br />
+用一个经营目标，连接商品、品牌、推广、答疑、直播准备与销售复盘。
 
-从商品实拍与档案出发，组织推广、答疑、直播准备和经营复盘。
+[![CI](https://github.com/yy9659/haichuang-buddy/actions/workflows/ci.yml/badge.svg)](https://github.com/yy9659/haichuang-buddy/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-22D3EE?style=flat-square)](LICENSE) ![Next.js](https://img.shields.io/badge/Next.js-16-111827?style=flat-square&logo=nextdotjs) ![React](https://img.shields.io/badge/React-19-149ECA?style=flat-square&logo=react) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
 
-![Next.js](https://img.shields.io/badge/Next.js-16-111827?style=flat-square&logo=nextdotjs)
-![React](https://img.shields.io/badge/React-19-149ECA?style=flat-square&logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
-![Status](https://img.shields.io/badge/项目状态-可演示原型-0E7490?style=flat-square)
-
-[核心能力](#核心能力) · [协作流程](#协作流程) · [快速启动](#快速启动) · [参赛演示](#参赛演示) · [技术架构](#技术架构) · [项目文档](#项目文档)
+[界面预览](#界面预览) · [核心功能](#核心功能) · [快速启动](#快速启动) · [部署指南](docs/DEPLOYMENT.md) · [技术架构](#技术架构) · [参与贡献](CONTRIBUTING.md)
 
 </div>
 
 ---
 
-## 为什么做这个作品
+## 项目介绍
 
-一家海产小店，经营者往往要同时介绍商品、制作推广、回复顾客、准备直播和记录销售。商品资料、文案、顾客问题与经营记录分散在不同环节，重复整理耗时，也容易出现信息不一致。
+一家海产小店的经营者，往往要同时介绍商品、制作推广、回复顾客、准备直播和记录销售。海创Buddy把这些工作连接到同一个经营目标：经营大脑读取商户资料与已有成果，制定计划；商户确认后，工作流按依赖协调六类专业 Agent，记录过程并保存结果。
 
-**海创Buddy把这些工作放进同一个经营目标中。** 经营大脑读取商户资料和已有成果，制定任务计划；商户确认后，工作流按依赖协调六类专业 Agent。每个岗位有对应的职责、输入和输出，商户能查看执行状态、复用成果、修改内容，并据销售记录决定下一步。
+**一张产品图，跑通一场生意。** 从商品照片与已核对的价格、规格出发，生成推广内容、制作可下载海报、准备有来源的答复，再结合销售记录安排下一步行动。
 
-> **一张产品图，跑通一场生意。**
->
-> 本作品以商品实拍、已核对的档案和商户确认作为起点，演示一轮经营准备与复盘。
+当前项目处于应用原型阶段，已提供可运行的商户端与管理端，支持本地持久化和远程 PostgreSQL。AI 输出由商户核对，真实发布与经营决策由商户完成。
 
-作品通过 AI 辅助编程（Vibe Coding）开发，围绕 **OPC 超级个体** 与 **连江海洋经济** 场景参加福州理工学院“移动杯·Work Buddy”AI创新大赛应用赛道。
+## 界面预览
 
-## 核心能力
+### 商户工作台
+
+经营大脑、当前目标、步骤进度与六个岗位入口集中展示，支持检索商品、素材和历史任务。
+
+![商户工作台：AI 经营大脑、当前经营目标与六岗位入口](docs/images/dashboard.png)
+
+<details>
+<summary><strong>查看营销海报工作区</strong> · 文案编辑、设计预览与 PNG 下载</summary>
+
+![推广素材：商品实拍、海报文案、档案价格与海报预览](docs/images/poster-studio.png)
+
+海报保留商品实拍与档案价格。初始排版、AI 设计和可选的 AI 创意背景各有明确入口；下载前由商户核对。
+
+</details>
+
+<details>
+<summary><strong>查看平台管理端</strong> · 指挥大屏、运行监控与公共知识管理</summary>
+
+![平台管理指挥大屏：海产品类、任务与渠道的可视化展示](docs/images/admin-dashboard.png)
+
+这张截图选择了“演示展示”：128 家、3,450 份、1,280 次及图表比例属于示例数据。管理端可切换到平台实际记录；示例数字不代表实际用户规模或经营成果。
+
+</details>
+
+## 核心功能
 
 ### 一个经营大脑，六类专业岗位
 
-| 岗位 | 给商户做什么 | 页面 |
+| 岗位 | 主要能力 | 页面 |
 | :--- | :--- | :--- |
-| **商品经理** | 管理商品图片、价格、规格与库存；分析商品，整理卖点、人群和使用场景 | [商品中心](src/app/(app)/products/) |
-| **品牌经理** | 整理店铺定位、店主表达偏好，生成可编辑、可确认的品牌档案 | [品牌中心](src/app/(app)/brand/) |
-| **内容运营** | 按商品、品牌、渠道和形式生成文案；提供适配的分镜、口播或图文建议；设计并下载营销海报 | [推广素材](src/app/(app)/content/) |
-| **智能客服** | 模拟顾客提问，检索商户知识、展示回答来源；记录资料不足与人工确认需求 | [答疑助手](src/app/(app)/customer-service/) |
-| **直播导演** | 模拟观众问题、提供回答建议，练习口播并按保存的文字生成复盘评分 | [直播彩排](src/app/(app)/live/) |
-| **经营分析师** | 记录与导入销售，汇总商品和渠道表现；给出附数据依据的 AI 建议与下一步入口 | [经营复盘](src/app/(app)/analytics/) |
+| **商品经理** | 管理图片、价格、规格与库存；生成商品理解、卖点、人群与使用场景 | `/products` |
+| **品牌经理** | 整理店铺定位与店主表达偏好，生成可编辑、可确认的品牌档案 | `/brand` |
+| **内容运营** | 按渠道与形式生成文案、分镜、口播或图文建议；设计并下载营销海报 | `/content` |
+| **智能客服** | 模拟顾客提问，检索商户知识并展示来源；记录资料不足与人工确认需求 | `/customer-service` |
+| **直播导演** | 模拟观众问题、提供回答建议，保存练习口播并生成文字评分与改进建议 | `/live` |
+| **经营分析师** | 汇总销售、商品与渠道表现，生成附数据依据的 AI 建议与下一步入口 | `/analytics` |
 
-工作台使用岗位名称，部分侧栏使用业务模块名称，两者指向同一页面。
+工作台使用岗位名称，侧栏使用业务模块名称，两者指向同一页面。
 
-### 值得看清的四个成果
+### 从资料到可用结果
 
-| 可交付的营销海报 | 可核对的知识答疑 |
-| :--- | :--- |
-| **文案 → AI设计 → 商户核对 → PNG下载**。保留商品实拍与档案价格，支持一句话调整设计、竖版与方形尺寸，以及可选的通义万相创意背景。 | **问题 → 知识检索 → 回答与来源**。展开来源可查看文档与摘录；依据不足时提示人工确认，形成待补知识。 |
-| **开播前的口播练习** | **销售记录带来的下一步** |
-| **观众问题 → 导演建议 → 保存口播 → 文字评分**。本地摄像头预览、浏览器语音转写或直接输入，结束后查看改进建议。 | **记账/导入 → 程序汇总 → AI解读 → 商户行动**。建议能展开数据依据，销售修改后会提示更新旧建议。 |
+- **目标规划与执行**：商户确认计划后执行，支持依赖检查、成果复用、步骤跟踪、历史任务与失败重试。
+- **营销海报**：文案驱动设计，支持一句话调整、竖版与方形 PNG 下载；通义万相可按需生成创意背景，商品照片保持实拍。
+- **知识答疑**：知识切片、向量检索、回答引用与来源摘录；资料不足时提示人工确认并记录待补知识。
+- **直播准备**：浏览器摄像头预览、语音转写或手工口播输入，按保存的文字生成练习反馈。
+- **销售记录与建议**：记一笔销售、粘贴表格、导入 Excel/CSV，支持列映射、预览核对与明细编辑；销售变化后提示更新旧建议。
+- **平台管理**：管理员身份分流、任务成功与失败监控、耗时与脱敏错误摘要、公共知识资料的核验与发布。
 
-### 工作台与平台管理
-
-- **商户工作台**：经营目标、真实步骤进度、历史任务、失败重试，以及商品、素材和任务的顶部搜索。
-- **销售记录**：随手记一笔、粘贴表格、导入 Excel/CSV；列映射与预览核对、明细编辑、独立演示记录、历史经营回顾及下载。
-- **平台管理端**：管理员身份分流，指挥大屏、AI任务监控、公共知识资料的来源、核验、发布与归档管理。
-- **运行记录**：追踪任务成功、失败、耗时与脱敏错误摘要；演示统计和平台实际记录分别标注。
-
-## 协作流程
+### 协作流程
 
 ```mermaid
 flowchart TD
-    Goal[商户提出经营目标] --> Brain[经营大脑：读取现状并制定计划]
-    Brain --> Confirm[商户确认]
-    Confirm --> Workflow[工作流：依赖执行 · 成果复用 · 状态记录 · 重试]
+    Goal[商户提出经营目标] --> Brain[经营大脑读取资料与已有成果]
+    Brain --> Plan[制定计划：职责、依赖与复用]
+    Plan --> Confirm[商户确认]
+    Confirm --> Workflow[工作流协调执行并记录状态]
     Workflow --> Product[商品经理]
     Workflow --> Brand[品牌经理]
-    Workflow --> Content[内容运营]
+    Product --> Content[内容运营]
+    Brand --> Content
+    Content --> Poster[文案、海报与商户核对]
     Workflow --> Customer[智能客服]
     Workflow --> Live[直播导演]
-    Workflow --> Analyst[经营分析师]
-    Product --> Content
-    Brand --> Content
-    Content --> Poster[商户主动设计、核对与下载海报]
-    Knowledge[商品资料与商户私有知识] --> Customer
+    Knowledge[商品资料与商户知识] --> Customer
     Knowledge --> Live
-    Sales[商户记录或导入销售] --> Analyst
-    Analyst --> Action[商户选择下一步行动]
+    Workflow --> Analyst[经营分析师]
+    Sales[销售记录与程序汇总] --> Analyst
+    Analyst --> Action[有数据依据的下一步建议]
     Action --> Goal
 ```
 
-**规划和执行分开。** 经营大脑先生成计划，商户确认后才执行。实际岗位和步骤取决于目标、依赖与已有资料；各 Agent 可以共用同一底层模型。海报设计和销售录入保留明确的商户操作。
-
-**事实和建议分开。** 商品事实来自商户档案；销售金额由程序计算；模型负责理解、生成与解释。回答引用、结构化输出和销售依据经过校验，模型失败会明确提示并保留已有成果。
+各 Agent 可以共用同一底层模型，区别在于职责、提示词、输入输出契约与执行流程。实际岗位和步骤随经营目标与资料状态变化。商品事实来自商户档案，销售金额由程序计算，模型负责理解、生成与解释。
 
 ## 快速启动
 
-推荐使用 **Node.js 24** 与 **pnpm 12.6.0**（项目已声明 `packageManager`）。首次体验推荐本地 PGlite，免安装 PostgreSQL，重启后保留业务记录。
+### 环境要求
 
-### 1. 获取代码并安装依赖
+- **Node.js 24**
+- **pnpm 12.6.0**，版本已在 `package.json` 声明
+- 首次体验不需要单独安装 PostgreSQL，也不需要模型密钥
 
 ```bash
 git clone https://github.com/yy9659/haichuang-buddy.git
@@ -103,9 +114,9 @@ cd haichuang-buddy
 pnpm install --frozen-lockfile
 ```
 
-尚未安装 pnpm 时可运行 `npm install -g pnpm@12.6.0`。
+尚未安装 pnpm 时，运行 `npm install -g pnpm@12.6.0`。
 
-### 2. 创建本地配置
+### 创建配置
 
 Windows PowerShell：
 
@@ -121,88 +132,100 @@ if [ ! -f .env.local ]; then
 fi
 ```
 
-编辑 `.env.local`，先用以下配置启动：
+在 `.env.local` 中设置：
 
 ```dotenv
 DATA_SOURCE=local
 AI_PROVIDER=mock
 ```
 
-`mock` 模型模式可体验界面与流程，新生成内容会带演示标记。全新本地库自动建表；注册后填写自己的店铺、商品与品牌资料。常规启动无需运行种子或重置命令。
-
-### 3. 启动
-
 ```bash
 pnpm dev
 ```
 
-终端显示 `Ready` 后打开 **[localhost:3000](http://localhost:3000)**，注册并登录。下次启动只需进入项目目录执行 `pnpm dev`；按 `Ctrl+C` 停止服务。
+打开 **[http://localhost:3000](http://localhost:3000)**，注册并登录。全新本地数据库会自动建表；随后填写店铺、商品与品牌资料。下次只需执行 `pnpm dev`，按 `Ctrl+C` 停止。
 
-### 4. 使用真实 AI
+`local` 模式默认把业务记录保存在 `.data/pgdata`，商品照片保存在 `.data/product-images`。`mock` 模型模式无需联网，新生成内容会带演示标记。常规启动无需执行种子或数据库重置命令。
 
-在 `.env.local` 修改以下两项并重启：
+### 接入真实 AI
+
+修改 `.env.local` 并重启服务：
 
 ```dotenv
 AI_PROVIDER=dashscope
 DASHSCOPE_API_KEY=your-dashscope-api-key
 ```
 
-真实模型接入 **阿里云百炼 / 通义千问**，包括文本生成、任务规划、商品图像理解和知识向量化。密钥留在服务端；具体模型、接口地域、超时及通义万相配置见 [环境模板](.env.example) 和 [技术与使用指南](docs/技术与使用指南.md)。网络、模型权限和额度需可用。
+已接入阿里云百炼 / 通义千问的文本、图像理解与向量化能力。可选通义万相用于海报创意背景；具体模型、接口地域与超时配置见 [环境模板](.env.example) 和 [技术与使用指南](docs/技术与使用指南.md#ai-模型)。真实调用需要有效密钥、相应模型权限、额度与服务端网络。
 
-### 两组独立配置
-
-| 配置 | 选项 | 控制什么 |
+| 配置 | 可用选项 | 作用 |
 | :--- | :--- | :--- |
-| `DATA_SOURCE` | `mock` / `local` / `db` | 业务数据：内存、本地 PGlite 或远程 PostgreSQL |
-| `AI_PROVIDER` | `mock` / `dashscope` | 模型输出：确定性演示或真实通义千问 |
+| `DATA_SOURCE` | `mock` / `local` / `db` | 内存示例、本地 PGlite 或远程 PostgreSQL |
+| `AI_PROVIDER` | `mock` / `dashscope` | 确定性示例或真实通义千问输出 |
 
-`DATA_SOURCE=mock` 重启还原；`local` 默认保存在 `.data/pgdata`。远程模式需配置 `DATABASE_URL` 并运行 `pnpm db:migrate`；商品图片使用 Supabase Storage。配置接受的其他模型提供方名称目前尚未实现，调用会明确报错。
+这两组配置相互独立。其他模型提供方名称目前仅预留，尚未实现，调用会明确提示。
 
-### 管理端
+### 管理员入口
 
-先注册管理员账号，再在 `.env.local` 设置并重启：
+先注册账号，然后配置白名单并重启：
 
 ```dotenv
 ADMIN_EMAILS=your-admin@example.com
 ```
 
-管理员登录进入 `/admin`，只显示平台管理界面。多个邮箱用逗号分隔；普通商户无法访问管理页面，相关操作由服务端重新校验权限。
+管理员登录进入 `/admin`。多个邮箱以逗号分隔；页面和服务端操作均校验管理员权限。
+
+## 部署
+
+项目支持 **Node.js 服务部署**，使用 Next.js 服务端接口、数据库和文件存储。
+
+```bash
+pnpm install --frozen-lockfile
+pnpm build
+pnpm start
+```
+
+部署方式、环境配置、HTTPS 反向代理、远程数据库迁移以及持久化目录说明见 **[部署指南](docs/DEPLOYMENT.md)**。
+
+- 单机体验：`DATA_SOURCE=local`，一个应用实例连接一个本地数据库目录。
+- 长期部署：可选择远程 PostgreSQL 与 Supabase Storage；AI 背景目录仍需要持久化存储。
+- 当前实现不适合静态网页托管；使用临时文件系统的平台前需调整文件存储与任务执行方式。
 
 ## 技术架构
 
-| 层次 | 使用技术与职责 |
+| 层级 | 技术 |
 | :--- | :--- |
-| 页面与交互 | Next.js 16 App Router、React 19、TypeScript |
-| 视觉 | Tailwind CSS 4、Radix/shadcn风格组件、Lucide、Recharts；深海主题与玻璃质感 |
-| AI | DashScope通义千问、可选通义万相；分岗位提示词与Zod结构化输出 |
-| 编排与检索 | 目标规划、任务依赖与复用、失败重试、知识切片与向量检索、引用校验 |
-| 数据与图片 | Drizzle ORM；PGlite / PostgreSQL；本地文件或Supabase Storage |
-| 质量检查 | TypeScript、ESLint、Vitest、数据库仓储集成测试、GitHub Actions |
+| 全栈框架 | Next.js 16 App Router、React 19、TypeScript |
+| 界面 | Tailwind CSS 4、Radix UI、Lucide、Recharts、Motion |
+| AI 与校验 | DashScope 通义千问、可选通义万相、Zod 结构化输出 |
+| 编排与检索 | 经营目标规划、工作流依赖与复用、失败重试、知识切片与向量检索、引用校验 |
+| 数据与存储 | Drizzle ORM、PGlite / PostgreSQL、本地文件 / Supabase Storage |
+| 开发与检查 | pnpm、ESLint、Vitest、GitHub Actions |
 
 ```text
 src/
-├── app/             商户、管理与认证页面；Route Handlers
-├── components/      业务组件与共享UI
+├── app/             商户端、管理端、认证页面与 Route Handlers
+├── components/      业务组件与共享 UI
 ├── actions/         Server Actions：输入校验与服务调用
 ├── services/        业务编排与权限边界
 ├── ai/
-│   ├── agents/      经营大脑与六岗位Agent
+│   ├── agents/      经营大脑与专业岗位 Agent
 │   ├── prompts/     分岗位提示词
-│   ├── schemas/     Zod输出契约
+│   ├── schemas/     Zod 输出契约
 │   ├── workflows/   依赖、复用、执行与重试
-│   └── provider/    Mock、DashScope与万相适配
-├── rag/             切片、检索、引用与知识缺口
-├── repositories/    数据访问接口与各数据源实现
+│   └── provider/    Mock、DashScope 与万相适配
+├── rag/             知识切片、检索、引用与缺口
+├── repositories/    数据访问接口与实现
 ├── db/              Schema、迁移与数据库网关
 ├── storage/         商品图片与创意背景存储
 └── analytics/       指标计算与销售分析依据
-docs/                使用指南、参赛脚本与展示素材
-scripts/             种子、验证与演示维护脚本
+docs/                功能、部署与资源说明
+scripts/             种子、验证与开发维护工具
 ```
 
-调用链：**页面 → Server Action / Route Handler → Service → Agent / Repository → 数据库**。模型凭据和数据库连接保留在服务端。
+调用链：**页面 → Server Action / Route Handler → Service → Agent / Repository → 数据库**。模型密钥与数据库连接保留在服务端。
 
-## 开发与检查
+## 开发与贡献
 
 ```bash
 pnpm typecheck
@@ -211,44 +234,34 @@ pnpm test
 pnpm build
 ```
 
-生产构建完成后使用 `pnpm start`。GitHub Actions对主分支提交及PR执行类型、Lint、单元测试与构建检查；自动检查使用Mock模式。
+GitHub Actions 在主分支提交与 Pull Request 时执行上述检查，使用 Mock 模式，无需仓库配置真实模型密钥。
 
-<details>
-<summary><strong>数据库测试与维护命令</strong></summary>
-
-| 命令 | 用途 |
-| :--- | :--- |
-| `pnpm test:db` | PGlite仓储集成测试；使用独立测试目录 |
-| `pnpm db:generate` / `pnpm db:check` | 生成 / 检查Drizzle迁移 |
-| `pnpm db:migrate` | 迁移远程PostgreSQL；本地启动自动迁移 |
-| `pnpm db:studio` | 数据库管理界面 |
-| `pnpm db:seed` | 写入或更新演示种子，适用于专门的演示数据环境 |
-| `pnpm demo:reset` | 重建指定本地演示库，会清除该目录的数据 |
-
-数据库测试前核对 `LOCAL_DB_DIR` 使用独立目录，避免指向正在使用的演示库。维护和重置前先停止服务并备份。正常启动与参赛录制都不需要重置现有数据库。
-
-</details>
+数据库集成测试、独立测试目录与维护工具用法见 [贡献指南](CONTRIBUTING.md)。问题、改进建议和 Pull Request 欢迎提交到 [GitHub Issues](https://github.com/yy9659/haichuang-buddy/issues) 与 [Pull Requests](https://github.com/yy9659/haichuang-buddy/pulls)。
 
 ## 项目文档
 
 | 文档 | 内容 |
 | :--- | :--- |
-| [技术与使用指南](docs/技术与使用指南.md) | 全部页面能力、海报操作、销售录入、模型配置、管理端口径与故障排查 |
-| [环境变量模板](.env.example) | 所有配置与默认模型；真实密钥填入未提交的`.env.local` |
+| [技术与使用指南](docs/技术与使用指南.md) | 页面能力、海报、销售、模型配置、管理端口径与故障排查 |
+| [部署指南](docs/DEPLOYMENT.md) | 本地生产运行、服务器部署、数据持久化、迁移与备份 |
+| [贡献指南](CONTRIBUTING.md) | 开发流程、目录边界、检查与独立数据库测试 |
+| [资源说明](docs/ASSETS.md) | 品牌文件、真实截图与替换方式 |
+| [环境变量模板](.env.example) | 配置项与默认模型；真实密钥填写在本地配置 |
+| [MIT 许可证](LICENSE) | 使用、修改与分发项目代码的许可条款 |
 
 ## 当前边界与后续方向
 
-当前是可运行、可演示的应用原型。推广文案、回答和经营建议由商户核对；实际发布与经营决策由商户完成。
-
-| 当前边界 | 后续方向 |
+| 当前能力边界 | 后续方向 |
 | :--- | :--- |
-| 销售来自记账、粘贴或导入 | 在获得授权后接入商户订单与销售系统 |
-| 客服与直播使用站内模拟 | 接入真实平台消息与评论，并完善人工接管 |
-| 公共资料可查阅，尚未自动进入私有检索 | 增加资料订阅、索引与来源版本管理 |
-| 评分读取口播文字，摄像头仅本地预览 | 增强练习反馈，并明确用户授权与数据处理范围 |
-| 尚无实际经营增收与节省成本的验证 | 通过真实商户试用，评估内容使用率、准备时间与建议效果 |
+| 销售来自记账、粘贴或导入 | 对接获得授权的订单与销售系统 |
+| 客服与直播使用站内模拟 | 对接真实消息与评论，完善人工接管 |
+| 公共资料可查阅，未自动进入私有检索 | 资料订阅、索引与来源版本管理 |
+| 彩排评分读取口播文字，摄像头为本地预览 | 更丰富的练习反馈与明确的数据授权 |
+| 尚无实际增收、转化或节省成本的验证 | 真实商户试用与使用效果评估 |
 
-`.env.local`、业务数据库、上传文件、包缓存和工具记忆均不作为公开仓库内容。备份本地业务记录时，同时保留数据库、商品图片和海报背景目录。
+## 许可证
+
+项目原创代码采用 **[MIT License](LICENSE)**，允许使用、修改和分发，包括商业用途，须保留版权与许可证声明。第三方依赖遵循各自许可证；品牌与图像资源说明见 [ASSETS](docs/ASSETS.md)。
 
 ---
 
@@ -256,8 +269,6 @@ pnpm build
 
 **海创Buddy · 让一个人的经营，有团队的分工。**
 
-问题与建议欢迎通过 [GitHub Issues](https://github.com/yy9659/haichuang-buddy/issues) 提交。
+[报告问题](https://github.com/yy9659/haichuang-buddy/issues) · [参与贡献](CONTRIBUTING.md) · [开始部署](docs/DEPLOYMENT.md)
 
 </div>
-
-本仓库目前未指定开源许可证。

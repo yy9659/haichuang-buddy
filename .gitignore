@@ -40,6 +40,18 @@
 /recordings/
 /video-output/
 
+# 本地创作稿、录制台词与内部开发计划
+/docs/COMPETITION_DEMO.md
+/docs/DEVELOPMENT_PLAN.md
+/docs/参赛成片剪辑指令与解说稿.md
+/docs/参赛视频纯解说稿.txt
+/docs/展示素材清单.md
+/docs/比赛彩排脚本_2026.md
+/docs/演示脚本.md
+/docs/答疑与直播彩排录制台词.md
+/docs/赛道B参赛视频脚本与创作说明.md
+/docs/鲍鱼版答疑与直播彩排录制台词.md
+
 # debug
 npm-debug.log*
 yarn-debug.log*
