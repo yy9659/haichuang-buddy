@@ -2,8 +2,6 @@ import { Compass, Quote, Sparkles } from "lucide-react";
 
 import { TagSection } from "@/components/common/tag-section";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import type { BrandProfile } from "@/types";
 
 /** 品牌定位卡片 */
@@ -19,17 +17,13 @@ export function BrandIdentityCard({ brand }: { brand: BrandProfile }) {
             <div className="flex flex-col">
               <span className="text-[13px] font-semibold">品牌定位</span>
               <span className="text-[11px] text-muted-foreground">
-                由品牌经理 Agent 基于 Product DNA 与老板数字分身生成
+                由商家核对后决定是否对外使用
               </span>
             </div>
           </div>
-          <Badge variant="soft">
-            完整度 {(brand.completeness * 100).toFixed(0)}%
-          </Badge>
         </div>
 
         <p className="text-[15px] leading-6 font-medium">{brand.positioning}</p>
-        <Progress value={brand.completeness * 100} />
 
         <div className="flex items-start gap-2 rounded-lg border border-primary/15 bg-primary-soft/60 px-3 py-2.5">
           <Quote className="mt-0.5 size-3.5 shrink-0 text-primary" />
@@ -60,7 +54,7 @@ export function BrandValueGrid({ brand }: { brand: BrandProfile }) {
           <div className="flex flex-col">
             <span className="text-[13px] font-semibold">品牌资产</span>
             <span className="text-[11px] text-muted-foreground">
-              所有内容与客服 Agent 生成时必须遵循的品牌约束
+              供后续内容生成参考的品牌表达
             </span>
           </div>
         </div>

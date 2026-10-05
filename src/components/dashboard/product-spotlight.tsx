@@ -1,4 +1,5 @@
-import { Package, Plus } from "lucide-react";
+import { Package } from "lucide-react";
+import Link from "next/link";
 
 import { ProductThumb } from "@/components/common/product-thumb";
 import { SectionCard } from "@/components/common/section-card";
@@ -29,9 +30,8 @@ export function ProductSpotlight({
       icon={<Package className="size-4 text-primary" />}
       moreHref="/products"
       action={
-        <Button variant="soft" size="sm">
-          <Plus />
-          添加商品
+        <Button variant="soft" size="sm" asChild>
+          <Link href="/products">管理商品</Link>
         </Button>
       }
     >
@@ -39,6 +39,7 @@ export function ProductSpotlight({
         <ProductThumb
           name={product.name}
           category={product.category}
+          imageUrl={product.imageUrl}
           className="size-20 shrink-0"
         />
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">

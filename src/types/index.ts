@@ -5,5 +5,7 @@ export * from "./product";
 export * from "./brand";
 export * from "./content";
 export * from "./live";
+export * from "./knowledge";
 export * from "./conversation";
 export * from "./analytics";
+export * from "./sales";

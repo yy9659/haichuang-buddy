@@ -7,6 +7,14 @@ interface AgentStatusBadgeProps {
   status: AgentStatus;
   /** 是否显示状态圆点 */
   withDot?: boolean;
+  /**
+   * 覆盖默认状态文案。
+   *
+   * 用于同一状态在不同员工身上有不同语义的场景：`completed` 对经营类员工
+   * 是「已完成」，对客服这种**常驻服务型**员工要说「最近服务正常」——
+   * 商家关心的不是那次任务，而是服务现在正不正常。
+   */
+  label?: string;
   className?: string;
 }
 
@@ -14,6 +22,7 @@ interface AgentStatusBadgeProps {
 export function AgentStatusBadge({
   status,
   withDot = true,
+  label,
   className,
 }: AgentStatusBadgeProps) {
   const meta = AGENT_STATUS_META[status];
@@ -30,7 +39,7 @@ export function AgentStatusBadge({
           )}
         />
       ) : null}
-      {meta.label}
+      {label ?? meta.label}
     </Badge>
   );
 }

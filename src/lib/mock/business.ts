@@ -5,6 +5,7 @@ export const MOCK_BUSINESS: BusinessProfile = {
   id: "biz_demo_001",
   name: "连江海创海产商贸",
   shortName: "海创海产",
+  description: "主营连江海产，为家庭餐桌提供可信的选购与烹饪建议。",
   owner: "陈老板",
   location: "福建省福州市连江县黄岐半岛",
   mainCategory: "连江海产品",

@@ -29,7 +29,7 @@ export function StatCard({
   const classes = TONE_CLASSES[tone];
 
   return (
-    <Card className={cn("transition-shadow hover:shadow-float", className)}>
+    <Card className={cn("transition-[box-shadow,transform] hover:-translate-y-0.5 hover:shadow-float", className)}>
       <CardContent className="flex flex-col gap-3 pt-4">
         <div className="flex items-center justify-between">
           <span className="text-[13px] font-medium text-muted-foreground">

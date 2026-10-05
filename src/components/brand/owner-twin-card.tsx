@@ -15,7 +15,7 @@ export function BrandStoryCard({ brand }: { brand: BrandProfile }) {
           <div className="flex flex-col">
             <span className="text-[13px] font-semibold">品牌故事</span>
             <span className="text-[11px] text-muted-foreground">
-              用于详情页首屏、直播开场与内容 IP 内容
+              商家确认后可用于详情页、视频与店铺介绍
             </span>
           </div>
         </div>

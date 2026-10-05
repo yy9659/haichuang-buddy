@@ -1,0 +1,1 @@
+ALTER TYPE "public"."conversation_channel" ADD VALUE 'simulator' BEFORE 'douyin';

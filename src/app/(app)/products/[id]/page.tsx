@@ -7,56 +7,64 @@ import {
   MapPin,
   Ruler,
   Snowflake,
-  Sparkles,
   Timer,
   TrendingUp,
-  Upload,
 } from "lucide-react";
 
-import { EmptyState } from "@/components/common/empty-state";
 import { PageHeader } from "@/components/common/page-header";
 import { ProductThumb } from "@/components/common/product-thumb";
 import { SectionCard } from "@/components/common/section-card";
+import { ProductAnalysisButton } from "@/components/products/product-analysis-button";
+import { ProductAnalysisPanel } from "@/components/products/product-analysis-panel";
 import { ProductAttributes } from "@/components/products/product-attributes";
-import { ProductDnaPanel } from "@/components/products/product-dna-panel";
+import { ProductDeleteDialog } from "@/components/products/product-delete-dialog";
+import { ProductEditDialog } from "@/components/products/product-form-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MOCK_PRODUCTS, MOCK_PRODUCT_DNA } from "@/lib/mock";
+import { unwrapOrThrow } from "@/lib/result";
 import { PRODUCT_ANALYSIS_META } from "@/lib/status-meta";
 import { formatCompact, formatCurrency } from "@/lib/utils";
+import { getProductDetailView, listProductIds } from "@/services";
 
 interface ProductDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
-export function generateStaticParams() {
-  return MOCK_PRODUCTS.map((product) => ({ id: product.id }));
+/**
+ * 预渲染已有商品详情页；未列出的 id 按需渲染（新商品、mock 新增商品都能直接访问）。
+ *
+ * 这里的 try/catch 是刻意的：`DATA_SOURCE=db` 时构建机上可能没有可用数据库连接，
+ * 此时不应让 `pnpm build` 失败 —— 拿不到 id 就退化成「全部按需渲染」。
+ */
+export async function generateStaticParams() {
+  const ids = await listProductIds();
+  return ids.ok ? ids.data.map((id) => ({ id })) : [];
 }
 
 export async function generateMetadata({
   params,
 }: ProductDetailPageProps): Promise<Metadata> {
   const { id } = await params;
-  const product = MOCK_PRODUCTS.find((item) => item.id === id);
+  const result = await getProductDetailView(id);
+  const product = result.ok ? result.data?.product : undefined;
   return {
     title: product
-      ? `${product.name} · Product DNA · 海创Buddy`
-      : "Product DNA · 海创Buddy",
+      ? `${product.name} · 商品理解 · 海创Buddy`
+      : "商品理解 · 海创Buddy",
   };
 }
 
-/** Product DNA 页面：商品基础资料 + 商品经理 Agent 的结构化输出 */
 export default async function ProductDetailPage({
   params,
 }: ProductDetailPageProps) {
   const { id } = await params;
-  const product = MOCK_PRODUCTS.find((item) => item.id === id);
+  const view = unwrapOrThrow(await getProductDetailView(id));
 
-  if (!product) {
+  if (!view) {
     notFound();
   }
 
-  const dna = MOCK_PRODUCT_DNA[product.id];
+  const { product, dna, imageUploadEnabled, analysis } = view;
   const statusMeta = PRODUCT_ANALYSIS_META[product.analysisStatus];
 
   const attributes = [
@@ -92,7 +100,7 @@ export default async function ProductDetailPage({
     <>
       <PageHeader
         title={product.name}
-        description={product.description}
+        description={product.description || "暂无商品描述"}
         badge={<Badge variant={statusMeta.tone}>{statusMeta.label}</Badge>}
         actions={
           <>
@@ -102,14 +110,25 @@ export default async function ProductDetailPage({
                 返回商品中心
               </Link>
             </Button>
-            <Button variant="soft">
-              <Upload />
-              替换图片
-            </Button>
-            <Button>
-              <Sparkles />
-              {dna ? "重新分析" : "AI 分析商品"}
-            </Button>
+            <ProductEditDialog
+              product={product}
+              imageUploadEnabled={imageUploadEnabled}
+            />
+            <ProductDeleteDialog
+              product={product}
+              redirectToList
+              triggerVariant="outline"
+              className="text-destructive"
+            />
+            {/* 唯一触发 Product Agent 的入口；实际调用走 Server Action，页面不接触 Agent */}
+            <ProductAnalysisButton
+              productId={product.id}
+              analysisStatus={product.analysisStatus}
+              hasDna={Boolean(dna)}
+              {...(analysis.provider.usable
+                ? {}
+                : { disabledReason: analysis.provider.reason ?? "模型通道不可用" })}
+            />
           </>
         }
       />
@@ -121,6 +140,7 @@ export default async function ProductDetailPage({
               <ProductThumb
                 name={product.name}
                 category={product.category}
+                imageUrl={product.imageUrl}
                 className="aspect-4/3 w-full"
               />
               <div className="flex items-baseline gap-2">
@@ -128,12 +148,14 @@ export default async function ProductDetailPage({
                   {formatCurrency(product.price)}
                 </span>
                 <span className="text-[12px] text-muted-foreground">
-                  / {product.unit}
+                  / {product.unit || "份"}
                 </span>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 <Badge variant="soft">{product.category}</Badge>
-                <Badge variant="soft">{product.subCategory}</Badge>
+                {product.subCategory ? (
+                  <Badge variant="soft">{product.subCategory}</Badge>
+                ) : null}
                 {product.tags.map((tag) => (
                   <Badge key={tag} variant="secondary">
                     {tag}
@@ -146,7 +168,7 @@ export default async function ProductDetailPage({
             </div>
           </SectionCard>
 
-          <SectionCard title="经营表现" description="近 7 天累计（Mock）">
+          <SectionCard title="经营表现" description="近 7 天累计">
             <div className="grid grid-cols-3 gap-2">
               {[
                 { id: "views", label: "浏览量", value: product.metrics.views },
@@ -171,30 +193,14 @@ export default async function ProductDetailPage({
                 </div>
               ))}
             </div>
+            <p className="mt-3 border-t border-border/70 pt-2.5 text-[11px] leading-5 text-muted-foreground">
+              经营数据由直播与客服模块汇总，本阶段新建商品从 0 开始累计。
+            </p>
           </SectionCard>
         </div>
 
         <div className="min-w-0">
-          {dna ? (
-            <ProductDnaPanel dna={dna} />
-          ) : (
-            <SectionCard
-              title="Product DNA"
-              description="商品经理 Agent 的结构化输出"
-            >
-              <EmptyState
-                title="尚未生成 Product DNA"
-                description="点击右上角「AI 分析商品」，商品经理 Agent 将读取图片与资料，输出结构化 DNA 供其他 AI 员工复用。"
-                icon={<Sparkles className="size-4" />}
-                action={
-                  <Button size="sm" className="mt-1">
-                    <Sparkles />
-                    立即分析
-                  </Button>
-                }
-              />
-            </SectionCard>
-          )}
+          <ProductAnalysisPanel product={product} dna={dna} analysis={analysis} />
         </div>
       </div>
     </>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Boxes, Eye, MessageSquare, Sparkles } from "lucide-react";
+import { ArrowRight, Boxes, Eye, MessageSquare } from "lucide-react";
 
 import { ProductThumb } from "@/components/common/product-thumb";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ export function ProductCard({ product }: { product: Product }) {
           <ProductThumb
             name={product.name}
             category={product.category}
+            imageUrl={product.imageUrl}
             className="size-16 shrink-0"
             showLabel={false}
           />
@@ -96,13 +97,9 @@ export function ProductCard({ product }: { product: Product }) {
             更新于 {product.updatedAt}
           </span>
           <span className="flex shrink-0 items-center gap-1.5">
-            <Button variant="ghost" size="sm" className="h-7 px-2 text-[12px]">
-              <Sparkles className="size-3.5" />
-              AI 分析
-            </Button>
             <Button variant="soft" size="sm" className="h-7 px-2 text-[12px]" asChild>
               <Link href={`/products/${product.id}`}>
-                查看 DNA
+                查看详情
                 <ArrowRight className="size-3.5" />
               </Link>
             </Button>

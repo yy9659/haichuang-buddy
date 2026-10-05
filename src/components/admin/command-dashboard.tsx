@@ -1,0 +1,73 @@
+"use client";
+
+import { useState, type ReactNode } from "react";
+import Link from "next/link";
+import { Activity, ArrowUpRight, AudioLines, Building2, Cpu, FileImage, MapPin, Radio, ShieldCheck } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { AdminPanel, AGENT_LABELS, TaskStatus, adminTime, taskDuration } from "./admin-panel";
+import { buildPlatformTrend } from "@/lib/admin";
+import { cn } from "@/lib/utils";
+import type { PlatformSnapshot } from "@/types/admin";
+
+const COLORS = ["#22d3ee", "#3b82f6", "#818cf8", "#2dd4bf", "#94a3b8"];
+const tooltipStyle = { background: "#0c233c", border: "1px solid #22465f", borderRadius: 12, color: "#e2e8f0", fontSize: 12 };
+const demoCategories = [{ name: "连江手工鱼丸", value: 40 }, { name: "连江鲍鱼", value: 30 }, { name: "丁香鱼", value: 20 }, { name: "海带紫菜", value: 10 }];
+const demoChannels = [{ name: "抖音脚本", value: 45 }, { name: "小红书图文", value: 35 }, { name: "微信答疑", value: 20 }];
+function Kpi({ title, value, unit, hint, icon, index }: { title: string; value: string; unit: string; hint: string; icon: ReactNode; index: number }) {
+  return <div className="group relative overflow-hidden rounded-2xl border border-cyan-400/20 bg-gradient-to-br from-[#123750] via-[#102b45] to-[#0b2039] px-5 py-5 shadow-[0_6px_24px_rgba(0,0,0,0.15)]">
+    <div aria-hidden className="absolute right-0 bottom-0 h-24 w-40 bg-[radial-gradient(ellipse_at_bottom_right,rgba(34,211,238,0.12),transparent_70%)]" />
+    <div aria-hidden className="absolute right-0 top-0 rounded-bl-xl border-b border-l border-cyan-400/15 px-2.5 py-1 font-mono text-[9px] tracking-widest text-cyan-300/40">0{index + 1}</div>
+    <div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-300 [&_svg]:size-5">{icon}</div><p className="text-xs text-slate-300">{title}</p></div>
+    <p className="mt-4 flex items-baseline gap-2"><span className="font-mono text-4xl font-semibold tracking-tight text-white [text-shadow:0_0_22px_rgba(34,211,238,0.18)] xl:text-5xl">{value}</span><span className="text-xs text-cyan-200/70">{unit}</span></p>
+    <p className="mt-3 text-[11px] text-slate-400">{hint}</p>
+    <div aria-hidden className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-blue-600/80 via-cyan-400/80 to-transparent" />
+  </div>;
+}
+function EmptyChart() { return <div className="flex h-[225px] items-center justify-center rounded-xl border border-dashed border-cyan-400/15 text-sm text-slate-500">暂无平台记录</div>; }
+
+export function CommandDashboard({ snapshot, dataSource }: { snapshot: PlatformSnapshot; dataSource: string }) {
+  const [demo, setDemo] = useState(true);
+  const denominator = snapshot.completed + snapshot.failed;
+  const success = denominator ? `${(snapshot.completed / denominator * 100).toFixed(1)}` : "—";
+  const categories = demo ? demoCategories : snapshot.categories, channels = demo ? demoChannels : snapshot.channels;
+  const categoryTotal = categories.reduce((sum, row) => sum + row.value, 0);
+  const realTrend = buildPlatformTrend(snapshot.trendTasks, new Date(snapshot.updatedAt));
+  const trend = demo ? realTrend.map((row, i) => ({ ...row, peak: [8, 12, 10, 16, 20, 18, 26][i], responseSeconds: [2.2, 2, 1.8, 2.1, 1.6, 1.7, 1.5][i] })) : realTrend;
+  return <div className="space-y-5">
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-cyan-400/10 bg-[#0b2138]/80 px-4 py-3">
+      <div className="flex items-center gap-2.5"><span className="relative flex size-2"><span className="absolute inline-flex size-full rounded-full bg-cyan-400/50 motion-safe:animate-ping" /><span className="relative size-2 rounded-full bg-cyan-400" /></span><span className="text-xs text-cyan-200">全域协同 · 智能赋能</span><span className={cn("rounded-md border px-2 py-1 text-[10px]", demo ? "border-amber-400/20 bg-amber-400/10 text-amber-200" : "border-blue-400/20 bg-blue-400/10 text-blue-200")}>{demo ? "演示数据 · 非实际业绩" : dataSource === "mock" ? "平台记录 · 内存演示环境" : "平台实际记录"}</span></div>
+      <div role="group" aria-label="大屏数据来源" className="flex rounded-lg border border-white/10 bg-[#06172a] p-1">{[{ value: true, label: "演示展示" }, { value: false, label: "真实统计" }].map(mode => <button key={mode.label} aria-pressed={demo === mode.value} onClick={() => setDemo(mode.value)} className={cn("rounded-md px-4 py-1.5 text-xs transition-colors", demo === mode.value ? "bg-cyan-500/20 text-cyan-100" : "text-slate-400 hover:text-white")}>{mode.label}</button>)}</div>
+    </div>
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <Kpi index={0} title={demo ? "已赋能海产 OPC 商户" : "平台已注册商户"} value={demo ? "128" : snapshot.merchants.toLocaleString()} unit="家" hint={demo ? "演示覆盖：定海湾 · 黄岐镇 · 苔菉镇" : "按已注册账号所属商户去重"} icon={<Building2 />} />
+      <Kpi index={1} title="累计生成营销素材" value={demo ? "3,450" : snapshot.materials.toLocaleString()} unit="份" hint={demo ? "演示目标：营销准备成本降低约 80%" : "按已保存内容计数，不含曝光或成交"} icon={<FileImage />} />
+      <Kpi index={2} title="直播彩排与答疑互动" value={demo ? "1,280" : snapshot.interactions.toLocaleString()} unit="次" hint={demo ? "模拟互动规模 · 场景化能力展示" : "彩排提问 + 商户答疑消息"} icon={<AudioLines />} />
+      <Kpi index={3} title="AI 任务成功率" value={demo ? "99.2" : success} unit={demo || denominator ? "%" : ""} hint={demo ? "模拟成功率 · 实时任务见下方" : `${snapshot.completed} 个成功 / ${denominator} 个已结束任务`} icon={<ShieldCheck />} />
+    </div>
+    <div className="grid gap-5 lg:grid-cols-[1fr_1.5fr_1fr]">
+      <AdminPanel title={demo ? "海产品类赋能分布" : "商品档案品类分布"} eyebrow="SEAFOOD ECOSYSTEM" action={<span className="text-[10px] text-cyan-300/70">{demo ? "演示占比" : `${categoryTotal} 份档案`}</span>}>
+        {categoryTotal ? <><div className="relative mx-auto h-[200px] max-w-[270px]"><ResponsiveContainer width="100%" height="100%"><PieChart><defs><filter id="admin-pie-glow"><feGaussianBlur stdDeviation="3" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter></defs><Pie data={categories} dataKey="value" nameKey="name" innerRadius="65%" outerRadius="84%" paddingAngle={4} cornerRadius={5} stroke="none" isAnimationActive={false} style={{ filter: "url(#admin-pie-glow)" }}>{categories.map((row, i) => <Cell key={row.name} fill={COLORS[i % COLORS.length]} />)}</Pie><Tooltip contentStyle={tooltipStyle} itemStyle={{ color: "#e2e8f0" }} /></PieChart></ResponsiveContainer><div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><span className="font-mono text-3xl font-bold text-cyan-100">{demo ? "4" : categories.length}</span><span className="mt-1 text-[10px] tracking-widest text-slate-400">海产品类</span></div></div><div className="space-y-2">{categories.map((row, i) => <div key={row.name} className="flex items-center justify-between rounded-lg bg-white/3 px-3 py-2 text-xs"><span className="flex items-center gap-2 text-slate-300"><span className="size-2 rounded-full" style={{ background: COLORS[i % COLORS.length] }} />{row.name}</span><span className="font-mono text-cyan-100">{demo ? `${row.value}%` : `${row.value} 份`}</span></div>)}</div></> : <EmptyChart />}
+      </AdminPanel>
+      <AdminPanel title={demo ? "AI 算力与请求并发趋势" : "AI 任务并发与响应趋势"} eyebrow="COMPUTE & RESPONSE" action={<span className="text-[10px] text-slate-400">近 7 天</span>}>
+        <div className="mb-4 flex gap-6"><div><p className="text-[10px] text-slate-400">{demo ? "模拟最高并发" : "任务并发峰值估算"}</p><p className="mt-1 font-mono text-2xl text-cyan-200">{Math.max(...trend.map(row => row.peak))}<span className="ml-1 text-xs text-slate-500">个</span></p></div><div><p className="text-[10px] text-slate-400">{demo ? "模拟响应时间" : "已结束任务平均耗时"}</p><p className="mt-1 font-mono text-2xl text-blue-300">{demo ? "1.5 s" : snapshot.averageDurationMs === null ? "—" : `${(snapshot.averageDurationMs / 1000).toFixed(1)} s`}</p></div></div>
+        <div className="h-[240px] w-full min-w-0"><ResponsiveContainer width="100%" height="100%"><LineChart data={trend} margin={{ top: 8, right: 5, left: -25, bottom: 0 }}><CartesianGrid stroke="#234059" strokeDasharray="3 6" vertical={false} /><XAxis dataKey="label" tick={{ fill: "#7b99b7", fontSize: 10 }} axisLine={false} tickLine={false} /><YAxis yAxisId="peak" allowDecimals={false} tick={{ fill: "#7b99b7", fontSize: 10 }} axisLine={false} tickLine={false} /><YAxis yAxisId="response" orientation="right" width={45} tick={{ fill: "#7b99b7", fontSize: 10 }} tickFormatter={v => `${v}s`} axisLine={false} tickLine={false} /><Tooltip contentStyle={tooltipStyle} labelStyle={{ color: "#b8d3ea" }} /><Legend wrapperStyle={{ fontSize: 11, paddingTop: 12 }} /><Line name={demo ? "请求峰值（个）" : "并发估算（个）"} yAxisId="peak" type="monotone" dataKey="peak" stroke="#22d3ee" strokeWidth={3} dot={{ r: 3, fill: "#0d263e", strokeWidth: 2 }} activeDot={{ r: 5 }} isAnimationActive={false} /><Line name={demo ? "算力响应（秒）" : "平均耗时（秒）"} yAxisId="response" type="monotone" dataKey="responseSeconds" stroke="#818cf8" strokeWidth={2} dot={{ r: 3 }} isAnimationActive={false} /></LineChart></ResponsiveContainer></div>
+        <p className="mt-4 border-t border-white/5 pt-3 text-[10px] leading-5 text-slate-500">{demo ? "模拟请求与响应曲线，用于展示大屏；不代表已部署的算力规模。" : "按任务执行区间估算并发；耗时含任务处理，未接入 GPU 遥测或 HTTP 请求监控。"}{snapshot.trendLimited && !demo ? " 本图仅使用最近 10000 条任务。" : ""}</p>
+      </AdminPanel>
+      <AdminPanel title={demo ? "爆款内容渠道分布" : "营销内容渠道分布"} eyebrow="CONTENT CHANNELS" action={<span className="text-[10px] text-cyan-300/70">{demo ? "模拟比例" : "保存份数"}</span>}>
+        {channels.length ? <><div className="h-[240px] min-w-0"><ResponsiveContainer width="100%" height="100%"><BarChart data={channels} margin={{ left: -30, right: 0, top: 12 }}><CartesianGrid stroke="#234059" strokeDasharray="3 6" vertical={false} /><XAxis dataKey="name" tick={{ fill: "#92adc7", fontSize: 10 }} axisLine={false} tickLine={false} interval={0} /><YAxis tick={{ fill: "#7b99b7", fontSize: 10 }} axisLine={false} tickLine={false} allowDecimals={false} tickFormatter={v => demo ? `${v}%` : String(v)} /><Tooltip contentStyle={tooltipStyle} itemStyle={{ color: "#e2e8f0" }} cursor={{ fill: "#22d3ee0c" }} /><Bar dataKey="value" name={demo ? "占比（%）" : "内容份数"} barSize={36} radius={[6, 6, 0, 0]} isAnimationActive={false}>{channels.map((row, i) => <Cell key={row.name} fill={COLORS[i % COLORS.length]} />)}</Bar></BarChart></ResponsiveContainer></div><div className="mt-4 space-y-2">{channels.map((row, i) => <div key={row.name} className="flex justify-between text-xs"><span className="flex items-center gap-2 text-slate-400"><span className="size-1.5 rounded-full" style={{ background: COLORS[i % COLORS.length] }} />{row.name}</span><span className="font-mono text-slate-200">{row.value}{demo ? "%" : " 份"}</span></div>)}</div></> : <EmptyChart />}
+        <p className="mt-4 text-[10px] leading-5 text-slate-500">{demo ? "展示渠道结构，不代表实际传播效果。" : "统计已保存内容，尚未接入曝光、点击或成交数据。"}</p>
+      </AdminPanel>
+    </div>
+    <div className="grid gap-5 lg:grid-cols-[1fr_2.5fr]">
+      <AdminPanel title="海洋经济服务网络" eyebrow="LIANJIANG · SERVICE NETWORK" action={<MapPin className="size-4 text-cyan-300/60" />}>
+        <div className="relative mb-4 overflow-hidden rounded-xl border border-cyan-400/15 bg-[#071e35] p-4"><div aria-hidden className="absolute -right-12 -bottom-12 size-40 rounded-full border border-cyan-400/15 shadow-[0_0_0_25px_rgba(34,211,238,0.025),0_0_0_50px_rgba(34,211,238,0.02)]" /><div className="relative"><Radio className="size-7 text-cyan-300" /><p className="mt-3 text-lg font-semibold text-cyan-100">一人经营 · AI 协同</p><p className="mt-2 text-[11px] leading-5 text-slate-400">商品、品牌、内容、直播、客服与复盘，连接海产商户的日常经营。</p></div></div>
+        <div className="space-y-2">{(demo ? [{ name: "定海湾", value: 52 }, { name: "黄岐镇", value: 46 }, { name: "苔菉镇及其他区域", value: 30 }] : snapshot.locations).map(row => <div key={row.name} className="flex justify-between rounded-lg border border-white/5 bg-white/3 px-3 py-2 text-xs"><span className="text-slate-400">{row.name}</span><span className="font-mono text-cyan-200">{row.value} 家</span></div>)}{!demo && !snapshot.locations.length && <p className="py-3 text-xs text-slate-500">暂无商户地区记录</p>}</div><p className="mt-3 text-[10px] text-slate-500">{demo ? "区域数量为演示分配" : "按已注册商户资料中的地区统计"}</p>
+      </AdminPanel>
+      <AdminPanel title="实时 AI 运行监控" eyebrow="LIVE TASK OPERATIONS" action={<Link href="/admin/monitor" className="flex items-center gap-1 text-xs text-cyan-300 hover:text-cyan-100">查看全部<ArrowUpRight className="size-3.5" /></Link>}>
+        <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">{[{ icon: Activity, label: "成功", value: snapshot.completed }, { icon: Cpu, label: "执行中", value: snapshot.running }, { icon: Radio, label: "失败", value: snapshot.failed }, { icon: ShieldCheck, label: "平均耗时", value: taskDuration(snapshot.averageDurationMs) }].map(({ icon: Icon, label, value }) => <div key={label} className="rounded-xl border border-cyan-400/10 bg-cyan-400/4 px-3 py-3"><p className="flex items-center gap-1.5 text-[10px] text-slate-400"><Icon className="size-3 text-cyan-300" />{label}</p><p className="mt-1.5 font-mono text-xl text-slate-100">{value}</p></div>)}</div>
+        <div className="overflow-x-auto"><table className="w-full min-w-[570px] text-left text-xs"><thead><tr className="border-b border-white/10 text-[10px] text-slate-500">{["AI 岗位 / 任务", "商户", "状态", "耗时", "开始时间"].map(name => <th key={name} className="px-2 pb-3 font-medium">{name}</th>)}</tr></thead><tbody>{snapshot.recentTasks.slice(0, 5).map(task => <tr key={task.id} className="border-b border-white/5 last:border-0"><td className="max-w-[240px] px-2 py-3"><span className="text-cyan-200">{AGENT_LABELS[task.agentType] ?? task.agentType}</span><p className="mt-1 truncate text-[10px] text-slate-400" title={task.title}>{task.title}</p></td><td className="max-w-[150px] truncate px-2 text-slate-400">{task.businessName}</td><td className="px-2"><TaskStatus status={task.status} /></td><td className="whitespace-nowrap px-2 font-mono text-slate-300">{taskDuration(task.durationMs)}</td><td className="whitespace-nowrap px-2 font-mono text-slate-500">{adminTime(task.createdAt)}</td></tr>)}</tbody></table>{!snapshot.recentTasks.length && <p className="py-8 text-center text-sm text-slate-500">暂无任务。在商户工作台运行 AI 后，这里会自动出现执行记录。</p>}</div>
+        <p className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[10px] text-slate-500"><span>此区域始终读取平台任务记录，独立于上方演示图表。</span><span>更新于 {adminTime(snapshot.updatedAt)}</span></p>
+      </AdminPanel>
+    </div>
+  </div>;
+}

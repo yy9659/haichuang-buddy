@@ -19,15 +19,15 @@ export interface NavItem {
 /** 主导航：对应技术文档第 8 章信息架构 */
 export const NAV_ITEMS: NavItem[] = [
   {
-    title: "AI经营驾驶舱",
+    title: "工作台",
     href: "/dashboard",
-    description: "今日经营总览与 AI 员工调度",
+    description: "从商品到推广",
     icon: LayoutDashboard,
   },
   {
     title: "商品中心",
     href: "/products",
-    description: "商品管理与 Product DNA",
+    description: "商品管理与商品理解",
     icon: Package,
   },
   {
@@ -37,34 +37,34 @@ export const NAV_ITEMS: NavItem[] = [
     icon: Palette,
   },
   {
-    title: "内容工厂",
+    title: "推广素材",
     href: "/content",
-    description: "多平台营销内容生产",
+    description: "生成、修改与确认",
     icon: FileText,
   },
   {
-    title: "AI直播间",
+    title: "直播彩排",
     href: "/live",
-    description: "直播提词与 AI 导演实时建议",
+    description: "模拟提问与话术练习",
     icon: Video,
   },
   {
-    title: "智能客服",
+    title: "答疑助手",
     href: "/customer-service",
-    description: "知识库问答与会话处理",
+    description: "核对依据，准备回复",
     icon: Headphones,
   },
   {
-    title: "经营分析",
+    title: "经营复盘",
     href: "/analytics",
-    description: "指标计算与经营日报",
+    description: "产出、问题与下一步",
     icon: ChartColumn,
   },
 ];
 
 export const SITE = {
   name: "海创Buddy",
-  tagline: "AI一人公司增长智能体",
-  slogan: "一个人，也可以拥有一支 AI 经营团队。",
+  tagline: "连江海产经营伙伴",
+  slogan: "一个人，也能把生意跑起来。",
   heroTitle: "一张产品图，跑通一场生意。",
 } as const;

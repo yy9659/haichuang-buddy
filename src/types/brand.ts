@@ -14,8 +14,19 @@ export interface BrandProfile {
   toneOfVoice: string[];
   visualKeywords: string[];
   ipConcept: string;
+  /**
+   * 合规与事实风险提示（绝对化用语、疑似虚构产地、命中禁用表达等）。
+   * 由 Agent 扫描产出并随档案留痕；Mock 产出会在首位带占位标记。
+   */
+  riskNotes: string[];
+  /** AI 契约版本号，提示词或 Schema 不兼容变更时递增 */
+  aiVersion: string;
+  /** 模型对本次产出的整体把握 0 ~ 1（**不是**完整度） */
+  confidence: number;
+  /** 是否已由商家确认；AI 产出恒为 false，确认前不得对外使用 */
+  approved: boolean;
   updatedAt: string;
-  /** 品牌完整度 0 ~ 1 */
+  /** 品牌完整度 0 ~ 1，由档案内容现算（见 repositories/brand-profile.ts） */
   completeness: number;
 }
 
@@ -35,6 +46,7 @@ export interface BusinessProfile {
   id: string;
   name: string;
   shortName: string;
+  description?: string;
   owner: string;
   location: string;
   mainCategory: string;

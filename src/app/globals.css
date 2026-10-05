@@ -2,61 +2,64 @@
 
 /**
  * 海创Buddy 设计系统
- * 关键词：海洋 / AI / 专业 / 可信 / 增长 / 现代 SaaS
- * 说明：本项目为浅色主题，海洋蓝为语义主色。
+ * 关键词：深海工作区 / 玻璃拟态卡片 / 蓝青渐变
+ * 说明：与登录页同一片「深海」——深色基底 + 白色/透明度玻璃卡片 +
+ * 青蓝渐变强调色，工作台不再另起一套浅色皮肤。
  */
 
 :root {
-  --radius: 0.75rem;
+  color-scheme: dark;
+  --radius: 1rem;
 
-  /* 基础色板 */
-  --background: oklch(0.981 0.006 236);
-  --foreground: oklch(0.235 0.03 250);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.235 0.03 250);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.235 0.03 250);
+  /* 深海基底色板 */
+  --background: #071c34;
+  --foreground: #e9f2fc;
+  --card: oklch(1 0 0 / 0.06);
+  --card-foreground: #eaf2fc;
+  /* 浮层（下拉 / 弹窗）必须实心，半透明会透出下层文字 */
+  --popover: #0c2a49;
+  --popover-foreground: #eaf2fc;
 
-  /* 海洋蓝主色 */
-  --primary: oklch(0.548 0.148 249);
+  /* 海洋蓝主色（暗底上提亮一档） */
+  --primary: oklch(0.68 0.16 243);
   --primary-foreground: oklch(0.99 0.005 240);
-  --primary-soft: oklch(0.955 0.021 245);
+  --primary-soft: oklch(0.68 0.16 243 / 0.18);
 
-  --secondary: oklch(0.966 0.012 240);
-  --secondary-foreground: oklch(0.31 0.035 250);
+  --secondary: oklch(1 0 0 / 0.09);
+  --secondary-foreground: #d7e7f8;
 
-  --muted: oklch(0.965 0.01 240);
-  --muted-foreground: oklch(0.556 0.025 250);
+  --muted: oklch(1 0 0 / 0.07);
+  --muted-foreground: #9db6d2;
 
-  --accent: oklch(0.94 0.032 214);
-  --accent-foreground: oklch(0.34 0.06 244);
+  --accent: oklch(0.8 0.12 210 / 0.16);
+  --accent-foreground: #7dd3fc;
 
-  --destructive: oklch(0.585 0.2 25);
+  --destructive: oklch(0.63 0.2 25);
   --destructive-foreground: oklch(0.99 0.005 240);
 
-  --success: oklch(0.62 0.14 162);
-  --warning: oklch(0.75 0.15 74);
-  --info: oklch(0.62 0.13 232);
+  --success: oklch(0.72 0.15 162);
+  --warning: oklch(0.8 0.14 80);
+  --info: oklch(0.74 0.12 232);
 
-  --border: oklch(0.918 0.012 240);
-  --input: oklch(0.918 0.012 240);
-  --ring: oklch(0.62 0.12 246);
+  --border: oklch(1 0 0 / 0.12);
+  --input: oklch(1 0 0 / 0.2);
+  --ring: #38bdf8;
 
-  /* 数据可视化色板 */
-  --chart-1: oklch(0.548 0.148 249);
-  --chart-2: oklch(0.688 0.116 210);
-  --chart-3: oklch(0.72 0.14 168);
-  --chart-4: oklch(0.78 0.14 84);
-  --chart-5: oklch(0.62 0.16 300);
+  /* 数据可视化色板（暗底提亮） */
+  --chart-1: oklch(0.7 0.15 245);
+  --chart-2: oklch(0.78 0.12 210);
+  --chart-3: oklch(0.78 0.14 168);
+  --chart-4: oklch(0.82 0.14 84);
+  --chart-5: oklch(0.72 0.16 300);
 
-  /* 侧边栏 */
-  --sidebar: oklch(0.995 0.003 240);
-  --sidebar-foreground: oklch(0.29 0.032 250);
-  --sidebar-primary: oklch(0.548 0.148 249);
-  --sidebar-primary-foreground: oklch(0.99 0.005 240);
-  --sidebar-accent: oklch(0.955 0.021 245);
-  --sidebar-accent-foreground: oklch(0.44 0.13 249);
-  --sidebar-border: oklch(0.925 0.012 240);
+  /* 侧边栏（比内容区更深，压出层次） */
+  --sidebar: #04101f;
+  --sidebar-foreground: #8ea8c5;
+  --sidebar-primary: #2f8cff;
+  --sidebar-primary-foreground: #fff;
+  --sidebar-accent: oklch(1 0 0 / 0.08);
+  --sidebar-accent-foreground: #fff;
+  --sidebar-border: oklch(1 0 0 / 0.08);
 }
 
 @theme inline {
@@ -106,9 +109,9 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 10px);
 
-  --shadow-card: 0 1px 2px oklch(0.4 0.05 250 / 0.04),
-    0 6px 20px -8px oklch(0.4 0.06 250 / 0.12);
-  --shadow-float: 0 12px 32px -12px oklch(0.4 0.08 250 / 0.22);
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.3),
+    0 12px 32px -20px oklch(0 0 0 / 0.6);
+  --shadow-float: 0 20px 50px -20px oklch(0 0 0 / 0.7);
 
   --animate-pulse-soft: pulse-soft 2.4s ease-in-out infinite;
 }
@@ -128,19 +131,53 @@
     border-color: var(--border);
   }
 
+  /* 原生 select 的展开层由浏览器绘制，明确指定深色以匹配深海界面。 */
+  select option,
+  select optgroup {
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+  }
+
   html {
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
 
   body {
-    background-color: var(--background);
+    background: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans);
   }
 
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+
   ::selection {
-    background-color: var(--primary-soft);
-    color: var(--primary-foreground);
+    background-color: oklch(0.68 0.16 243 / 0.35);
+    color: #fff;
+  }
+
+  /* 暗色滚动条，避免深海界面里冒出一截亮灰 */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: oklch(1 0 0 / 0.14);
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(1 0 0 / 0.22);
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
   }
 }

@@ -1,56 +1,57 @@
-"use client";
-
-import { BookOpen, CircleAlert, Send, Sparkles, UserRound } from "lucide-react";
-import * as React from "react";
+import { BookOpen, CircleAlert, ShieldCheck, ShieldAlert, Sparkles, UserRound } from "lucide-react";
+import type { ReactNode } from "react";
 
 import { EmptyState } from "@/components/common/empty-state";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { KNOWLEDGE_TYPE_LABEL } from "@/lib/status-meta";
+import { CopyTextButton } from "@/components/common/copy-text-button";
+import {
+  CONVERSATION_STATUS_META,
+  CUSTOMER_INTENT_LABEL,
+  KNOWLEDGE_TYPE_LABEL,
+} from "@/lib/status-meta";
 import { cn } from "@/lib/utils";
 import type { ChatMessage, CustomerConversation } from "@/types";
 
 interface ChatThreadProps {
   conversation: CustomerConversation | null;
   messages: ChatMessage[];
+  /** 提问 / 回复表单（Server Action 驱动，由页面注入） */
+  footer?: ReactNode;
+  /** 会话级操作（转人工 / 结束会话），由页面注入 */
+  actions?: ReactNode;
 }
 
-/** 智能客服 · 会话聊天区（含知识来源与转人工提示） */
-export function ChatThread({ conversation, messages }: ChatThreadProps) {
-  const [draft, setDraft] = React.useState("");
-  const [localMessages, setLocalMessages] = React.useState<ChatMessage[]>([]);
-
+/**
+ * 智能客服 · 会话聊天区。
+ *
+ * 这是**服务端组件**：消息、引用、转人工提示都是纯展示，不需要任何客户端状态。
+ * 唯一需要交互的「展开依据」用原生 `<details>` 实现 —— 为了一个折叠面板
+ * 引入客户端组件，会把整棵消息树送进浏览器，得不偿失。
+ *
+ * 引用只显示**文档名与类型**，不显示 chunkId（任务书第二十六节）：
+ * uuid 对商家没有任何意义，只会让「依据」这一栏看起来像调试输出。
+ * 真要看原文，展开后能看到片段内容。
+ *
+ * 相关度百分比**只在开发模式下显示**（任务书第二十二节）。
+ * 它是检索的内部数字，对消费者是噪声、对商家是误导 —— 一个「相关度 41%」
+ * 的引用可能恰好是一句完全正确的回答，而「相关度 92%」也可能答偏了。
+ * 生产界面该让商家判断的是**引用了哪份文档**，而不是它的小数点。
+ */
+export function ChatThread({ conversation, messages, footer, actions }: ChatThreadProps) {
   if (!conversation) {
     return (
       <EmptyState
-        title="请选择一个会话"
-        description="左侧选择客户会话后，可查看 AI 客服回答与知识来源。"
+        title="还没有任何会话"
+        description="点击右上角「新建模拟会话」，然后输入一句消费者提问，系统会实时检索企业知识库并给出带依据的回答。"
         className="h-full"
       />
     );
   }
 
-  const allMessages = [...messages, ...localMessages];
-
-  const handleSend = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const content = draft.trim();
-    if (content.length === 0) return;
-
-    setLocalMessages((prev) => [
-      ...prev,
-      {
-        id: `local_${prev.length + 1}`,
-        conversationId: conversation.id,
-        role: "agent",
-        content,
-        createdAtText: "刚刚",
-        confidence: 1,
-      },
-    ]);
-    setDraft("");
-  };
+  const statusMeta = CONVERSATION_STATUS_META[conversation.status];
+  /** 检索内部数字只在开发模式露出，避免被当成「回答可信度」 */
+  const showSimilarity = process.env.NODE_ENV === "development";
 
   return (
     <div className="flex h-full min-h-0 flex-col rounded-xl border border-border bg-card shadow-card">
@@ -67,25 +68,28 @@ export function ChatThread({ conversation, messages }: ChatThreadProps) {
           </span>
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-1">
+          <Badge variant={statusMeta.tone} className="px-1.5 py-0 text-[10px]">
+            {statusMeta.label}
+          </Badge>
           {conversation.tags.map((tag) => (
             <Badge key={tag} variant="secondary" className="px-1.5 py-0 text-[10px]">
               {tag}
             </Badge>
           ))}
         </div>
+        {actions ? <div className="shrink-0">{actions}</div> : null}
       </div>
 
       <ScrollArea className="min-h-0 flex-1" viewportClassName="px-3.5 py-3">
         <ul className="flex flex-col gap-3">
-          {allMessages.map((message) => {
+          {messages.map((message) => {
             const isCustomer = message.role === "customer";
+            const citations = message.knowledgeSources ?? [];
+
             return (
               <li
                 key={message.id}
-                className={cn(
-                  "flex gap-2",
-                  isCustomer ? "flex-row" : "flex-row-reverse",
-                )}
+                className={cn("flex gap-2", isCustomer ? "flex-row" : "flex-row-reverse")}
               >
                 <span
                   className={cn(
@@ -102,7 +106,7 @@ export function ChatThread({ conversation, messages }: ChatThreadProps) {
                   )}
                 </span>
 
-                <div className="flex max-w-[78%] min-w-0 flex-col gap-1.5">
+                <div className="flex max-w-[80%] min-w-0 flex-col gap-1.5">
                   <div
                     className={cn(
                       "rounded-xl px-3 py-2 text-[12px] leading-6",
@@ -114,49 +118,86 @@ export function ChatThread({ conversation, messages }: ChatThreadProps) {
                     {message.content}
                   </div>
 
-                  {typeof message.confidence === "number" &&
-                  message.role === "agent" ? (
-                    <div className="flex items-center gap-1.5">
-                      <Badge variant="secondary" className="px-1.5 py-0 text-[10px]">
-                        AI 客服 · 置信度{" "}
-                        {(message.confidence * 100).toFixed(0)}%
-                      </Badge>
+                  {message.role === "agent" ? (
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {/* grounded 是「这句回答有没有依据」的唯一凭据，必须显式展示 */}
+                      {message.grounded === true ? (
+                        <Badge
+                          variant="success"
+                          className="gap-1 px-1.5 py-0 text-[10px]"
+                        >
+                          <ShieldCheck className="size-2.5" />
+                          基于知识库回答
+                        </Badge>
+                      ) : message.grounded === false ? (
+                        <Badge
+                          variant="warning"
+                          className="gap-1 px-1.5 py-0 text-[10px]"
+                        >
+                          <ShieldAlert className="size-2.5" />
+                          知识不足 · 建议人工确认
+                        </Badge>
+                      ) : null}
+                      {message.grounded === true ? (
+                        <CopyTextButton text={message.content} />
+                      ) : null}
+                      {message.intent ? (
+                        <Badge variant="secondary" className="px-1.5 py-0 text-[10px]">
+                          {CUSTOMER_INTENT_LABEL[message.intent]}
+                        </Badge>
+                      ) : null}
                       <span className="text-[10px] text-muted-foreground">
                         {message.createdAtText}
                       </span>
                     </div>
                   ) : null}
 
-                  {message.knowledgeSources &&
-                  message.knowledgeSources.length > 0 ? (
-                    <ul className="flex flex-col gap-1">
-                      {message.knowledgeSources.map((source) => (
-                        <li
-                          key={source.id}
-                          className="flex items-start gap-1.5 rounded-lg border border-border bg-muted/50 px-2 py-1.5"
-                        >
-                          <BookOpen className="mt-0.5 size-3 shrink-0 text-primary" />
-                          <span className="flex min-w-0 flex-col">
-                            <span className="truncate text-[11px] font-medium">
-                              {source.title}
-                            </span>
-                            <span className="line-clamp-2 text-[10px] leading-4 text-muted-foreground">
+                  {citations.length > 0 ? (
+                    <details className="group rounded-lg border border-border bg-muted/40">
+                      <summary className="flex cursor-pointer list-none items-center gap-1.5 px-2 py-1.5 text-[11px] font-medium text-muted-foreground select-none">
+                        <BookOpen className="size-3 shrink-0 text-primary" />
+                        依据 {citations.length} 条
+                        <span className="text-[10px] group-open:hidden">展开</span>
+                        <span className="hidden text-[10px] group-open:inline">收起</span>
+                      </summary>
+                      <ul className="flex flex-col gap-1 px-2 pb-2">
+                        {citations.map((source, index) => (
+                          <li
+                            key={source.chunkId}
+                            className="rounded-lg border border-border bg-card px-2 py-1.5"
+                          >
+                            <div className="flex items-center gap-1.5">
+                              <span className="truncate text-[11px] font-medium">
+                                《{source.title}》
+                              </span>
+                              <Badge
+                                variant="soft"
+                                className="ml-auto shrink-0 px-1.5 py-0 text-[10px]"
+                              >
+                                {KNOWLEDGE_TYPE_LABEL[source.type]}
+                              </Badge>
+                            </div>
+                            <p className="mt-0.5 line-clamp-3 text-[10px] leading-4 text-muted-foreground">
                               {source.snippet}
+                            </p>
+                            <span className="mt-0.5 block text-[10px] text-muted-foreground/80 tabular-nums">
+                              第 {index + 1} 条
+                              {showSimilarity
+                                ? ` · 相关度 ${(source.score * 100).toFixed(0)}%（仅开发模式可见）`
+                                : ""}
                             </span>
-                            <span className="mt-0.5 text-[10px] text-muted-foreground tabular-nums">
-                              {KNOWLEDGE_TYPE_LABEL[source.type]} · 相关度{" "}
-                              {(source.score * 100).toFixed(0)}%
-                            </span>
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
                   ) : null}
 
                   {message.needsHuman ? (
-                    <span className="inline-flex items-center gap-1.5 rounded-lg border border-warning/25 bg-warning/12 px-2 py-1.5 text-[11px] leading-4 text-warning">
-                      <CircleAlert className="size-3 shrink-0" />
-                      当前商品资料中没有找到可靠信息，建议转人工确认。
+                    <span className="inline-flex items-start gap-1.5 rounded-lg border border-warning/25 bg-warning/12 px-2 py-1.5 text-[11px] leading-4 text-warning">
+                      <CircleAlert className="mt-0.5 size-3 shrink-0" />
+                      {message.grounded === true
+                        ? "本次回答依据充分，但 AI 仍建议人工跟进确认。"
+                        : "知识库中没有找到可靠依据，已建议转人工确认。"}
                     </span>
                   ) : null}
                 </div>
@@ -166,25 +207,7 @@ export function ChatThread({ conversation, messages }: ChatThreadProps) {
         </ul>
       </ScrollArea>
 
-      <form
-        onSubmit={handleSend}
-        className="flex items-center gap-2 border-t border-border/70 p-2.5"
-      >
-        <Input
-          value={draft}
-          onChange={(event) => setDraft(event.target.value)}
-          placeholder="以人工身份回复（Demo：不会调用 AI）"
-          aria-label="人工回复"
-          className="bg-muted/60"
-        />
-        <button
-          type="submit"
-          className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-colors hover:bg-primary/90"
-          aria-label="发送"
-        >
-          <Send className="size-4" />
-        </button>
-      </form>
+      {footer ? <div className="border-t border-border/70 p-2.5">{footer}</div> : null}
     </div>
   );
 }

@@ -59,6 +59,8 @@ export function TagSection({
 interface TagSectionCardProps {
   title: string;
   description?: string;
+  /** 标题右侧的操作区（如状态徽标、重试按钮） */
+  action?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
 }
@@ -67,19 +69,23 @@ interface TagSectionCardProps {
 export function TagSectionCard({
   title,
   description,
+  action,
   children,
   className,
 }: TagSectionCardProps) {
   return (
     <Card className={cn("flex flex-col", className)}>
       <CardContent className="flex flex-col gap-3 pt-4">
-        <div className="flex flex-col gap-0.5">
-          <span className="text-[13px] font-semibold">{title}</span>
-          {description ? (
-            <span className="text-[11px] leading-4 text-muted-foreground">
-              {description}
-            </span>
-          ) : null}
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex flex-col gap-0.5">
+            <span className="text-[13px] font-semibold">{title}</span>
+            {description ? (
+              <span className="text-[11px] leading-4 text-muted-foreground">
+                {description}
+              </span>
+            ) : null}
+          </div>
+          {action}
         </div>
         {children}
       </CardContent>

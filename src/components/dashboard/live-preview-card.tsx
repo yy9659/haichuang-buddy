@@ -69,11 +69,11 @@ export function LivePreviewCard({
         {comments.slice(0, 4).map((comment) => (
           <li key={comment.id} className="flex items-start gap-2 text-[12px]">
             <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-sky-100 to-blue-200 text-[10px] font-medium text-blue-700">
-              {comment.user.slice(0, 1)}
+              {comment.authorName.slice(0, 1)}
             </span>
             <span className="flex min-w-0 flex-1 flex-col">
               <span className="truncate text-[11px] text-muted-foreground">
-                {comment.user}
+                {comment.authorName}
               </span>
               <span className="truncate leading-5">{comment.content}</span>
             </span>

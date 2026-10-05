@@ -13,6 +13,7 @@ import {
 import { cn } from "@/lib/utils";
 
 interface SectionCardProps {
+  id?: string;
   title: string;
   description?: string;
   icon?: React.ReactNode;
@@ -28,6 +29,7 @@ interface SectionCardProps {
 
 /** 页面内统一的分区卡片容器 */
 export function SectionCard({
+  id,
   title,
   description,
   icon,
@@ -39,7 +41,7 @@ export function SectionCard({
   contentClassName,
 }: SectionCardProps) {
   return (
-    <Card className={cn("flex flex-col", className)}>
+    <Card id={id} className={cn("flex flex-col", className)}>
       <CardHeader>
         <div className="flex flex-col gap-0.5">
           <CardTitle>

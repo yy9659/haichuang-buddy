@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="480" viewBox="0 0 1440 480" role="img" aria-labelledby="title desc">
+  <title id="title">海创Buddy：一个人，也可以拥有一支AI经营团队</title>
+  <desc id="desc">深海蓝品牌封面，右侧为AI经营大脑协作示意，展示目标、计划、确认与执行。</desc>
+  <defs>
+    <linearGradient id="ocean" x2="1" y2="1"><stop stop-color="#071427"/><stop offset=".6" stop-color="#0B2A46"/><stop offset="1" stop-color="#113B53"/></linearGradient>
+    <linearGradient id="accent"><stop stop-color="#2563EB"/><stop offset="1" stop-color="#22D3EE"/></linearGradient>
+    <radialGradient id="glow"><stop stop-color="#06B6D4" stop-opacity=".23"/><stop offset="1" stop-color="#06B6D4" stop-opacity="0"/></radialGradient>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M36 0H0V36" fill="none" stroke="#BAE6FD" stroke-opacity=".045"/></pattern>
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9"/></filter>
+  </defs>
+  <rect width="1440" height="480" rx="24" fill="url(#ocean)"/>
+  <rect width="1440" height="480" rx="24" fill="url(#grid)"/>
+  <ellipse cx="1120" cy="200" rx="355" ry="290" fill="url(#glow)"/>
+  <path d="M0 374C220 250 380 475 620 359S1060 290 1440 375V480H0Z" fill="#22D3EE" opacity=".035"/>
+  <path d="M0 396C240 272 350 474 610 393S1100 318 1440 395" stroke="#67E8F9" stroke-opacity=".16" fill="none"/>
+  <path d="M0 425C210 310 440 501 690 416S1120 352 1440 425" stroke="#60A5FA" stroke-opacity=".13" fill="none"/>
+  <g font-family="Segoe UI,Microsoft YaHei,PingFang SC,sans-serif">
+    <rect x="66" y="55" width="209" height="30" rx="15" fill="#22D3EE" fill-opacity=".1" stroke="#67E8F9" stroke-opacity=".23"/>
+    <circle cx="84" cy="70" r="4" fill="#22D3EE"/>
+    <text x="99" y="75" fill="#A5F3FC" font-size="13" letter-spacing="1.2">OPC · 连江海洋经济</text>
+    <text x="66" y="169" fill="#F8FAFC" font-size="68" font-weight="750">海创Buddy</text>
+    <text x="68" y="214" fill="#7DD3FC" font-size="19" letter-spacing="3">HAICHUANG BUDDY</text>
+    <text x="66" y="276" fill="#E2F3FF" font-size="31" font-weight="650">一个人，也可以拥有一支 AI 经营团队。</text>
+    <text x="66" y="319" fill="#A4BED5" font-size="20">从商品实拍出发，让经营目标变成可核对的行动。</text>
+    <g fill="#D8ECFF" font-size="15">
+      <rect x="66" y="355" width="115" height="39" rx="19.5" fill="#FFFFFF" fill-opacity=".055" stroke="#FFFFFF" stroke-opacity=".12"/><text x="90" y="380">目标拆解</text>
+      <rect x="195" y="355" width="115" height="39" rx="19.5" fill="#FFFFFF" fill-opacity=".055" stroke="#FFFFFF" stroke-opacity=".12"/><text x="219" y="380">专业分工</text>
+      <rect x="324" y="355" width="115" height="39" rx="19.5" fill="#FFFFFF" fill-opacity=".055" stroke="#FFFFFF" stroke-opacity=".12"/><text x="348" y="380">内容交付</text>
+      <rect x="453" y="355" width="115" height="39" rx="19.5" fill="#FFFFFF" fill-opacity=".055" stroke="#FFFFFF" stroke-opacity=".12"/><text x="477" y="380">经营复盘</text>
+    </g>
+    <rect x="930" y="49" width="442" height="377" rx="26" fill="#FFFFFF" fill-opacity=".04" stroke="#BCE8FF" stroke-opacity=".17"/>
+    <rect x="961" y="49" width="380" height="3" rx="1.5" fill="url(#accent)"/>
+    <text x="959" y="90" fill="#E8F7FF" font-size="19" font-weight="650">AI 经营大脑</text>
+    <text x="1280" y="89" fill="#94B9CE" font-size="12">协作示意</text>
+    <circle cx="1151" cy="215" r="87" fill="none" stroke="#22D3EE" stroke-width="8" opacity=".4" filter="url(#soft)"/>
+    <circle cx="1151" cy="215" r="84" fill="none" stroke="#77B7DC" stroke-opacity=".13" stroke-width="11"/>
+    <circle cx="1151" cy="215" r="84" fill="none" stroke="url(#accent)" stroke-width="11" stroke-linecap="round" stroke-dasharray="443 85" transform="rotate(-90 1151 215)"/>
+    <circle cx="1151" cy="215" r="63" fill="#0D3651" stroke="#67E8F9" stroke-opacity=".16"/>
+    <text x="1151" y="218" text-anchor="middle" fill="#FFFFFF" font-size="45" font-weight="750">AI</text>
+    <text x="1151" y="246" text-anchor="middle" fill="#BAE6FD" font-size="14">任务规划 · 协调执行</text>
+    <path d="M989 349H1313" stroke="#3B82F6" stroke-opacity=".4"/>
+    <g fill="#102D46" stroke="#60A5FA" stroke-opacity=".65"><circle cx="989" cy="349" r="9"/><circle cx="1097" cy="349" r="9"/><circle cx="1205" cy="349" r="9"/><circle cx="1313" cy="349" r="9"/></g>
+    <g fill="#93C5FD" font-size="13" text-anchor="middle"><text x="989" y="385">目标</text><text x="1097" y="385">计划</text><text x="1205" y="385">确认</text><text x="1313" y="385">执行</text></g>
+  </g>
+</svg>

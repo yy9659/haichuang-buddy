@@ -1,94 +1,46 @@
 import Link from "next/link";
-import {
-  ChartLine,
-  FileText,
-  Headphones,
-  Megaphone,
-  Package,
-  Palette,
-} from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
-import type { IconComponent } from "@/types";
+import { NAV_ITEMS } from "@/lib/navigation";
 
-interface QuickEntry {
-  id: string;
-  title: string;
-  description: string;
-  href: string;
-  icon: IconComponent;
-}
+const DASHBOARD_ROLE_TITLES: Readonly<Record<string, string>> = {
+  "/products": "商品经理",
+  "/brand": "品牌经理",
+  "/content": "内容运营",
+  "/live": "直播导演",
+  "/customer-service": "智能客服",
+  "/analytics": "经营分析师",
+};
 
-const ENTRIES: QuickEntry[] = [
-  {
-    id: "entry_product",
-    title: "商品理解",
-    description: "多模态分析",
-    href: "/products",
-    icon: Package,
-  },
-  {
-    id: "entry_brand",
-    title: "品牌策划",
-    description: "定位与故事",
-    href: "/brand",
-    icon: Palette,
-  },
-  {
-    id: "entry_content",
-    title: "内容营销",
-    description: "图文 / 视频 / 文案",
-    href: "/content",
-    icon: FileText,
-  },
-  {
-    id: "entry_live",
-    title: "直播辅助",
-    description: "策略与话术",
-    href: "/live",
-    icon: Megaphone,
-  },
-  {
-    id: "entry_cs",
-    title: "智能客服",
-    description: "知识库问答",
-    href: "/customer-service",
-    icon: Headphones,
-  },
-  {
-    id: "entry_analytics",
-    title: "经营复盘",
-    description: "优化建议",
-    href: "/analytics",
-    icon: ChartLine,
-  },
-];
-
-/** 驾驶舱能力快捷入口 */
+/** 与侧栏共用模块目录，首页的每个入口都落到现有工作区。 */
 export function QuickEntryGrid() {
   return (
-    <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
-      {ENTRIES.map((entry) => {
-        const Icon = entry.icon;
-        return (
-          <Link
-            key={entry.id}
-            href={entry.href}
-            className="group flex items-center gap-2.5 rounded-xl border border-border bg-card px-3 py-2.5 shadow-card transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-float"
-          >
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary-soft text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-              <Icon className="size-4" strokeWidth={1.9} />
-            </span>
-            <span className="flex min-w-0 flex-col">
-              <span className="truncate text-[13px] leading-5 font-medium">
-                {entry.title}
-              </span>
-              <span className="truncate text-[11px] leading-4 text-muted-foreground">
-                {entry.description}
-              </span>
-            </span>
-          </Link>
-        );
-      })}
+    <section aria-labelledby="module-entry-title">
+      <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+        <h2 id="module-entry-title" className="text-lg font-semibold text-white">开始今天的工作</h2>
+        <p className="text-[13px] text-slate-400">选一个模块，把想法变成下一步行动</p>
+      </div>
+      <div className="min-w-0 overflow-x-auto pb-2 xl:overflow-visible xl:pb-0">
+        <div className="grid w-full min-w-[900px] grid-cols-6 gap-3">
+          {NAV_ITEMS.filter((item) => item.href !== "/dashboard").map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link key={item.href} href={item.href} className="group min-w-0 rounded-2xl border border-white/10 bg-white/[0.05] p-4 shadow-md shadow-black/20 backdrop-blur-md transition-[box-shadow,border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-cyan-400/30 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400">
+                <div className="mb-3 flex items-center justify-between">
+                  <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-400/20 to-cyan-400/15 text-cyan-300">
+                    <Icon className="size-5" strokeWidth={1.8} />
+                  </span>
+                  <ArrowUpRight className="size-4 text-slate-500 transition-colors group-hover:text-cyan-300" />
+                </div>
+                <h3 className="text-sm font-semibold text-slate-100">
+                  {DASHBOARD_ROLE_TITLES[item.href] ?? item.title}
+                </h3>
+                <p className="mt-1 text-[13px] leading-5 text-slate-400">{item.description}</p>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
     </section>
   );
 }

@@ -1,52 +1,75 @@
-import { Upload } from "lucide-react";
+import { PlayCircle, Waves } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import type { ReactNode } from "react";
 
-import { Button } from "@/components/ui/button";
-import { LaunchDailyButton } from "@/components/dashboard/launch-daily-button";
-import { SITE } from "@/lib/navigation";
+/** 按服务器当前时段给出英文问候（页面 force-dynamic，每次请求实时渲染）。 */
+function greetingByHour(hour: number): string {
+  if (hour < 5) return "Good Night";
+  if (hour < 12) return "Good Morning";
+  if (hour < 18) return "Good Afternoon";
+  return "Good Evening";
+}
 
-/** 驾驶舱顶部品牌区 + 核心 CTA */
-export function DashboardHero() {
+/**
+ * 首页航海横幅（图一构图）：
+ * 左侧深蓝渐变上排文案与双 CTA，右侧保留渔船画面，右上角手写体标语。
+ */
+export function DashboardHero({ cta }: { cta?: ReactNode }) {
+  const greeting = greetingByHour(new Date().getHours());
+
   return (
-    <section className="relative overflow-hidden rounded-2xl border border-blue-200/60 bg-gradient-to-br from-blue-700 via-blue-600 to-cyan-500 px-6 py-6 text-white shadow-card">
-      {/* 海洋氛围层（纯 CSS，无 3D / 无粒子） */}
-      <div className="pointer-events-none absolute inset-0 opacity-25 [background-image:radial-gradient(120%_80%_at_85%_-10%,white,transparent_55%)]" />
-      <div className="pointer-events-none absolute -right-8 -bottom-16 size-64 rounded-full bg-cyan-300/25 blur-3xl" />
-      <div className="pointer-events-none absolute -top-14 left-1/3 size-56 rounded-full bg-blue-300/20 blur-3xl" />
+    <section className="relative isolate overflow-hidden rounded-3xl bg-[#0a2248] text-white shadow-lg shadow-blue-950/10">
+      <Image
+        src="/assets/dashboard-ocean.png"
+        alt=""
+        fill
+        priority
+        sizes="(min-width: 1440px) 1200px, (min-width: 1024px) calc(100vw - 296px), 100vw"
+        className="object-cover object-[72%_center]"
+      />
+      {/* 左侧压暗保证文字可读，右侧透出渔船与海面 */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-gradient-to-r from-[#081c3a]/95 via-[#0a2a56]/60 to-transparent"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-gradient-to-t from-[#081c3a]/35 via-transparent to-transparent"
+      />
 
-      <div className="relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-        <div className="flex flex-col gap-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-medium backdrop-blur-sm">
-              连江海产 · AI 一人公司
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-medium backdrop-blur-sm">
-              Demo 数据
-            </span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <h1 className="text-2xl leading-9 font-semibold tracking-tight">
-              {SITE.name}
-            </h1>
-            <p className="text-[13px] leading-5 text-white/85">{SITE.tagline}</p>
-          </div>
-          <p className="max-w-xl text-[15px] leading-6 font-medium">
-            {SITE.heroTitle}
-            <span className="mt-1 block text-[12px] leading-5 font-normal text-white/80">
-              让 AI 成为你的数字经营团队，从商品到直播、从内容到数据，全流程助力连江海产品经营。
-            </span>
-          </p>
-        </div>
+      {/* 右上角手写体标语 */}
+      <p
+        aria-hidden="true"
+        className="absolute top-5 right-7 hidden rotate-[-2deg] text-right text-[15px] leading-6 font-medium text-white/90 italic drop-shadow-md md:block"
+        style={{ fontFamily: "'Segoe Script', 'Ma Shan Zheng', cursive" }}
+      >
+        让中国的海产生意
+        <br />
+        更简单，更赚钱！
+      </p>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-          <LaunchDailyButton />
-          <Button
-            size="lg"
-            variant="secondary"
-            className="min-w-36 bg-white/95 text-blue-700 hover:bg-white"
+      <div className="relative flex min-h-[232px] flex-col justify-center px-6 py-8 sm:px-9 lg:px-11">
+        <span className="mb-2 inline-flex items-center gap-2 text-xs font-medium tracking-wider text-cyan-200">
+          <Waves className="size-4" /> 海创Buddy · 连江海产经营伙伴
+        </span>
+        <h1 className="max-w-xl text-[26px] leading-tight font-semibold tracking-tight sm:text-[32px]">
+          {greeting}，连江海产经营者！
+        </h1>
+        <p className="mt-2 max-w-lg text-[13px] leading-5 text-blue-100/90 sm:text-sm">
+          我是海创Buddy，你的 AI 海洋商业助手。
+          <br />
+          从商品、品牌到推广、直播与答疑，助你把握每一个蓝色机遇。
+        </p>
+        <div className="mt-4 flex flex-wrap items-center gap-3 sm:gap-4">
+          {cta}
+          <Link
+            href="/analytics"
+            className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2.5 text-sm font-medium backdrop-blur-sm transition-colors hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-300"
           >
-            <Upload />
-            上传商品，开始经营
-          </Button>
+            <PlayCircle className="size-4" />
+            查看工作复盘
+          </Link>
         </div>
       </div>
     </section>

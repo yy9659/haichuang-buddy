@@ -1,27 +1,32 @@
 "use client";
 
+import Link from "next/link";
 import { Search } from "lucide-react";
 import * as React from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
 import { CONVERSATION_STATUS_META } from "@/lib/status-meta";
 import { cn } from "@/lib/utils";
 import type { CustomerConversation } from "@/types";
 
 interface ConversationListProps {
   conversations: CustomerConversation[];
-  activeId: string;
-  onSelect: (id: string) => void;
+  activeId: string | null;
 }
 
-/** 智能客服 · 会话列表 */
-export function ConversationList({
-  conversations,
-  activeId,
-  onSelect,
-}: ConversationListProps) {
+/**
+ * 智能客服 · 会话列表
+ *
+ * 选中态改由 URL 表达（`?conv=<id>`）而不是本地 state：
+ * 服务端只加载「当前这一条」会话的消息，因此切换会话必须回到服务端。
+ * 客户端保留的只有搜索框的本地状态 —— 那是一次纯粹的视图过滤，不需要往返。
+ *
+ * 用 `<Link>` 而不是 `onClick + router.push`：前者是真正的导航语义
+ * （可以中键新窗口打开、可以被读屏软件识别为链接），后者只是一个按钮。
+ */
+export function ConversationList({ conversations, activeId }: ConversationListProps) {
   const [keyword, setKeyword] = React.useState("");
 
   const filtered = conversations.filter((item) => {
@@ -56,11 +61,12 @@ export function ConversationList({
 
             return (
               <li key={conversation.id}>
-                <button
-                  type="button"
-                  onClick={() => onSelect(conversation.id)}
+                <Link
+                  href={`/customer-service?conv=${encodeURIComponent(conversation.id)}`}
+                  scroll={false}
+                  aria-current={isActive ? "true" : undefined}
                   className={cn(
-                    "w-full rounded-lg px-2.5 py-2 text-left transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+                    "block w-full rounded-lg px-2.5 py-2 text-left transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
                     isActive ? "bg-primary-soft" : "hover:bg-secondary/70",
                   )}
                 >
@@ -79,10 +85,7 @@ export function ConversationList({
                     {conversation.lastMessage}
                   </p>
                   <div className="mt-1.5 flex flex-wrap items-center gap-1">
-                    <Badge
-                      variant={meta.tone}
-                      className="px-1.5 py-0 text-[10px]"
-                    >
+                    <Badge variant={meta.tone} className="px-1.5 py-0 text-[10px]">
                       {meta.label}
                     </Badge>
                     {conversation.tags.slice(0, 2).map((tag) => (
@@ -100,7 +103,7 @@ export function ConversationList({
                       </span>
                     ) : null}
                   </div>
-                </button>
+                </Link>
               </li>
             );
           })}

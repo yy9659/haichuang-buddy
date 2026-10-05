@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 interface PageHeaderProps {
   title: string;
-  description: string;
+  description?: string;
   /** 标题右侧的徽标或补充信息 */
   badge?: React.ReactNode;
   /** 右侧操作区 */
@@ -34,9 +34,11 @@ export function PageHeader({
           </h1>
           {badge}
         </div>
-        <p className="max-w-3xl text-[13px] leading-5 text-muted-foreground">
-          {description}
-        </p>
+        {description ? (
+          <p className="max-w-2xl text-[13px] leading-5 text-muted-foreground">
+            {description}
+          </p>
+        ) : null}
       </div>
       {actions ? (
         <div className="flex shrink-0 items-center gap-2">{actions}</div>

@@ -1,4 +1,5 @@
 allowBuilds:
+  esbuild: true
   sharp: false
   unrs-resolver: false
 # 本机（Windows / E: 盘）环境下 isolated 符号链接创建不稳定，
