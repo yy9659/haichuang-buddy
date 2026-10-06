@@ -274,7 +274,7 @@ export async function resolveActiveBusinessId(explicit?: string): Promise<Result
     return fail(
       "VALIDATION_FAILED",
       "尚未建立商家档案，无法使用客服工作台",
-      "客服会话必须归属于一个商家。请先创建商家资料（可执行 pnpm db:seed 初始化演示数据）。",
+      "客服会话必须归属于一个商家。请先注册并登录，再填写商家资料。",
     );
   }
   return ok(profile.data.id);

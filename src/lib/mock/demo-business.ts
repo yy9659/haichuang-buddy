@@ -1,17 +1,9 @@
 /**
  * 演示商家的种子数据（**唯一来源**）
  *
- * 这里的常量被两处使用：
- * 1. `scripts/seed.ts` —— 命令行把演示数据灌进当前数据库（`pnpm db:seed`）；
- * 2. `@/services/business-provisioning.service` —— 新账号注册时，给 TA 灌一份
- *    **属于自己的**商家档案 + 商品 + 知识库，使新用户登录后看到的不是空页面。
- *
- * 放在 `src/lib/mock` 而不是脚本目录，是因为第 2 条：服务层不能 import 脚本目录。
- * 两份数据各写一遍必然漂 —— 而「脚本灌的数据」与「注册灌的数据」不一致，
- * 会让「我按文档 seed 过，怎么和截图不一样」变成一个查不出原因的问题。
- *
- * 注意：这些是**演示**数据，不是「系统预置」。`seedDemoBusinessData()` 只会
- * 往一个**空**商家下写，已存在同名的商品 / 知识文档时跳过，绝不覆盖用户改过的内容。
+ * Mock 数据源与首账号认领既有演示商家的流程共用这些定义。
+ * 全新本地数据库中的新商家从空白资料开始，不自动继承示例商品。
+ * 认领分支保留已有业务资料，只为没有商品的演示商家补充示例数据。
  */
 
 /** 演示商家档案 */
@@ -65,7 +57,7 @@ export interface DemoProduct {
   storageMethod: string;
   shelfLife: string;
   tags: string[];
-  /** 对应 `scripts/lib/sample-image.ts` 的 `SAMPLE_PALETTES` 键（脚本生成示例图用） */
+  /** 示例商品的配色标识 */
   palette: string;
   imageSeed: number;
 }

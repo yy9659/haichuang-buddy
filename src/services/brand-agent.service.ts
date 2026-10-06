@@ -447,7 +447,7 @@ export async function generateBrandProfile(
     return fail(
       "VALIDATION_FAILED",
       "尚未建立商家档案，无法生成品牌",
-      "品牌档案归属于商家。请先创建商家资料（可执行 pnpm db:seed 初始化演示数据）后再生成。",
+      "品牌档案归属于商家。请先注册并登录，填写商家资料后再生成。",
     );
   }
 

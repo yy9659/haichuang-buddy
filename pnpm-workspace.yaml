@@ -5,3 +5,7 @@ allowBuilds:
 # 本机（Windows / E: 盘）环境下 isolated 符号链接创建不稳定，
 # 使用 hoisted 扁平 node_modules，保证 pnpm install / pnpm dev 可复现。
 nodeLinker: hoisted
+
+# Drizzle 配置加载器使用 esbuild 的转换 API；统一到已修复开发服务 CORS 问题的版本。
+overrides:
+  '@esbuild-kit/core-utils>esbuild': 0.25.12

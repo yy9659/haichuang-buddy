@@ -33,7 +33,7 @@ export default async function RegisterPage({
       <div className="flex flex-col gap-4">
         <AuthForm mode="register" nextPath={nextPath} />
         <p className="rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-[11px] leading-5 text-white/75">
-          首次注册会导入示例商品与知识文档，之后可随时修改或删除。
+          注册后可填写店铺资料、添加商品，并建立自己的知识库。
         </p>
       </div>
     </AuthVideoShell>

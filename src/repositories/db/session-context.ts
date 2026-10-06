@@ -91,8 +91,8 @@ export const getSessionContext = cache(
       token = store.get(name)?.value;
     } catch {
       /**
-       * `cookies()` 在请求作用域之外会抛错 —— 脚本（`pnpm db:seed`）、
-       * vitest 里就是这种情况。这不是异常，而是「没有请求」的正常信号。
+       * `cookies()` 在请求作用域之外会抛错，例如维护工具或测试。
+       * 这是「没有请求」的正常信号。
        */
       return { kind: "no-request" };
     }

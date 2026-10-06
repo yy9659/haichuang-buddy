@@ -9,7 +9,7 @@
  * 现在改为：登录用户看到自己的商家；请求内无有效会话**拿不到任何商家**
  * （返回 null / 抛 UNAUTHORIZED），而不是静默回落到第一个租户。
  *
- * 例外：脚本（`pnpm db:seed`）、vitest、CRON 这类**没有请求作用域**的运行
+ * 例外：维护工具、测试、CRON 这类**没有请求作用域**的运行
  * 仍然回落到「最早的商家」，否则种子脚本自己都读不到刚写进去的数据。
  * 两条路径的辨别由 `getSessionContext()` 负责。
  */
@@ -33,7 +33,7 @@ type CurrentBusinessResolution =
  * 解析「当前商家 id」，并把两种「空」分开。
  *
  * 分开是必须的：未登录该抛 UNAUTHORIZED（前端跳登录页），
- * 库为空该抛 VALIDATION_FAILED（提示去跑 seed）。合成一种就分不清了。
+ * 库为空该抛 VALIDATION_FAILED（提示先注册账号）。合成一种就分不清了。
  */
 async function resolveCurrentBusiness(): Promise<CurrentBusinessResolution> {
   const context = await getSessionContext();
@@ -62,7 +62,7 @@ async function resolveCurrentBusiness(): Promise<CurrentBusinessResolution> {
  * 用于「读不到就当作尚未开始」的场景（例如品牌档案：还没建档就返回 null，
  * 界面进入 empty 态，而不是把「数据未初始化」当成错误抛出去）。
  * 未登录与库为空都返回 null —— 调用方不关心成因时用这个；
- * 需要区分「该去登录」还是「该去 seed」时用 `resolvePrimaryBusinessId()`。
+ * 需要区分「该去登录」还是「尚未开通商家」时用 `resolvePrimaryBusinessId()`。
  */
 export async function findPrimaryBusinessIdOrNull(): Promise<string | null> {
   const resolution = await resolveCurrentBusiness();
@@ -73,7 +73,7 @@ export async function findPrimaryBusinessIdOrNull(): Promise<string | null> {
  * 取当前商家 id；读不到时抛错。
  *
  * - 未登录（请求内无有效会话）→ UNAUTHORIZED，前端据此跳登录页
- * - 库为空（种子尚未跑）→ VALIDATION_FAILED，给出可操作提示
+ * - 库为空（尚未开通商家）→ VALIDATION_FAILED，给出可操作提示
  */
 export async function resolvePrimaryBusinessId(): Promise<string> {
   const resolution = await resolveCurrentBusiness();
@@ -95,7 +95,7 @@ export async function resolvePrimaryBusinessId(): Promise<string> {
     code: "VALIDATION_FAILED",
     message: "尚未创建商家档案",
     detail:
-      "businesses 表为空。请先写入一条商家记录（可执行 pnpm db:seed 初始化演示数据）。",
+      "businesses 表为空。请先注册账号，再填写商家资料。",
     retryable: false,
   });
 }

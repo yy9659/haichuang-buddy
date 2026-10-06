@@ -40,7 +40,7 @@ export function AuthForm({ mode, nextPath }: AuthFormProps) {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // 必须在异步之前取 FormData：事件对象在 React 里会被回收
+    // 在异步提交前读取表单，固定本次提交的输入。
     const formData = new FormData(event.currentTarget);
     formData.set("next", nextPath);
     setError(null);
