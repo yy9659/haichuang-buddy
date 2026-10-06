@@ -43,6 +43,16 @@
 </details>
 
 <details>
+
+<summary><strong>查看注册与登录入口</strong> · 海洋动态背景与玻璃质感卡片</summary>
+
+![注册页面：海洋背景、品牌标识与创建账号表单](docs/images/register.png)
+
+新用户可创建账号，并通过登录进入自己的经营空间。截图展示未填写的注册表单，页面同时提供已有账号的登录入口。
+
+</details>
+
+<details>
 <summary><strong>查看平台管理端</strong> · 指挥大屏、运行监控与公共知识管理</summary>
 
 ![平台管理指挥大屏：海产品类、任务与渠道的可视化展示](docs/images/admin-dashboard.png)
