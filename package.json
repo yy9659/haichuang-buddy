@@ -16,17 +16,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:check": "drizzle-kit check",
-    "db:seed": "tsx scripts/seed.ts",
-    "demo:reset": "tsx scripts/demo-reset.ts",
-    "db:studio": "drizzle-kit studio",
-    "test:db": "vitest run --config vitest.db.config.mts"
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.8",
@@ -60,12 +54,8 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.31.11",
-    "eslint": "^9",
-    "eslint-config-next": "16.3.6",
     "tailwindcss": "^4",
-    "tsx": "^4.23.15",
-    "typescript": "^5",
-    "vitest": "^5.0.1"
+    "typescript": "^5"
   },
   "packageManager": "pnpm@12.6.0"
 }

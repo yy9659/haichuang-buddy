@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/images/readme-banner.svg" alt="海创Buddy：一个人，也可以拥有一支 AI 经营团队" width="100%" />
+<img src="docs/images/readme-banner.png" alt="海创Buddy：一个人，也可以拥有一支 AI 经营团队" width="100%" />
 
 # 海创Buddy · Haichuang Buddy
 
@@ -11,7 +11,7 @@
 
 [![CI](https://github.com/yy9659/haichuang-buddy/actions/workflows/ci.yml/badge.svg)](https://github.com/yy9659/haichuang-buddy/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-22D3EE?style=flat-square)](LICENSE) ![Next.js](https://img.shields.io/badge/Next.js-16-111827?style=flat-square&logo=nextdotjs) ![React](https://img.shields.io/badge/React-19-149ECA?style=flat-square&logo=react) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
 
-[界面预览](#界面预览) · [核心功能](#核心功能) · [快速启动](#快速启动) · [部署指南](docs/DEPLOYMENT.md) · [技术架构](#技术架构) · [参与贡献](CONTRIBUTING.md)
+[界面预览](#界面预览) · [核心功能](#核心功能) · [快速启动](#快速启动) · [部署指南](docs/DEPLOYMENT.md) · [技术架构](#技术架构)
 
 </div>
 
@@ -200,7 +200,7 @@ pnpm start
 | AI 与校验 | DashScope 通义千问、可选通义万相、Zod 结构化输出 |
 | 编排与检索 | 经营目标规划、工作流依赖与复用、失败重试、知识切片与向量检索、引用校验 |
 | 数据与存储 | Drizzle ORM、PGlite / PostgreSQL、本地文件 / Supabase Storage |
-| 开发与检查 | pnpm、ESLint、Vitest、GitHub Actions |
+| 安装与构建 | pnpm、TypeScript、GitHub Actions |
 
 ```text
 src/
@@ -220,23 +220,18 @@ src/
 ├── storage/         商品图片与创意背景存储
 └── analytics/       指标计算与销售分析依据
 docs/                功能、部署与资源说明
-scripts/             种子、验证与开发维护工具
 ```
 
 调用链：**页面 → Server Action / Route Handler → Service → Agent / Repository → 数据库**。模型密钥与数据库连接保留在服务端。
 
-## 开发与贡献
+## 构建检查
 
 ```bash
 pnpm typecheck
-pnpm lint
-pnpm test
 pnpm build
 ```
 
-GitHub Actions 在主分支提交与 Pull Request 时执行上述检查，使用 Mock 模式，无需仓库配置真实模型密钥。
-
-数据库集成测试、独立测试目录与维护工具用法见 [贡献指南](CONTRIBUTING.md)。问题、改进建议和 Pull Request 欢迎提交到 [GitHub Issues](https://github.com/yy9659/haichuang-buddy/issues) 与 [Pull Requests](https://github.com/yy9659/haichuang-buddy/pulls)。
+GitHub Actions 在主分支提交与 Pull Request 时检查类型与生产构建，使用 Mock 模式，无需仓库配置真实模型密钥。问题与建议欢迎通过 [GitHub Issues](https://github.com/yy9659/haichuang-buddy/issues) 提交。
 
 ## 项目文档
 
@@ -244,7 +239,6 @@ GitHub Actions 在主分支提交与 Pull Request 时执行上述检查，使用
 | :--- | :--- |
 | [技术与使用指南](docs/技术与使用指南.md) | 页面能力、海报、销售、模型配置、管理端口径与故障排查 |
 | [部署指南](docs/DEPLOYMENT.md) | 本地生产运行、服务器部署、数据持久化、迁移与备份 |
-| [贡献指南](CONTRIBUTING.md) | 开发流程、目录边界、检查与独立数据库测试 |
 | [资源说明](docs/ASSETS.md) | 品牌文件、真实截图与替换方式 |
 | [环境变量模板](.env.example) | 配置项与默认模型；真实密钥填写在本地配置 |
 | [MIT 许可证](LICENSE) | 使用、修改与分发项目代码的许可条款 |
@@ -269,6 +263,6 @@ GitHub Actions 在主分支提交与 Pull Request 时执行上述检查，使用
 
 **海创Buddy · 让一个人的经营，有团队的分工。**
 
-[报告问题](https://github.com/yy9659/haichuang-buddy/issues) · [参与贡献](CONTRIBUTING.md) · [开始部署](docs/DEPLOYMENT.md)
+[报告问题](https://github.com/yy9659/haichuang-buddy/issues) · [开始部署](docs/DEPLOYMENT.md)
 
 </div>
