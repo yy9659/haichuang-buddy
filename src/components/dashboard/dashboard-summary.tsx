@@ -35,23 +35,23 @@ function SummaryMetric({ title, value, unit, description, href, icon: Icon, tone
   tone: "blue" | "cyan" | "violet";
 }) {
   return (
-    <Link href={href} className="group flex flex-col rounded-2xl border border-white/10 bg-white/[0.05] p-4 shadow-md shadow-black/20 backdrop-blur-md transition-[box-shadow,border-color] duration-200 hover:border-white/20 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400">
+    <Link href={href} className="group flex flex-col rounded-2xl border border-slate-900/10 bg-slate-900/[0.03] p-4 shadow-md shadow-slate-900/10 backdrop-blur-md transition-[box-shadow,border-color] duration-200 hover:border-slate-900/20 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400 dark:border-white/10 dark:bg-white/[0.05] dark:shadow-black/20 dark:hover:border-white/20">
       <div className="flex items-center justify-between gap-2">
-        <span className={cn("flex size-10 shrink-0 items-center justify-center rounded-xl", tone === "blue" && "bg-blue-400/15 text-blue-300", tone === "cyan" && "bg-cyan-400/15 text-cyan-300", tone === "violet" && "bg-violet-400/15 text-violet-300")}>
+        <span className={cn("flex size-10 shrink-0 items-center justify-center rounded-xl", tone === "blue" && "bg-blue-600/10 text-blue-700 dark:bg-blue-400/15 dark:text-blue-300", tone === "cyan" && "bg-cyan-600/10 text-cyan-700 dark:bg-cyan-400/15 dark:text-cyan-300", tone === "violet" && "bg-violet-600/10 text-violet-700 dark:bg-violet-400/15 dark:text-violet-300")}>
           <Icon className="size-5" strokeWidth={1.8} />
         </span>
-        <span className="rounded-full bg-white/8 px-2 py-0.5 text-xs text-slate-400">
+        <span className="rounded-full bg-slate-900/5 px-2 py-0.5 text-xs text-slate-500 dark:bg-white/8 dark:text-slate-400">
           实时
         </span>
       </div>
-      <h2 className="mt-3 text-[13px] font-medium text-slate-400">{title}</h2>
-      <p className="mt-0.5 text-[28px] leading-9 font-semibold tracking-tight text-white tabular-nums">
+      <h2 className="mt-3 text-[13px] font-medium text-slate-500 dark:text-slate-400">{title}</h2>
+      <p className="mt-0.5 text-[28px] leading-9 font-semibold tracking-tight text-slate-900 tabular-nums dark:text-white">
         {value === null ? "—" : formatNumber(value)}
         <span className="ml-1.5 text-xs font-normal text-slate-500">{unit}</span>
       </p>
-      <p className="mt-1 flex items-center gap-1 text-[13px] leading-5 text-slate-400">
+      <p className="mt-1 flex items-center gap-1 text-[13px] leading-5 text-slate-500 dark:text-slate-400">
         <span className="truncate">{value === null ? "数据暂不可用" : description}</span>
-        <ArrowUpRight className="ml-auto size-3.5 shrink-0 text-slate-500 transition-colors group-hover:text-cyan-300" />
+        <ArrowUpRight className="ml-auto size-3.5 shrink-0 text-slate-500 transition-colors group-hover:text-cyan-600 dark:group-hover:text-cyan-300" />
       </p>
     </Link>
   );

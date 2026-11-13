@@ -104,18 +104,18 @@ export function ContentEditor({ content, onDraftChange }: {
 
   return (
     <div className="flex flex-col gap-2">
-      {isPoster ? <div className="mb-1 flex items-center justify-between gap-2"><h4 className="text-sm font-semibold text-cyan-100">海报文案</h4><span className="text-[11px] text-slate-400">{changed ? "修改尚未保存" : "文字与海报同步"}</span></div> : null}
-      <PreviewContainer className={isPoster ? "mb-2 rounded-lg border border-white/10 px-3 py-2.5" : "mb-2 rounded-2xl border border-cyan-400/20 bg-gradient-to-br from-[#12395d] to-[#10243e] p-4 shadow-lg shadow-black/10"}>
-        {isPoster ? <summary className="cursor-pointer text-xs text-slate-400">查看发布文案预览</summary> : null}
+      {isPoster ? <div className="mb-1 flex items-center justify-between gap-2"><h4 className="text-sm font-semibold text-cyan-700 dark:text-cyan-100">海报文案</h4><span className="text-[11px] text-slate-500 dark:text-slate-400">{changed ? "修改尚未保存" : "文字与海报同步"}</span></div> : null}
+      <PreviewContainer className={isPoster ? "mb-2 rounded-lg border border-slate-900/10 px-3 py-2.5 dark:border-white/10" : "mb-2 rounded-2xl border border-cyan-600/25 bg-gradient-to-br from-blue-50 to-cyan-50 p-4 shadow-lg shadow-slate-900/10 dark:border-cyan-400/20 dark:from-[#12395d] dark:to-[#10243e] dark:shadow-black/10"}>
+        {isPoster ? <summary className="cursor-pointer text-xs text-slate-500 dark:text-slate-400">查看发布文案预览</summary> : null}
         <div>
         <div className="flex items-center justify-between gap-2">
-          <span className="text-xs font-semibold tracking-wide text-cyan-200">发布文案预览</span>
-          {changed ? <span className="text-xs text-amber-200">修改尚未保存</span> : null}
+          <span className="text-xs font-semibold tracking-wide text-cyan-700 dark:text-cyan-200">发布文案预览</span>
+          {changed ? <span className="text-xs text-amber-700 dark:text-amber-200">修改尚未保存</span> : null}
         </div>
-        <h4 className="mt-3 text-lg font-semibold text-white">{title || "等待填写标题"}</h4>
-        <p className="mt-2 text-sm font-medium leading-6 text-cyan-100">{hook || "填写开头一句"}</p>
-        <p className="mt-2 line-clamp-5 whitespace-pre-line text-sm leading-6 text-slate-200">{body || "填写正文"}</p>
-        <p className="mt-2 text-xs text-cyan-200">{content.hashtags.join(" ")}</p>
+        <h4 className="mt-3 text-lg font-semibold text-slate-900 dark:text-white">{title || "等待填写标题"}</h4>
+        <p className="mt-2 text-sm font-medium leading-6 text-cyan-700 dark:text-cyan-100">{hook || "填写开头一句"}</p>
+        <p className="mt-2 line-clamp-5 whitespace-pre-line text-sm leading-6 text-slate-700 dark:text-slate-200">{body || "填写正文"}</p>
+        <p className="mt-2 text-xs text-cyan-700 dark:text-cyan-200">{content.hashtags.join(" ")}</p>
         </div>
       </PreviewContainer>
       {!isPoster ? <p className="text-xs font-medium text-muted-foreground">修改文案</p> : null}
@@ -166,14 +166,14 @@ export function ContentEditor({ content, onDraftChange }: {
         className="w-full rounded-lg border border-border bg-card px-3 py-2 text-[12px] outline-none focus-visible:ring-2 focus-visible:ring-ring/40 disabled:opacity-70"
       />
       {reviewNotes.length > 0 ? (
-        <div className="rounded-xl border border-amber-400/20 bg-amber-400/[0.07] p-3 text-xs leading-5 text-amber-100">
+        <div className="rounded-xl border border-amber-600/25 bg-amber-600/[0.07] p-3 text-xs leading-5 text-amber-700 dark:border-amber-400/20 dark:bg-amber-400/[0.07] dark:text-amber-100">
           <p className="font-semibold">发布前留意</p>
           <ul className="mt-1 space-y-1">
             {reviewNotes.map((note) => <li key={note}>· {note}</li>)}
           </ul>
         </div>
       ) : null}
-      {isDemoDraft ? <p className="text-xs text-amber-200">这是演示模式的占位草稿，可复制体验，但不能确认可用或标记发布。</p> : null}
+      {isDemoDraft ? <p className="text-xs text-amber-700 dark:text-amber-200">这是演示模式的占位草稿，可复制体验，但不能确认可用或标记发布。</p> : null}
       <div className="flex flex-wrap gap-2">
         {content.status !== "published" ? (
           <Button type="button" size="sm" variant="outline" onClick={save} disabled={pending || !changed || !valid}>
@@ -191,10 +191,10 @@ export function ContentEditor({ content, onDraftChange }: {
         </Button>
       </div>
       {canApprove || content.status === "approved" ? (
-        <ApprovalContainer className={isPoster ? "mt-2 rounded-lg border border-white/10 px-3 py-2.5" : "space-y-2"}>
-          {isPoster ? <summary className="cursor-pointer text-xs text-slate-400">确认文案与记录发布</summary> : null}
+        <ApprovalContainer className={isPoster ? "mt-2 rounded-lg border border-slate-900/10 px-3 py-2.5 dark:border-white/10" : "space-y-2"}>
+          {isPoster ? <summary className="cursor-pointer text-xs text-slate-500 dark:text-slate-400">确认文案与记录发布</summary> : null}
           <div className="mt-2 space-y-2">
-            {canApprove ? <label className="flex cursor-pointer items-start gap-2 text-[11px] leading-5 text-slate-300"><input type="checkbox" checked={reviewed} onChange={(event) => setReviewed(event.target.checked)} className="mt-1 accent-cyan-500" /><span><ShieldCheck className="mr-1 inline size-3.5 text-cyan-300" />我已核对商品名称、价格、产地、保质期和文案承诺。</span></label> : null}
+            {canApprove ? <label className="flex cursor-pointer items-start gap-2 text-[11px] leading-5 text-slate-600 dark:text-slate-300"><input type="checkbox" checked={reviewed} onChange={(event) => setReviewed(event.target.checked)} className="mt-1 accent-cyan-500" /><span><ShieldCheck className="mr-1 inline size-3.5 text-cyan-700 dark:text-cyan-300" />我已核对商品名称、价格、产地、保质期和文案承诺。</span></label> : null}
             {canApprove ? <Button type="button" size="sm" onClick={() => confirm("approved")} disabled={pending || changed || !reviewed || isDemoDraft}><Check />确认文案可用</Button> : null}
             {content.status === "approved" ? <Button type="button" size="sm" onClick={() => confirm("published")} disabled={pending || changed}><Send />标记已发布</Button> : null}
           </div>

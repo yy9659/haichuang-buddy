@@ -238,7 +238,9 @@ export function ProductPosterPanel({ product, copy, contentId, isDemo, slot, cre
   }
 
   return (
-    <section aria-label="商品营销海报" className="min-w-0 overflow-hidden rounded-2xl border border-cyan-300/20 bg-linear-to-br from-[#123651] via-[#0e2944] to-[#0b223b] shadow-xl shadow-slate-950/15">
+    // theme-locked：海报工作区是专业设计面，变量锁定深海配色，
+    // 不随全局亮暗开关变化，确保画布观感与导出 PNG 颜色绝对稳定。
+    <section aria-label="商品营销海报" className="theme-locked min-w-0 overflow-hidden rounded-2xl border border-cyan-300/20 bg-linear-to-br from-[#123651] via-[#0e2944] to-[#0b223b] shadow-xl shadow-slate-950/15">
       <header className="flex items-center justify-between gap-3 border-b border-cyan-200/10 bg-white/3 px-4 py-3">
         <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-100"><span className="flex size-7 items-center justify-center rounded-lg border border-cyan-300/20 bg-cyan-300/10"><ImagePlus className="size-4 text-cyan-300" /></span>商品营销海报</h4>
         <span className="text-[11px] text-slate-400">预览 · PNG 下载</span>

@@ -51,7 +51,7 @@ export function TrafficTrendChart({
         <CartesianGrid
           strokeDasharray="3 3"
           vertical={false}
-          stroke="var(--border)"
+          stroke="var(--chart-grid)"
         />
         <XAxis
           dataKey="date"
@@ -68,15 +68,18 @@ export function TrafficTrendChart({
           tickFormatter={(value: number) => formatNumber(value)}
         />
         <Tooltip
-          cursor={{ stroke: "var(--border)", strokeWidth: 1 }}
+          cursor={{ stroke: "var(--chart-axis)", strokeWidth: 1 }}
           contentStyle={{
             borderRadius: 10,
             border: "1px solid var(--border)",
+            background: "var(--popover)",
+            color: "var(--popover-foreground)",
             boxShadow: "0 12px 32px -14px rgba(15, 23, 42, 0.3)",
             fontSize: 12,
             padding: "8px 10px",
           }}
           labelStyle={{ color: "var(--muted-foreground)", fontSize: 11 }}
+          itemStyle={{ color: "var(--popover-foreground)" }}
           formatter={(value) =>
             typeof value === "number" ? formatNumber(value) : `${value}`
           }

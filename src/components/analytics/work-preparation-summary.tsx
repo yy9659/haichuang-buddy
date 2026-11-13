@@ -56,10 +56,10 @@ export function WorkPreparationSummary({ snapshot }: { snapshot: AnalyticsSnapsh
   return (
     <section aria-labelledby="work-preparation-title" className="space-y-3">
       <div>
-        <h2 id="work-preparation-title" className="text-base font-semibold text-slate-100">
+        <h2 id="work-preparation-title" className="text-base font-semibold text-slate-800 dark:text-slate-100">
           店里的准备工作
         </h2>
-        <p className="mt-1 text-sm text-slate-400">
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
           看看商品、推广和答疑准备到了哪一步。数字来自海创Buddy内的操作记录。
         </p>
       </div>
@@ -68,15 +68,15 @@ export function WorkPreparationSummary({ snapshot }: { snapshot: AnalyticsSnapsh
           const Icon = item.icon;
           return (
             <article key={item.title} className="flex flex-col rounded-2xl border border-border bg-card p-4">
-              <div className="flex items-center gap-2 text-sm font-medium text-slate-200">
+              <div className="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-200">
                 <span className="flex size-9 items-center justify-center rounded-xl bg-primary-soft text-primary">
                   <Icon className="size-4" aria-hidden="true" />
                 </span>
                 {item.title}
               </div>
-              <p className="mt-3 text-xl font-semibold tabular-nums text-white">{item.value}</p>
-              <p className="mt-1 flex-1 text-xs leading-5 text-slate-400">{item.detail}</p>
-              <Link href={item.href} className="mt-3 inline-flex w-fit items-center gap-1 text-xs font-medium text-cyan-300 hover:text-cyan-200">
+              <p className="mt-3 text-xl font-semibold tabular-nums text-slate-900 dark:text-white">{item.value}</p>
+              <p className="mt-1 flex-1 text-xs leading-5 text-slate-500 dark:text-slate-400">{item.detail}</p>
+              <Link href={item.href} className="mt-3 inline-flex w-fit items-center gap-1 text-xs font-medium text-cyan-700 hover:text-cyan-800 dark:text-cyan-300 dark:hover:text-cyan-200">
                 {item.link}<ArrowUpRight className="size-3.5" aria-hidden="true" />
               </Link>
             </article>

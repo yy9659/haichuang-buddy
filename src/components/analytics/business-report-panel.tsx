@@ -96,10 +96,10 @@ export function BusinessReportSection({
           </p>
         </div>
 
-        {firstAction ? <div className="rounded-xl border border-primary/20 bg-primary-soft p-4"><div className="flex items-center gap-2 text-xs font-medium text-cyan-200"><ListChecks className="size-4" />准备工作先做这件事</div><h3 className="mt-2 text-sm font-semibold text-slate-100">{sanitizeUserFacingText(firstAction.title)}</h3><p className="mt-1 text-xs leading-6 text-slate-300">{sanitizeUserFacingText(firstAction.recommendedAction)}</p><Link href={actionHref} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-cyan-200 hover:text-white">去处理<ArrowRight className="size-3.5" /></Link></div> : null}
+        {firstAction ? <div className="rounded-xl border border-primary/20 bg-primary-soft p-4"><div className="flex items-center gap-2 text-xs font-medium text-cyan-700 dark:text-cyan-200"><ListChecks className="size-4" />准备工作先做这件事</div><h3 className="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">{sanitizeUserFacingText(firstAction.title)}</h3><p className="mt-1 text-xs leading-6 text-slate-600 dark:text-slate-300">{sanitizeUserFacingText(firstAction.recommendedAction)}</p><Link href={actionHref} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-cyan-700 hover:text-slate-900 dark:text-cyan-200 dark:hover:text-white">去处理<ArrowRight className="size-3.5" /></Link></div> : null}
 
         <details className="rounded-xl border border-border bg-muted/40 p-3">
-          <summary className="cursor-pointer text-xs font-medium text-slate-300">看看做得好的地方和待留意的事</summary>
+          <summary className="cursor-pointer text-xs font-medium text-slate-600 dark:text-slate-300">看看做得好的地方和待留意的事</summary>
           <div className="mt-4 grid gap-4 lg:grid-cols-2">
 
         {/* 亮点 */}
@@ -177,7 +177,7 @@ export function BusinessReportSection({
         {/* 优先行动 */}
         {report.actions.length > 1 ? (
           <Block
-            icon={<ListChecks className="size-3.5 text-cyan-300" />}
+            icon={<ListChecks className="size-3.5 text-cyan-700 dark:text-cyan-300" />}
             title="时间允许的话，还可以做"
           >
             <ol className="flex flex-col gap-2">
@@ -336,7 +336,7 @@ export function BusinessReportHistory({
                   <p className="mt-0.5 line-clamp-2 text-[12px] leading-5 text-muted-foreground">
                     {sanitizeUserFacingText(item.report.salesReview?.summary ?? item.report.executiveSummary)}
                   </p>
-                  {item.report.salesReview ? <details className="mt-2 text-xs"><summary className="cursor-pointer text-cyan-200">查看当时的销售建议{item.snapshot.sales?.mode === "demo" ? "（演示记录）" : ""}</summary><ul className="mt-2 space-y-2">{item.report.salesReview.actions.map(action => <li key={action.priority}><strong className="text-slate-200">{action.priority}. {action.title}</strong><p className="mt-1 leading-5 text-slate-400">{action.steps}</p></li>)}</ul><p className="mt-2 text-[11px] leading-5 text-slate-400">{item.snapshot.sales?.facts.find(fact => fact.id === "revenue")?.display} · {item.report.salesReview.isMock ? "演示模型建议" : "AI 建议"}，仅对应当时保存的记录。</p></details> : null}
+                  {item.report.salesReview ? <details className="mt-2 text-xs"><summary className="cursor-pointer text-cyan-700 dark:text-cyan-200">查看当时的销售建议{item.snapshot.sales?.mode === "demo" ? "（演示记录）" : ""}</summary><ul className="mt-2 space-y-2">{item.report.salesReview.actions.map(action => <li key={action.priority}><strong className="text-slate-700 dark:text-slate-200">{action.priority}. {action.title}</strong><p className="mt-1 leading-5 text-slate-500 dark:text-slate-400">{action.steps}</p></li>)}</ul><p className="mt-2 text-[11px] leading-5 text-slate-500 dark:text-slate-400">{item.snapshot.sales?.facts.find(fact => fact.id === "revenue")?.display} · {item.report.salesReview.isMock ? "演示模型建议" : "AI 建议"}，仅对应当时保存的记录。</p></details> : null}
                 </div>
                 <Badge variant={health.tone}>{health.label}</Badge>
               </li>

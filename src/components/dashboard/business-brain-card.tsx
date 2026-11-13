@@ -84,26 +84,26 @@ export function BusinessBrainCard({
           status === "error" ? "任务需处理" : "等待指令";
 
   return (
-    <Card className="relative isolate flex h-full min-h-0 flex-col overflow-hidden border-white/10 bg-white/[0.05] shadow-md shadow-black/20">
+    <Card className="relative isolate flex h-full min-h-0 flex-col overflow-hidden border-slate-900/10 bg-slate-900/[0.03] shadow-md shadow-slate-900/10 dark:border-white/10 dark:bg-white/[0.05] dark:shadow-black/20">
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
 
       <div className="flex min-h-56 flex-1 flex-col xl:min-h-0">
         <header className="relative flex flex-wrap items-start justify-between gap-2 px-4 pt-3.5 pb-2">
           <div className="flex items-start gap-2.5">
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-cyan-300/25 bg-cyan-300/10 text-cyan-300">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-cyan-600/20 bg-cyan-600/10 text-cyan-700 dark:border-cyan-300/25 dark:bg-cyan-300/10 dark:text-cyan-300">
               <Brain className={cn("size-4.5", status === "running" && "motion-safe:animate-pulse")} aria-hidden="true" />
             </span>
             <div>
-              <h2 className="text-[15px] font-semibold leading-5 text-white">{brain.name}</h2>
-              <p className="mt-0.5 text-xs text-slate-400">{brain.role}</p>
+              <h2 className="text-[15px] font-semibold leading-5 text-slate-900 dark:text-white">{brain.name}</h2>
+              <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{brain.role}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <span className={cn(
               "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium",
-              status === "error" ? "border-rose-400/25 bg-rose-400/10 text-rose-200" :
-                status === "completed" ? "border-blue-400/30 bg-blue-400/10 text-blue-200" :
-                  "border-cyan-300/25 bg-cyan-300/10 text-cyan-100",
+              status === "error" ? "border-rose-600/20 bg-rose-600/10 text-rose-700 dark:border-rose-400/25 dark:bg-rose-400/10 dark:text-rose-200" :
+                status === "completed" ? "border-blue-600/25 bg-blue-600/10 text-blue-700 dark:border-blue-400/30 dark:bg-blue-400/10 dark:text-blue-200" :
+                  "border-cyan-600/20 bg-cyan-600/10 text-cyan-700 dark:border-cyan-300/25 dark:bg-cyan-300/10 dark:text-cyan-100",
             )}>
               <span className={cn(
                 "size-1.5 rounded-full",
@@ -117,7 +117,7 @@ export function BusinessBrainCard({
         </header>
 
         {brain.phase === "interrupted" ? (
-          <div className="mx-4 mb-2 flex items-start gap-2 rounded-lg border border-rose-400/25 bg-rose-400/10 px-3 py-2 text-xs leading-5 text-rose-200">
+          <div className="mx-4 mb-2 flex items-start gap-2 rounded-lg border border-rose-600/20 bg-rose-600/10 px-3 py-2 text-xs leading-5 text-rose-700 dark:border-rose-400/25 dark:bg-rose-400/10 dark:text-rose-200">
             <TriangleAlert className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
             <span>上一轮任务停在「执行中」且已超过 10 分钟，可在下方任务列表中重试。</span>
           </div>
@@ -140,7 +140,7 @@ export function BusinessBrainCard({
                   <stop offset="100%" stopColor="#3b82f6" />
                 </linearGradient>
               </defs>
-              <circle cx="90" cy="90" r={RADIUS} fill="none" stroke="#123653" strokeWidth="11" />
+              <circle cx="90" cy="90" r={RADIUS} fill="none" stroke="var(--chart-grid)" strokeWidth="11" />
               {percent !== null ? (
                 <circle cx="90" cy="90" r={RADIUS} fill="none" stroke="url(#brain-core-gradient)" strokeWidth="11" strokeLinecap="round"
                   strokeDasharray={CIRCUMFERENCE} strokeDashoffset={CIRCUMFERENCE * (1 - percent / 100)}
@@ -148,11 +148,11 @@ export function BusinessBrainCard({
               ) : null}
             </svg>
             <div className="relative flex flex-col items-center text-center">
-              <span className="text-3xl font-semibold leading-8 tracking-tight text-white tabular-nums">
+              <span className="text-3xl font-semibold leading-8 tracking-tight text-slate-900 tabular-nums dark:text-white">
                 {percent === null ? "—" : percent}
-                {percent === null ? null : <span className="ml-0.5 text-base text-cyan-200">%</span>}
+                {percent === null ? null : <span className="ml-0.5 text-base text-cyan-700 dark:text-cyan-200">%</span>}
               </span>
-              <span className="mt-1 text-[11px] text-slate-300">{coreCaption}</span>
+              <span className="mt-1 text-[11px] text-slate-600 dark:text-slate-300">{coreCaption}</span>
             </div>
           </div>
         </div>
@@ -160,31 +160,31 @@ export function BusinessBrainCard({
 
       {/* 与两侧 grid-rows-2 的第二排同高；减去一半的 1rem 行间距。 */}
       <div className="flex flex-col gap-2 px-4 pt-2 pb-3 xl:basis-[calc(50%_-_0.5rem)] xl:shrink-0 xl:justify-between">
-        <section className="w-full min-w-0 rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2" aria-label="当前经营目标">
-          <p className="text-xs font-semibold tracking-wide text-cyan-300">当前经营目标</p>
-          <p className="mt-0.5 line-clamp-2 text-xs font-medium leading-4 text-slate-100" title={brain.goal ?? undefined}>
+        <section className="w-full min-w-0 rounded-2xl border border-slate-900/10 bg-slate-900/[0.03] px-3 py-2 dark:border-white/10 dark:bg-white/[0.04]" aria-label="当前经营目标">
+          <p className="text-xs font-semibold tracking-wide text-cyan-700 dark:text-cyan-300">当前经营目标</p>
+          <p className="mt-0.5 line-clamp-2 text-xs font-medium leading-4 text-slate-900 dark:text-slate-100" title={brain.goal ?? undefined}>
             {goal.summary ?? "已准备就绪，点击上方按钮制定目标"}
           </p>
           {hasGoalMeta ? (
-            <dl className="mt-1.5 grid grid-cols-3 gap-2 border-t border-white/10 pt-1.5">
+            <dl className="mt-1.5 grid grid-cols-3 gap-2 border-t border-slate-900/10 pt-1.5 dark:border-white/10">
               {([
                 ["主推商品", goal.product],
                 ["目标人群", goal.audience],
                 ["渠道", goal.channels],
               ] as const).map(([label, value]) => (
                 <div key={label} className="min-w-0">
-                  <dt className="text-xs text-slate-400">{label}</dt>
-                  <dd className="truncate text-xs font-medium text-cyan-100" title={value ?? undefined}>{value ?? "待选择"}</dd>
+                  <dt className="text-xs text-slate-500 dark:text-slate-400">{label}</dt>
+                  <dd className="truncate text-xs font-medium text-cyan-700 dark:text-cyan-100" title={value ?? undefined}>{value ?? "待选择"}</dd>
                 </div>
               ))}
             </dl>
           ) : null}
         </section>
 
-        <div className="relative w-full rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-1.5" aria-label="经营工作阶段">
+        <div className="relative w-full rounded-2xl border border-slate-900/10 bg-slate-900/[0.03] px-3 py-1.5 dark:border-white/10 dark:bg-white/[0.04]" aria-label="经营工作阶段">
           <div aria-hidden="true" className={cn(
             "absolute inset-x-[12.5%] top-4 h-px",
-            status === "completed" ? "bg-blue-400/50" : "bg-cyan-400/20",
+            status === "completed" ? "bg-blue-600/40 dark:bg-blue-400/50" : "bg-cyan-600/20 dark:bg-cyan-400/20",
           )} />
           <ol className="relative grid grid-cols-4 gap-1">
             {brain.skills.map((skill, index) => {
@@ -194,16 +194,16 @@ export function BusinessBrainCard({
                 <li key={skill} className="flex min-w-0 flex-col items-center gap-1 text-center">
                   <span className={cn(
                     "flex size-5 items-center justify-center rounded-full border",
-                    done ? "border-blue-400/50 bg-blue-400/15 text-blue-300" :
-                      active ? "border-cyan-300/60 bg-cyan-400/20 text-cyan-200 motion-safe:animate-pulse" :
-                        "border-white/15 bg-slate-800 text-slate-500",
+                    done ? "border-blue-600/30 bg-blue-600/10 text-blue-700 dark:border-blue-400/50 dark:bg-blue-400/15 dark:text-blue-300" :
+                      active ? "border-cyan-600/40 bg-cyan-600/15 text-cyan-700 motion-safe:animate-pulse dark:border-cyan-300/60 dark:bg-cyan-400/20 dark:text-cyan-200" :
+                        "border-slate-900/15 bg-slate-200 text-slate-400 dark:border-white/15 dark:bg-slate-800 dark:text-slate-500",
                   )}>
                     {done ? <Check className="size-3" strokeWidth={2} aria-hidden="true" /> :
                       <span className="size-1.5 rounded-full bg-current" aria-hidden="true" />}
                   </span>
                   <span className={cn(
                     "truncate text-[11px] font-medium",
-                    done ? "text-blue-300" : active ? "text-cyan-200" : "text-slate-500",
+                    done ? "text-blue-700 dark:text-blue-300" : active ? "text-cyan-700 dark:text-cyan-200" : "text-slate-500",
                   )}>{skill}</span>
                 </li>
               );

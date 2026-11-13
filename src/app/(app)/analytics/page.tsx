@@ -63,35 +63,35 @@ export default async function AnalyticsPage() {
         badge={<Badge variant="soft">销售分析 · 经营建议</Badge>}
       />
 
-      <section className="rounded-2xl border border-white/10 bg-[#112131]/80 p-5 text-card-foreground shadow-md shadow-black/25 backdrop-blur-md" aria-labelledby="today-action-title">
-        <div className="flex items-center gap-2 text-cyan-200"><ListChecks className="size-4" /><span className="text-xs font-medium">今天先做这件事</span></div>
-        <h2 id="today-action-title" className="mt-2 text-xl font-semibold text-white">{actions[0].title}</h2>
-        <p className="mt-1 text-sm text-slate-300">{actions[0].detail}</p>
+      <section className="rounded-2xl border border-slate-900/10 bg-card/80 p-5 text-card-foreground shadow-md shadow-slate-900/10 backdrop-blur-md dark:border-white/10 dark:bg-[#112131]/80 dark:shadow-black/25" aria-labelledby="today-action-title">
+        <div className="flex items-center gap-2 text-cyan-700 dark:text-cyan-200"><ListChecks className="size-4" /><span className="text-xs font-medium">今天先做这件事</span></div>
+        <h2 id="today-action-title" className="mt-2 text-xl font-semibold text-slate-900 dark:text-white">{actions[0].title}</h2>
+        <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{actions[0].detail}</p>
         <Link href={actions[0].href} className="mt-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-5 py-2 text-sm font-medium text-white shadow-md shadow-blue-500/30 hover:from-blue-700 hover:to-cyan-600">{actions[0].link}<ArrowRight className="size-4" /></Link>
-        {actions.length > 1 ? <div className="mt-5 grid gap-2 border-t border-white/10 pt-4 sm:grid-cols-2">{actions.slice(1).map((action) => <Link key={action.title} href={action.href} className="rounded-xl border border-white/10 bg-white/[0.05] p-3 hover:bg-white/10"><span className="text-sm font-medium text-slate-100">{action.title}</span><span className="mt-1 block text-xs text-slate-400">{action.detail}</span></Link>)}</div> : null}
+        {actions.length > 1 ? <div className="mt-5 grid gap-2 border-t border-slate-900/10 pt-4 sm:grid-cols-2 dark:border-white/10">{actions.slice(1).map((action) => <Link key={action.title} href={action.href} className="rounded-xl border border-slate-900/10 bg-slate-900/[0.03] p-3 hover:bg-slate-900/5 dark:border-white/10 dark:bg-white/[0.05] dark:hover:bg-white/10"><span className="text-sm font-medium text-slate-800 dark:text-slate-100">{action.title}</span><span className="mt-1 block text-xs text-slate-500 dark:text-slate-400">{action.detail}</span></Link>)}</div> : null}
       </section>
 
       <SalesPanel view={sales} reports={salesReports} generating={real.reportState.status === "generating"} unavailableReason={reportsDegraded?.reason} />
 
-      {!reportsDegraded && salesReports.length > 1 ? <details className="rounded-2xl border border-border bg-card p-4 sm:p-5"><summary className="cursor-pointer text-sm font-medium text-slate-200">查看以往的经营回顾</summary><div className="mt-4"><BusinessReportHistory reports={salesReports} latestId={real.latestReport?.id ?? null} /></div></details> : null}
+      {!reportsDegraded && salesReports.length > 1 ? <details className="rounded-2xl border border-border bg-card p-4 sm:p-5"><summary className="cursor-pointer text-sm font-medium text-slate-700 dark:text-slate-200">查看以往的经营回顾</summary><div className="mt-4"><BusinessReportHistory reports={salesReports} latestId={real.latestReport?.id ?? null} /></div></details> : null}
 
       <details className="group rounded-2xl border border-border bg-card p-4 sm:p-5">
         <summary className="cursor-pointer list-none rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 [&::-webkit-details-marker]:hidden">
           <span className="flex items-center justify-between gap-4">
             <span>
-              <span className="block text-base font-semibold text-slate-100">商品、推广和答疑准备得怎么样</span>
-              <span className="mt-1 block text-sm font-normal text-slate-400">看看哪些工作已经做好，哪些还可以补齐</span>
+              <span className="block text-base font-semibold text-slate-800 dark:text-slate-100">商品、推广和答疑准备得怎么样</span>
+              <span className="mt-1 block text-sm font-normal text-slate-500 dark:text-slate-400">看看哪些工作已经做好，哪些还可以补齐</span>
             </span>
-            <span className="shrink-0 text-sm font-medium text-cyan-300 group-open:hidden">展开查看 ↓</span>
-            <span className="hidden shrink-0 text-sm font-medium text-cyan-300 group-open:inline">收起 ↑</span>
+            <span className="shrink-0 text-sm font-medium text-cyan-700 group-open:hidden dark:text-cyan-300">展开查看 ↓</span>
+            <span className="hidden shrink-0 text-sm font-medium text-cyan-700 group-open:inline dark:text-cyan-300">收起 ↑</span>
           </span>
         </summary>
-        <div className="mt-5 space-y-5 border-t border-white/10 pt-5">
+        <div className="mt-5 space-y-5 border-t border-slate-900/10 pt-5 dark:border-white/10">
           <WorkPreparationSummary snapshot={real.snapshot} />
           {reportsDegraded ? <ModuleUnavailable title="AI 整理的工作建议" reason={reportsDegraded.reason} /> : <BusinessReportSection latestReport={real.latestReport} state={real.reportState} />}
           <details className="rounded-xl border border-border bg-muted/40 p-4">
-            <summary className="cursor-pointer text-sm font-medium text-slate-200">查看问题分类与详细记录</summary>
-            <p className="mt-2 text-xs text-slate-400">想了解哪些问题常被问到，或核对统计数字时再展开。</p>
+            <summary className="cursor-pointer text-sm font-medium text-slate-700 dark:text-slate-200">查看问题分类与详细记录</summary>
+            <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">想了解哪些问题常被问到，或核对统计数字时再展开。</p>
             <div className="mt-4 space-y-4">
               <DistributionPanel snapshot={real.snapshot} liveUnavailableReason={liveDegraded?.reason ?? null} />
               <SystemMetricsPanel snapshot={real.snapshot} unavailableMetricPrefixes={liveDegraded ? ["live."] : []} />

@@ -58,7 +58,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
       <QuickEntryGrid />
 
       <div id="recent-tasks" className="grid scroll-mt-20 gap-4 xl:grid-cols-[1fr_1.3fr]">
-        {workflowId && !selectedWorkflow ? <p role="status" className="rounded-xl border border-white/10 bg-card p-3 text-sm text-muted-foreground xl:col-span-2">{selected && !selected.ok ? "暂时无法查看这条经营任务，请刷新后重试。" : "这条经营任务不存在或已被删除，下面展示最近的任务。"}</p> : null}
+        {workflowId && !selectedWorkflow ? <p role="status" className="rounded-xl border border-slate-900/10 bg-card p-3 text-sm text-muted-foreground dark:border-white/10 xl:col-span-2">{selected && !selected.ok ? "暂时无法查看这条经营任务，请刷新后重试。" : "这条经营任务不存在或已被删除，下面展示最近的任务。"}</p> : null}
         <WorkflowPanel
           workflow={focusWorkflow}
           isActive={focusWorkflow?.status === "running" && !focusWorkflow.isStale}
@@ -85,8 +85,8 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
         <KnowledgeGapAlert state={view.customerService} />
       </div>
 
-      <details className="rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 shadow-md shadow-black/20 backdrop-blur-md transition-shadow duration-200 hover:shadow-lg">
-        <summary className="cursor-pointer text-[13px] font-medium text-slate-300">查看内部协同岗位</summary>
+      <details className="rounded-2xl border border-slate-900/10 bg-slate-900/[0.03] px-4 py-3 shadow-md shadow-slate-900/10 backdrop-blur-md transition-shadow duration-200 hover:shadow-lg dark:border-white/10 dark:bg-white/[0.05] dark:shadow-black/20">
+        <summary className="cursor-pointer text-[13px] font-medium text-slate-600 dark:text-slate-300">查看内部协同岗位</summary>
         <div className="mt-3">
           <AgentGrid agents={view.agentStates} />
         </div>

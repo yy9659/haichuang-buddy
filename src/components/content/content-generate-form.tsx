@@ -176,7 +176,7 @@ export function ContentGenerateForm({
               disabled={noProducts}
               aria-pressed={angle === item}
               onClick={() => setAngle(item)}
-              className={`rounded-xl border px-3 py-3 text-left transition-colors disabled:opacity-50 ${angle === item ? "border-cyan-400/60 bg-cyan-400/10 text-cyan-100" : "border-white/10 bg-white/[0.04] text-slate-200 hover:bg-white/[0.08]"}`}
+              className={`rounded-xl border px-3 py-3 text-left transition-colors disabled:opacity-50 ${angle === item ? "border-cyan-600/50 bg-cyan-600/10 text-cyan-700 dark:border-cyan-400/60 dark:bg-cyan-400/10 dark:text-cyan-100" : "border-slate-900/10 bg-slate-900/[0.03] text-slate-700 hover:bg-slate-900/5 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-200 dark:hover:bg-white/[0.08]"}`}
             >
               <span className="block text-sm font-semibold">{CONTENT_ANGLE_META[item].label}</span>
               <span className="mt-1 block text-xs text-muted-foreground">{CONTENT_ANGLE_META[item].hint}</span>

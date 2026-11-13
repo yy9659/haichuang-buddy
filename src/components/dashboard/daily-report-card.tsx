@@ -40,7 +40,7 @@ export function DailyReportCard({ report }: { report: BusinessReport }) {
       id: "actions",
       title: "优先行动",
       icon: Sparkles,
-      tone: "text-emerald-400",
+      tone: "text-emerald-600 dark:text-emerald-400",
       items: content.actions.map(
         (action) => `${action.priority}. ${action.title}`,
       ),

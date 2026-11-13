@@ -243,7 +243,7 @@ function ImagePicker({
             已选择：{file.name}
           </span>
         ) : null}
-        {fileError ? <span role="alert" className="text-[11px] text-rose-300">{fileError}</span> : null}
+        {fileError ? <span role="alert" className="text-[11px] text-rose-700 dark:text-rose-300">{fileError}</span> : null}
       </div>
       <input type="hidden" name="removeImage" value={removed ? "1" : "0"} />
     </div>
@@ -338,7 +338,7 @@ function ProductFormDialogContent({
             <ErrorState error={error} className="mb-4" />
           ) : null}
           {slowRequest ? (
-            <p role="status" className="mb-4 rounded-xl border border-amber-400/25 bg-amber-400/10 px-3 py-2 text-sm text-amber-200">
+            <p role="status" className="mb-4 rounded-xl border border-amber-600/25 bg-amber-600/10 px-3 py-2 text-sm text-amber-700 dark:border-amber-400/25 dark:bg-amber-400/10 dark:text-amber-200">
               保存时间较长。如果页面仍无响应，请刷新后先检查商品列表，避免重复添加。
             </p>
           ) : null}

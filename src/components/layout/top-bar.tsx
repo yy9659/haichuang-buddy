@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BrandMark } from "@/components/layout/brand-mark";
 import { DashboardSearch } from "@/components/layout/dashboard-search";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { NAV_ITEMS } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
 import type { ShellView } from "@/services";
@@ -65,7 +66,7 @@ export function TopBar({ shell, user }: TopBarProps) {
   return (
     <header
       className={cn(
-        "sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-white/8 bg-[#071c34]/80 px-3 backdrop-blur-md sm:px-5 lg:px-8",
+        "glass-bar sticky top-0 z-30 flex h-14 items-center gap-2 border-b px-3 sm:px-5 lg:px-8",
         isDashboard && "h-auto flex-wrap pb-2 md:h-14 md:flex-nowrap md:pb-0",
       )}
     >
@@ -97,7 +98,7 @@ export function TopBar({ shell, user }: TopBarProps) {
           </DropdownMenuContent>
         </DropdownMenu>
         <Link href="/dashboard">
-          <BrandMark showSubtitle={false} onDark />
+          <BrandMark showSubtitle={false} adaptive />
         </Link>
       </div>
 
@@ -115,6 +116,9 @@ export function TopBar({ shell, user }: TopBarProps) {
             <span className="max-w-40 truncate">{business?.shortName ?? "品牌资料"}</span>
           </Link>
         </Button>
+
+        {/* 深海夜航 / 海岸白昼 主题切换 */}
+        <ThemeToggle />
 
         {/* AI 任务通知 */}
         <DropdownMenu>

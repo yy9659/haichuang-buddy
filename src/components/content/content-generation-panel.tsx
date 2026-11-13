@@ -73,7 +73,7 @@ function GeneratingCard({ view }: { view: ContentView }) {
           <Loader2 className="size-4 animate-spin text-primary" />
           正在撰写「{target}」…
         </div>
-        <div className="h-1.5 overflow-hidden rounded-full bg-white/10" aria-label="内容正在生成，完成时间暂不确定">
+        <div className="h-1.5 overflow-hidden rounded-full bg-slate-900/[0.06] dark:bg-white/10" aria-label="内容正在生成，完成时间暂不确定">
           <div className="h-full w-1/3 animate-pulse rounded-full bg-gradient-to-r from-blue-500 to-cyan-400" />
         </div>
         <ContentGeneratingHint />

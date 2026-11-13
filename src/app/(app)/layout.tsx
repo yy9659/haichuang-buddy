@@ -49,7 +49,7 @@ export default async function AppLayout({
   const shell = unwrapOrThrow(await getShellView());
 
   return (
-    <div className="flex min-h-screen bg-[#071c34]">
+    <div className="flex min-h-screen bg-background">
       <AppSidebar />
       <AppContent shell={shell} user={user}>{children}</AppContent>
     </div>

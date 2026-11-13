@@ -17,25 +17,25 @@ export function QuickEntryGrid() {
   return (
     <section aria-labelledby="module-entry-title">
       <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id="module-entry-title" className="text-lg font-semibold text-white">开始今天的工作</h2>
-        <p className="text-[13px] text-slate-400">选一个模块，把想法变成下一步行动</p>
+        <h2 id="module-entry-title" className="text-lg font-semibold text-slate-900 dark:text-white">开始今天的工作</h2>
+        <p className="text-[13px] text-slate-500 dark:text-slate-400">选一个模块，把想法变成下一步行动</p>
       </div>
       <div className="min-w-0 overflow-x-auto pb-2 xl:overflow-visible xl:pb-0">
         <div className="grid w-full min-w-[900px] grid-cols-6 gap-3">
           {NAV_ITEMS.filter((item) => item.href !== "/dashboard").map((item) => {
             const Icon = item.icon;
             return (
-              <Link key={item.href} href={item.href} className="group min-w-0 rounded-2xl border border-white/10 bg-white/[0.05] p-4 shadow-md shadow-black/20 backdrop-blur-md transition-[box-shadow,border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-cyan-400/30 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400">
+              <Link key={item.href} href={item.href} className="group min-w-0 rounded-2xl border border-slate-900/10 bg-slate-900/[0.03] p-4 shadow-md shadow-slate-900/10 backdrop-blur-md transition-[box-shadow,border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-cyan-600/40 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400 dark:border-white/10 dark:bg-white/[0.05] dark:shadow-black/20 dark:hover:border-cyan-400/30">
                 <div className="mb-3 flex items-center justify-between">
-                  <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-400/20 to-cyan-400/15 text-cyan-300">
+                  <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600/15 to-cyan-600/10 text-cyan-700 dark:from-blue-400/20 dark:to-cyan-400/15 dark:text-cyan-300">
                     <Icon className="size-5" strokeWidth={1.8} />
                   </span>
-                  <ArrowUpRight className="size-4 text-slate-500 transition-colors group-hover:text-cyan-300" />
+                  <ArrowUpRight className="size-4 text-slate-500 transition-colors group-hover:text-cyan-600 dark:group-hover:text-cyan-300" />
                 </div>
-                <h3 className="text-sm font-semibold text-slate-100">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   {DASHBOARD_ROLE_TITLES[item.href] ?? item.title}
                 </h3>
-                <p className="mt-1 text-[13px] leading-5 text-slate-400">{item.description}</p>
+                <p className="mt-1 text-[13px] leading-5 text-slate-500 dark:text-slate-400">{item.description}</p>
               </Link>
             );
           })}

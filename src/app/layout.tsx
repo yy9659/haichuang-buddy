@@ -16,7 +16,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh-CN" className="h-full">
+    // suppressHydrationWarning：next-themes 会在首屏渲染前改写 <html> 的
+    // class（.dark / .light），这是预期行为，不应触发水合告警。
+    <html lang="zh-CN" className="h-full" suppressHydrationWarning>
       <body className="min-h-full antialiased">
         <AppProviders>{children}</AppProviders>
       </body>

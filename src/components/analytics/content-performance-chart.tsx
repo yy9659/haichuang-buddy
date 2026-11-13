@@ -46,7 +46,7 @@ export function ContentPerformanceChart({
       >
         <CartesianGrid
           horizontal={false}
-          stroke="var(--border)"
+          stroke="var(--chart-grid)"
           strokeDasharray="3 3"
         />
         <XAxis
@@ -69,9 +69,12 @@ export function ContentPerformanceChart({
           contentStyle={{
             borderRadius: 10,
             border: "1px solid var(--border)",
+            background: "var(--popover)",
+            color: "var(--popover-foreground)",
             boxShadow: "0 12px 32px -14px rgba(15, 23, 42, 0.3)",
             fontSize: 12,
           }}
+          itemStyle={{ color: "var(--popover-foreground)" }}
           formatter={(value) =>
             typeof value === "number" ? formatNumber(value) : `${value}`
           }

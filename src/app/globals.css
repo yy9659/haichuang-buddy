@@ -1,17 +1,23 @@
 @import "tailwindcss";
 
 /**
- * 海创Buddy 设计系统
- * 关键词：深海工作区 / 玻璃拟态卡片 / 蓝青渐变
- * 说明：与登录页同一片「深海」——深色基底 + 白色/透明度玻璃卡片 +
- * 青蓝渐变强调色，工作台不再另起一套浅色皮肤。
+ * 海创Buddy 设计系统 · 双主题
+ * ─────────────────────────────────────────────
+ * 深海夜航（dark，默认）：极深邃海洋蓝基底 + 赛博青高光 + 深空微光
+ * 海岸白昼（light）：晨曦海岸沙白 / 海雾灰基底 + 深海军蓝文字 + 通透蔚蓝
+ *
+ * 主题由 next-themes 在 <html> 上切换 `.dark` / `.light` 类：
+ * - `:root` 承载默认（dark）变量，`.light` 整组覆盖；
+ * - `@custom-variant dark` 让 `dark:` 工具类跟随类名而非系统偏好。
  */
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   color-scheme: dark;
   --radius: 1rem;
 
-  /* 深海基底色板 */
+  /* ── 深海夜航 · 基底 ─────────────────────────── */
   --background: #071c34;
   --foreground: #e9f2fc;
   --card: oklch(1 0 0 / 0.06);
@@ -45,12 +51,16 @@
   --input: oklch(1 0 0 / 0.2);
   --ring: #38bdf8;
 
-  /* 数据可视化色板（暗底提亮） */
+  /* 数据可视化色板（暗底提亮：荧光青蓝系） */
   --chart-1: oklch(0.7 0.15 245);
   --chart-2: oklch(0.78 0.12 210);
   --chart-3: oklch(0.78 0.14 168);
   --chart-4: oklch(0.82 0.14 84);
   --chart-5: oklch(0.72 0.16 300);
+  /* 图表骨架：半透明亮灰网格 / 刻度 */
+  --chart-grid: oklch(1 0 0 / 0.1);
+  --chart-axis: oklch(1 0 0 / 0.35);
+  --chart-tick: #9db6d2;
 
   /* 侧边栏（比内容区更深，压出层次） */
   --sidebar: #04101f;
@@ -60,6 +70,131 @@
   --sidebar-accent: oklch(1 0 0 / 0.08);
   --sidebar-accent-foreground: #fff;
   --sidebar-border: oklch(1 0 0 / 0.08);
+
+  /* ── 深海夜航 · 毛玻璃与光晕 ──────────────────── */
+  --glass-bg: oklch(0.27 0.06 243 / 0.6);
+  --glass-border: oklch(1 0 0 / 0.08);
+  --glass-shadow: 0 24px 48px -24px oklch(0 0 0 / 0.55),
+    0 2px 6px oklch(0 0 0 / 0.25);
+  --glass-sheen: linear-gradient(
+    180deg,
+    oklch(1 0 0 / 0.06),
+    oklch(1 0 0 / 0.015) 38%,
+    transparent
+  );
+  --glow-cyan: oklch(0.8 0.12 210 / 0.16);
+  --glow-blue: oklch(0.68 0.16 243 / 0.1);
+  --glow-warm: oklch(0.75 0.1 85 / 0.04);
+  /* 内容区纵向深海渐变 */
+  --surface-top: #0a2544;
+  --surface-bottom: #051324;
+
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.3),
+    0 12px 32px -20px oklch(0 0 0 / 0.6);
+  --shadow-float: 0 20px 50px -20px oklch(0 0 0 / 0.7);
+
+  /* 主题切换胶囊（月亮面） */
+  --toggle-track: oklch(1 0 0 / 0.08);
+  --toggle-thumb: linear-gradient(135deg, #22d3ee, #38bdf8 55%, #2f8cff);
+
+  --selection-bg: oklch(0.68 0.16 243 / 0.35);
+  --selection-fg: #fff;
+  --scrollbar-thumb: oklch(1 0 0 / 0.14);
+  --scrollbar-thumb-hover: oklch(1 0 0 / 0.22);
+}
+
+/* ─────────────────────────────────────────────────
+ * 海岸白昼 · 整组覆盖
+ * ─────────────────────────────────────────────── */
+.light {
+  color-scheme: light;
+
+  /* 海岸白昼：海雾蓝基底（略深半档，让白玻璃浮起来） */
+  --background: #e9f1f7;
+  --foreground: #0f172a;
+  --card: oklch(1 0 0 / 0.82);
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+
+  /* 深邃海军蓝主色（亮底上压低两档，保证对比度） */
+  --primary: oklch(0.55 0.17 252);
+  --primary-foreground: oklch(0.99 0.005 240);
+  --primary-soft: oklch(0.55 0.17 252 / 0.12);
+
+  --secondary: oklch(0.52 0.07 235 / 0.08);
+  --secondary-foreground: #1e3a5f;
+
+  --muted: oklch(0.52 0.05 235 / 0.06);
+  --muted-foreground: #546a84;
+
+  /* 海沫青：浅色模式的呼吸感来源 */
+  --accent: oklch(0.84 0.08 208 / 0.24);
+  --accent-foreground: #0b6b8f;
+
+  --destructive: oklch(0.58 0.2 25);
+  --destructive-foreground: oklch(0.99 0.005 240);
+
+  --success: oklch(0.6 0.13 160);
+  --warning: oklch(0.62 0.12 65);
+  --info: oklch(0.55 0.12 235);
+
+  --border: oklch(0.48 0.05 240 / 0.12);
+  --input: oklch(0.45 0.05 240 / 0.2);
+  --ring: #0ea5e9;
+
+  /* 数据可视化色板（亮底：深海军蓝 + 清透蓝） */
+  --chart-1: oklch(0.45 0.11 252);
+  --chart-2: oklch(0.62 0.13 225);
+  --chart-3: oklch(0.6 0.13 168);
+  --chart-4: oklch(0.66 0.13 80);
+  --chart-5: oklch(0.55 0.14 300);
+  /* 图表骨架：带蓝调的深灰网格 / 刻度 */
+  --chart-grid: oklch(0.4 0.04 240 / 0.1);
+  --chart-axis: oklch(0.35 0.04 240 / 0.3);
+  --chart-tick: #546a84;
+
+  /* 侧边栏：带海雾蓝调的白玻璃 */
+  --sidebar: oklch(0.99 0.008 225 / 0.78);
+  --sidebar-foreground: #546a84;
+  --sidebar-primary: #2563eb;
+  --sidebar-primary-foreground: #fff;
+  --sidebar-accent: oklch(0.55 0.17 252 / 0.1);
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: oklch(0.55 0.06 245 / 0.12);
+
+  /* ── 海岸白昼 · 毛玻璃与光晕 ──────────────────── */
+  --glass-bg: oklch(1 0 0 / 0.8);
+  /* 描边带一线海蓝，玻璃才不会「灰扑扑」 */
+  --glass-border: oklch(0.76 0.05 225 / 0.6);
+  --glass-shadow: 0 20px 44px -24px oklch(0.55 0.08 232 / 0.32),
+    0 1px 3px oklch(0.6 0.06 232 / 0.14);
+  --glass-sheen: linear-gradient(
+    180deg,
+    oklch(1 0 0 / 0.7),
+    oklch(1 0 0 / 0.25) 38%,
+    transparent
+  );
+  /* 晨光三原色：右上青潮、左下暖沙、远处蓝雾 */
+  --glow-cyan: oklch(0.85 0.1 208 / 0.55);
+  --glow-blue: oklch(0.7 0.12 248 / 0.3);
+  --glow-warm: oklch(0.92 0.06 92 / 0.55);
+  /* 内容区：暖沙白 → 海雾蓝 */
+  --surface-top: #fdf8f1;
+  --surface-bottom: #d9e9f4;
+
+  --shadow-card: 0 1px 2px oklch(0.55 0.06 238 / 0.07),
+    0 14px 34px -22px oklch(0.55 0.08 232 / 0.26);
+  --shadow-float: 0 24px 54px -26px oklch(0.5 0.09 232 / 0.34);
+
+  /* 主题切换胶囊（太阳面） */
+  --toggle-track: oklch(0.55 0.06 245 / 0.1);
+  --toggle-thumb: linear-gradient(135deg, #fbbf24, #f97316);
+
+  --selection-bg: oklch(0.7 0.12 220 / 0.28);
+  --selection-fg: #0f172a;
+  --scrollbar-thumb: oklch(0.5 0.05 235 / 0.18);
+  --scrollbar-thumb-hover: oklch(0.45 0.06 235 / 0.28);
 }
 
 @theme inline {
@@ -91,6 +226,9 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-chart-grid: var(--chart-grid);
+  --color-chart-axis: var(--chart-axis);
+  --color-chart-tick: var(--chart-tick);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -109,9 +247,8 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 10px);
 
-  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.3),
-    0 12px 32px -20px oklch(0 0 0 / 0.6);
-  --shadow-float: 0 20px 50px -20px oklch(0 0 0 / 0.7);
+  --shadow-card: var(--shadow-card);
+  --shadow-float: var(--shadow-float);
 
   --animate-pulse-soft: pulse-soft 2.4s ease-in-out infinite;
 }
@@ -131,7 +268,7 @@
     border-color: var(--border);
   }
 
-  /* 原生 select 的展开层由浏览器绘制，明确指定深色以匹配深海界面。 */
+  /* 原生 select 的展开层由浏览器绘制，明确指定以匹配当前主题。 */
   select option,
   select optgroup {
     background-color: var(--popover);
@@ -147,6 +284,10 @@
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans);
+    /* 主题切换时基底先柔和过渡，避免生硬闪切 */
+    transition:
+      background-color 0.4s ease,
+      color 0.4s ease;
   }
 
   button,
@@ -158,26 +299,100 @@
   }
 
   ::selection {
-    background-color: oklch(0.68 0.16 243 / 0.35);
-    color: #fff;
+    background-color: var(--selection-bg);
+    color: var(--selection-fg);
   }
 
-  /* 暗色滚动条，避免深海界面里冒出一截亮灰 */
+  /* 滚动条跟随主题变量，避免界面里冒出一截异色 */
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
   ::-webkit-scrollbar-thumb {
-    background: oklch(1 0 0 / 0.14);
+    background: var(--scrollbar-thumb);
     border-radius: 8px;
     border: 2px solid transparent;
     background-clip: content-box;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: oklch(1 0 0 / 0.22);
+    background: var(--scrollbar-thumb-hover);
     background-clip: content-box;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
+  }
+}
+
+@layer components {
+  /**
+   * iOS 高级毛玻璃面板：半透底 + 强模糊 + 极细描边 + 顶部高光（sheen）。
+   * 双主题共用同一套变量，亮暗切换即自动换装。
+   */
+  .glass-panel {
+    position: relative;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    box-shadow: var(--glass-shadow);
+  }
+  .glass-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--glass-sheen);
+    pointer-events: none;
+  }
+
+  /* 顶栏 / 侧栏级别的轻量毛玻璃（不带 sheen，避免条状高光违和） */
+  .glass-bar {
+    border-color: var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  }
+
+  /**
+   * 商户端内容区表面：纵向微渐变 + 两端光晕。
+   * 深海夜航是从海沟望向洋面的深邃，海岸白昼是晨曦越过沙岸的通透。
+   */
+  .app-surface {
+    background:
+      radial-gradient(720px 340px at 78% -80px, var(--glow-cyan), transparent 70%),
+      radial-gradient(560px 300px at 4% 112%, var(--glow-warm), transparent 70%),
+      radial-gradient(640px 300px at 12% 110%, var(--glow-blue), transparent 70%),
+      linear-gradient(
+        165deg,
+        var(--surface-top),
+        var(--background) 46%,
+        var(--surface-bottom)
+      );
+    background-attachment: fixed;
+  }
+
+  /**
+   * 海报画布隔离罩：锁定深色专业底色，不受全局亮暗开关污染，
+   * 确保导出的 PNG 颜色绝对稳定。
+   */
+  .theme-locked {
+    color-scheme: dark;
+    --background: #071c34;
+    --foreground: #e9f2fc;
+    --card: oklch(1 0 0 / 0.06);
+    --card-foreground: #eaf2fc;
+    --popover: #0c2a49;
+    --popover-foreground: #eaf2fc;
+    --muted: oklch(1 0 0 / 0.07);
+    --muted-foreground: #9db6d2;
+    --secondary: oklch(1 0 0 / 0.09);
+    --secondary-foreground: #d7e7f8;
+    --accent: oklch(0.8 0.12 210 / 0.16);
+    --accent-foreground: #7dd3fc;
+    --border: oklch(1 0 0 / 0.12);
+    --input: oklch(1 0 0 / 0.2);
+    --ring: #38bdf8;
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }

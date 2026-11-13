@@ -241,8 +241,8 @@ function ContentDetailBody({ content, product, isDemoData }: {
                 creativeHints={[...content.visualSuggestions, ...content.shotList]}
                 isDemo={isDemoData || (content.riskNotes?.some((note) => note.includes("【Mock】")) ?? false)}
               />
-              <details className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-                <summary className="cursor-pointer text-xs font-medium text-slate-300">原始创意建议 · 可选查看</summary>
+              <details className="rounded-xl border border-slate-900/10 bg-slate-900/[0.02] p-3 dark:border-white/10 dark:bg-white/[0.03]">
+                <summary className="cursor-pointer text-xs font-medium text-slate-600 dark:text-slate-300">原始创意建议 · 可选查看</summary>
                 <p className="mt-3 text-xs leading-6 text-muted-foreground">AI 海报设计会结合这些建议和你的要求调整画面，成品以海报预览为准。这里也可作为拍摄或补充素材时的参考。</p>
                 <ContentGuide content={content} />
               </details>
@@ -258,11 +258,11 @@ function ContentGuide({ content, framed = false }: { content: ContentItem; frame
   const guideLabels = CONTENT_GUIDE_LABELS[content.format];
   const Icon = guideLabels.icon;
   return (
-    <section aria-label={guideLabels.title} className={cn("flex min-w-0 flex-col gap-4", framed ? "rounded-2xl border border-cyan-400/20 bg-slate-950/15 p-4" : "mt-3")}>
+    <section aria-label={guideLabels.title} className={cn("flex min-w-0 flex-col gap-4", framed ? "rounded-2xl border border-cyan-600/25 bg-slate-900/[0.04] p-4 dark:border-cyan-400/20 dark:bg-slate-950/15" : "mt-3")}>
       {framed ? (
-        <div className="border-b border-white/10 pb-3">
-          <h4 className="flex items-center gap-2 text-sm font-semibold text-cyan-100"><Icon className="size-4 text-cyan-300" />{guideLabels.title}</h4>
-          <p className="mt-1 text-xs leading-5 text-slate-400">{guideLabels.description}</p>
+        <div className="border-b border-slate-900/10 pb-3 dark:border-white/10">
+          <h4 className="flex items-center gap-2 text-sm font-semibold text-cyan-700 dark:text-cyan-100"><Icon className="size-4 text-cyan-700 dark:text-cyan-300" />{guideLabels.title}</h4>
+          <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">{guideLabels.description}</p>
         </div>
       ) : null}
       <Field label={guideLabels.visual}>
@@ -278,14 +278,14 @@ function ContentGuide({ content, framed = false }: { content: ContentItem; frame
       <Field label={content.format === "poster-copy" ? "其他排版思路" : guideLabels.scenes}>
         <ul className="flex flex-col gap-1.5">
           {content.shotList.map((shot) => (
-            <li key={shot} className="rounded-xl border border-white/5 bg-muted/40 px-3 py-2 text-[12px] leading-6">
+            <li key={shot} className="rounded-xl border border-slate-900/5 bg-muted/40 px-3 py-2 text-[12px] leading-6 dark:border-white/5">
               {shot}
             </li>
           ))}
         </ul>
       </Field>
       <Field label={guideLabels.voiceover}>
-        <p className="whitespace-pre-wrap rounded-xl border border-white/5 bg-muted/40 px-3 py-3 text-[12px] leading-6">
+        <p className="whitespace-pre-wrap rounded-xl border border-slate-900/5 bg-muted/40 px-3 py-3 text-[12px] leading-6 dark:border-white/5">
           {content.voiceover}
         </p>
       </Field>

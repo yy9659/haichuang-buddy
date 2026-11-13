@@ -55,24 +55,24 @@ export function SalesAIAdvice({ mode, fingerprint, count, reports, generating = 
   }
 
   return (
-    <section aria-label="AI 销售建议" className="overflow-hidden rounded-2xl border border-white/10 bg-[#112131]/80 text-card-foreground backdrop-blur-md">
-      <header className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 px-4 py-5 sm:px-6">
+    <section aria-label="AI 销售建议" className="overflow-hidden rounded-2xl border border-slate-900/10 bg-card/80 text-card-foreground backdrop-blur-md dark:border-white/10 dark:bg-[#112131]/80">
+      <header className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-900/10 px-4 py-5 sm:px-6 dark:border-white/10">
         <div className="flex items-center gap-3">
           <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-primary/20 bg-primary-soft"><Sparkles className="size-5 text-primary" /></span>
-          <div><h3 className="text-base font-semibold tracking-wide text-white">AI 帮你看销售，想下一步</h3><p className="mt-1 text-sm leading-5 text-slate-300">依据当前{mode === "demo" ? "演示" : "销售"}记录，看清重点，再选下一步</p></div>
+          <div><h3 className="text-base font-semibold tracking-wide text-slate-900 dark:text-white">AI 帮你看销售，想下一步</h3><p className="mt-1 text-sm leading-5 text-slate-600 dark:text-slate-300">依据当前{mode === "demo" ? "演示" : "销售"}记录，看清重点，再选下一步</p></div>
         </div>
         <Button className="h-10 max-sm:w-full" disabled={busy || count === 0 || !!unavailableReason} aria-busy={busy} onClick={generate}>
           {busy ? <Loader2 className="animate-spin" /> : review ? <RefreshCw /> : <Sparkles />}{busy ? "正在分析销售…" : stale ? "按最新记录更新建议" : review ? "更新销售建议" : "生成 AI 销售建议"}
         </Button>
       </header>
       <div className="space-y-5 p-4 sm:p-6">
-        {error ? <p role="alert" className="rounded-xl border border-amber-300/20 bg-amber-300/10 px-4 py-3 text-sm leading-6 text-amber-100">{sanitizeUserFacingText(error)}</p> : null}
-        {unavailableReason ? <p className="text-sm leading-6 text-slate-200">{unavailableReason}</p> : null}
-        {busy ? <p role="status" className="flex items-center gap-2 text-sm leading-6 text-cyan-200"><Loader2 className="size-4 animate-spin" />正在核对商品、渠道与成本，整理销售和准备工作建议…</p> : null}
+        {error ? <p role="alert" className="rounded-xl border border-amber-600/20 bg-amber-600/10 px-4 py-3 text-sm leading-6 text-amber-800 dark:border-amber-300/20 dark:bg-amber-300/10 dark:text-amber-100">{sanitizeUserFacingText(error)}</p> : null}
+        {unavailableReason ? <p className="text-sm leading-6 text-slate-700 dark:text-slate-200">{unavailableReason}</p> : null}
+        {busy ? <p role="status" className="flex items-center gap-2 text-sm leading-6 text-cyan-700 dark:text-cyan-200"><Loader2 className="size-4 animate-spin" />正在核对商品、渠道与成本，整理销售和准备工作建议…</p> : null}
         {review && snapshot ? (
           <SalesAdviceReport mode={mode} snapshot={snapshot} review={review} stale={stale} createdAt={latest!.createdAt} onDownload={download} />
         ) : !busy ? (
-          <div className="flex items-start gap-3 rounded-xl border border-dashed border-white/15 p-4"><Lightbulb className="mt-1 size-5 shrink-0 text-cyan-300" /><div><p className="text-base font-medium text-slate-100">{count ? "让这些数字变成下一步行动" : "先有销售记录，再听听 AI 的建议"}</p><p className="mt-2 text-sm leading-7 text-slate-300">{count ? "点击上方按钮，看看哪些商品值得推广、哪个渠道可以继续尝试，以及成本和记录哪里需要补齐。" : "记一笔销售、导入现有流水，或载入演示数据体验完整复盘。"}</p></div></div>
+          <div className="flex items-start gap-3 rounded-xl border border-dashed border-slate-900/15 p-4 dark:border-white/15"><Lightbulb className="mt-1 size-5 shrink-0 text-cyan-700 dark:text-cyan-300" /><div><p className="text-base font-medium text-slate-800 dark:text-slate-100">{count ? "让这些数字变成下一步行动" : "先有销售记录，再听听 AI 的建议"}</p><p className="mt-2 text-sm leading-7 text-slate-600 dark:text-slate-300">{count ? "点击上方按钮，看看哪些商品值得推广、哪个渠道可以继续尝试，以及成本和记录哪里需要补齐。" : "记一笔销售、导入现有流水，或载入演示数据体验完整复盘。"}</p></div></div>
         ) : null}
       </div>
     </section>
