@@ -14,6 +14,7 @@
 
 import { sql } from "drizzle-orm";
 import {
+  bigint,
   boolean,
   check,
   index,
@@ -22,6 +23,7 @@ import {
   numeric,
   pgEnum,
   pgTable,
+  primaryKey,
   real,
   text,
   timestamp,
@@ -210,6 +212,8 @@ export const users = pgTable(
      * 本表在 S7 之前从未写入过任何行，因此加此列不需要回填。
      */
     passwordHash: text("password_hash").notNull(),
+    role: text("role").$type<"merchant" | "admin">().notNull().default("merchant"),
+    emailVerifiedAt: timestamp("email_verified_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -220,8 +224,53 @@ export const users = pgTable(
   (table) => [
     uniqueIndex("users_email_unique").on(table.email),
     index("users_business_id_idx").on(table.businessId),
+    check("users_role_check", sql`${table.role} IN ('merchant', 'admin')`),
   ],
 );
+
+/** Historical data only: open registration no longer creates or consumes invitations. */
+export const accountInvites = pgTable("account_invites", {
+  tokenHash: text("token_hash").primaryKey(),
+  email: text("email").notNull(),
+  createdBy: uuid("created_by").references(() => users.id, { onDelete: "set null" }),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  consumedAt: timestamp("consumed_at", { withTimezone: true }),
+}, (table) => [index("account_invites_expiry_idx").on(table.expiresAt)]);
+
+export const passwordResets = pgTable("password_resets", {
+  tokenHash: text("token_hash").primaryKey(),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  consumedAt: timestamp("consumed_at", { withTimezone: true }),
+}, (table) => [index("password_resets_user_idx").on(table.userId), index("password_resets_expiry_idx").on(table.expiresAt)]);
+
+export const securityRoleAudit = pgTable("security_role_audit", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull(),
+  oldRole: text("old_role").notNull(),
+  newRole: text("new_role").notNull(),
+  operator: text("operator").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const securityRateWindows = pgTable("security_rate_windows", {
+  bucket: text("bucket").notNull(),
+  windowStart: bigint("window_start", { mode: "number" }).notNull(),
+  hits: integer("hits").notNull(),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+}, (table) => [primaryKey({ columns: [table.bucket, table.windowStart] }), index("security_rate_expiry_idx").on(table.expiresAt)]);
+
+export const aiDailyUsage = pgTable("ai_daily_usage", {
+  businessId: uuid("business_id").notNull().references(() => businesses.id, { onDelete: "cascade" }),
+  day: text("day").notNull(),
+  calls: integer("calls").notNull(),
+}, (table) => [primaryKey({ columns: [table.businessId, table.day] })]);
+
+export const aiCallLeases = pgTable("ai_call_leases", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  businessId: uuid("business_id").notNull().references(() => businesses.id, { onDelete: "cascade" }),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+}, (table) => [index("ai_lease_business_expiry_idx").on(table.businessId, table.expiresAt), index("ai_lease_expiry_idx").on(table.expiresAt)]);
 
 export const publicKnowledgeDocuments = pgTable("public_knowledge_documents", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -677,6 +726,7 @@ export const agentTasks = pgTable(
   "agent_tasks",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+    businessId: uuid("business_id").references(() => businesses.id, { onDelete: "cascade" }),
     /**
      * 所属工作流。**可空** —— 商品分析这类由用户单点触发的任务并不从属于某个经营目标，
      * 等 S3 的 Workflow 编排落地后再按需回填。
@@ -707,6 +757,7 @@ export const agentTasks = pgTable(
     completedAt: timestamp("completed_at", { withTimezone: true }),
   },
   (table) => [
+    index("agent_tasks_business_id_idx").on(table.businessId),
     index("agent_tasks_workflow_id_idx").on(table.workflowId),
     index("agent_tasks_status_idx").on(table.status),
     index("agent_tasks_product_id_idx").on(table.productId),

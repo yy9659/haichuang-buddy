@@ -4,8 +4,6 @@ import { redirect } from "next/navigation";
 import { AuthForm } from "@/components/auth/auth-form";
 import { AuthVideoShell } from "@/components/auth/auth-video-shell";
 import { resolveRoleRedirect, sanitizeNextPath } from "@/lib/auth-redirect";
-import { isAdminEmail } from "@/lib/admin";
-import { getServerEnv } from "@/lib/env";
 import { getCurrentAuthUser } from "@/services/auth.service";
 
 export const metadata: Metadata = {
@@ -22,13 +20,13 @@ export default async function RegisterPage({
 
   const user = await getCurrentAuthUser();
   if (user) {
-    redirect(resolveRoleRedirect(nextPath, isAdminEmail(user.email, getServerEnv().ADMIN_EMAILS)));
+    redirect(resolveRoleRedirect(nextPath, user.role === "admin"));
   }
 
   return (
     <AuthVideoShell
       title="创建你的账号"
-      description="为你的店铺开启专属 AI 经营空间。"
+      description="创建账号，进入你的经营空间。"
     >
       <div className="flex flex-col gap-4">
         <AuthForm mode="register" nextPath={nextPath} />

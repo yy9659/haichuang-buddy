@@ -4,8 +4,6 @@ import { redirect } from "next/navigation";
 import { AuthForm } from "@/components/auth/auth-form";
 import { AuthVideoShell } from "@/components/auth/auth-video-shell";
 import { resolveRoleRedirect, sanitizeNextPath } from "@/lib/auth-redirect";
-import { isAdminEmail } from "@/lib/admin";
-import { getServerEnv } from "@/lib/env";
 import { getCurrentAuthUser } from "@/services/auth.service";
 
 export const metadata: Metadata = {
@@ -23,7 +21,7 @@ export default async function LoginPage({
   // 已登录就别再让 TA 看登录页了
   const user = await getCurrentAuthUser();
   if (user) {
-    redirect(resolveRoleRedirect(nextPath, isAdminEmail(user.email, getServerEnv().ADMIN_EMAILS)));
+    redirect(resolveRoleRedirect(nextPath, user.role === "admin"));
   }
 
   return (

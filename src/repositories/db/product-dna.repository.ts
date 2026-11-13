@@ -8,10 +8,10 @@
  * 本阶段（S1-1）只提供读写能力，不调用任何模型；DNA 内容由后续 Product Agent 产出。
  */
 
-import { eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 
 import { getDb } from "@/db";
-import { productDna } from "@/db/schema";
+import { productDna, products } from "@/db/schema";
 import { isUuid } from "@/lib/id";
 import { AppError } from "@/lib/result";
 import type { ProductDNA } from "@/types";
@@ -22,6 +22,7 @@ import type {
   UpdateProductDnaInput,
 } from "../types";
 import { mapDatabaseError } from "./errors";
+import { resolvePrimaryBusinessId } from "./shared";
 import { mapProductDnaRow } from "./mappers";
 
 /** 领域字段 → 数据库列 的公共映射（不含归属商品） */
@@ -43,6 +44,12 @@ function toDnaColumns(input: NewProductDnaInput) {
   };
 }
 
+async function productScope(productId: string) {
+  const businessId = await resolvePrimaryBusinessId();
+  return and(eq(productDna.productId, productId), inArray(productDna.productId,
+    getDb().select({ id: products.id }).from(products).where(eq(products.businessId, businessId))));
+}
+
 export function createDbProductDnaRepository(): ProductDnaRepository {
   return {
     async getByProductId(productId) {
@@ -53,7 +60,7 @@ export function createDbProductDnaRepository(): ProductDnaRepository {
         const rows = await getDb()
           .select()
           .from(productDna)
-          .where(eq(productDna.productId, productId))
+          .where(await productScope(productId))
           .limit(1);
         const row = rows[0];
         return row ? mapProductDnaRow(row) : null;
@@ -72,6 +79,11 @@ export function createDbProductDnaRepository(): ProductDnaRepository {
         });
       }
       try {
+        const owner = await resolvePrimaryBusinessId();
+        if (!(await getDb().select({ id: products.id }).from(products)
+          .where(and(eq(products.id, input.productId), eq(products.businessId, owner)))).length) {
+          throw new AppError({ code: "NOT_FOUND", message: "商品不存在" });
+        }
         const rows = await getDb()
           .insert(productDna)
           .values({ productId: input.productId, ...toDnaColumns(input) })
@@ -125,7 +137,7 @@ export function createDbProductDnaRepository(): ProductDnaRepository {
         const rows = await getDb()
           .update(productDna)
           .set(values)
-          .where(eq(productDna.productId, productId))
+          .where(await productScope(productId))
           .returning();
 
         const row = rows[0];

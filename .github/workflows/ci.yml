@@ -33,5 +33,9 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: TypeScript
         run: pnpm typecheck
+      - name: Security integration tests
+        run: pnpm test:security
+      - name: Production dependency audit
+        run: pnpm audit --prod
       - name: Production build
         run: pnpm build

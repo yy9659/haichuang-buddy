@@ -271,6 +271,8 @@ export function createDbLiveRepository(): LiveRepository {
 
     async updateComment(id: string, patch: UpdateLiveCommentInput): Promise<LiveComment> {
       try {
+        const owned = getDb().select({ id: liveSessions.id }).from(liveSessions)
+          .where(eq(liveSessions.businessId, await resolvePrimaryBusinessId()));
         const values: Partial<typeof liveComments.$inferInsert> = {};
         if (patch.intent !== undefined) values.intent = patch.intent;
         if (patch.priority !== undefined) values.priority = patch.priority;
@@ -279,7 +281,7 @@ export function createDbLiveRepository(): LiveRepository {
         const rows = await getDb()
           .update(liveComments)
           .set(values)
-          .where(eq(liveComments.id, id))
+          .where(and(eq(liveComments.id, id), inArray(liveComments.sessionId, owned)))
           .returning();
         const row = rows[0];
         if (!row) {
@@ -362,7 +364,10 @@ export function createDbLiveRepository(): LiveRepository {
         const rows = await getDb()
           .select()
           .from(liveSuggestions)
-          .where(eq(liveSuggestions.commentId, commentId))
+          .where(and(eq(liveSuggestions.commentId, commentId), inArray(liveSuggestions.commentId,
+            getDb().select({ id: liveComments.id }).from(liveComments)
+              .innerJoin(liveSessions, eq(liveComments.sessionId, liveSessions.id))
+              .where(eq(liveSessions.businessId, await resolvePrimaryBusinessId())))))
           .orderBy(desc(liveSuggestions.createdAt))
           .limit(1);
         const row = rows[0];

@@ -16,7 +16,8 @@
 import { randomBytes } from "node:crypto";
 
 import { sha256Hex } from "./hash";
-import { isSecureContext, sessionCookieName } from "./session-cookie";
+import { configuredAppOrigin } from "./public-security";
+import { sessionCookieName } from "./session-cookie";
 
 export {
   SESSION_COOKIE_NAME_DEV,
@@ -32,7 +33,7 @@ export {
  * 两边各判断一次，只要判据有一丝不同，就会出现「写进去的名字读不出来」，
  * 表现成「登录成功但一刷新就退出登录」。所以判断只在这里做一次。
  *
- * 判据见 `@/lib/session-cookie` 的 `isSecureContext()`。
+ * 依据可信 APP_ORIGIN 判定；未配置时生产默认使用 Secure。
  */
 export interface SessionCookiePolicy {
   name: string;
@@ -41,24 +42,8 @@ export interface SessionCookiePolicy {
 }
 
 export async function resolveSessionCookiePolicy(): Promise<SessionCookiePolicy> {
-  let forwardedProto: string | null = null;
-  let host: string | null = null;
-
-  try {
-    const { headers } = await import("next/headers");
-    const store = await headers();
-    forwardedProto = store.get("x-forwarded-proto");
-    host = store.get("host");
-  } catch {
-    // 无请求作用域（脚本 / 测试 / 构建期）：走下面的 NODE_ENV 兜底
-  }
-
-  const secure = isSecureContext({
-    forwardedProto,
-    host,
-    nodeEnv: process.env.NODE_ENV,
-  });
-
+  const origin = configuredAppOrigin();
+  const secure = origin ? origin.protocol === "https:" : process.env.NODE_ENV === "production";
   return { name: sessionCookieName(secure), secure };
 }
 

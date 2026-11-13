@@ -1,4 +1,7 @@
 import type * as React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { referrer: "no-referrer", robots: { index: false, follow: false } };
 
 /**
  * 登录 / 注册页的独立外壳。

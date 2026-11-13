@@ -8,7 +8,7 @@
  * 多租户：日报归属商家，读取按「当前会话的商家」过滤。
  */
 
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
 import { getDb } from "@/db";
 import { businessReports } from "@/db/schema";
@@ -83,7 +83,7 @@ export function createDbAnalyticsReportRepository(): AnalyticsReportRepository {
         const rows = await getDb()
           .select()
           .from(businessReports)
-          .where(eq(businessReports.id, id))
+          .where(and(eq(businessReports.id, id), eq(businessReports.businessId, businessId)))
           .limit(1);
         const row = rows[0];
         // 归属校验：不属于当前商家视同不存在（防 id 枚举）

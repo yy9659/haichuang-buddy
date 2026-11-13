@@ -1,3 +1,5 @@
+import { getServerEnv } from "@/lib/env";
+import { trustedProductImagePath } from "@/storage/paths";
 /**
  * 数据库行 → 领域类型 的映射
  *
@@ -124,7 +126,7 @@ export function mapProductRow(row: ProductRow): Product {
     specification: row.specification,
     storageMethod: row.storageMethod,
     shelfLife: row.shelfLife,
-    imageUrl: row.imageUrl,
+    imageUrl: trustedProductImagePath(row.imageUrl, getServerEnv().NEXT_PUBLIC_SUPABASE_URL) ? `/api/product-assets/${row.id}` : row.imageUrl,
     analysisStatus: row.analysisStatus,
     updatedAt: formatDateTime(row.updatedAt),
     metrics: toMetrics(row.metrics),
@@ -515,6 +517,7 @@ export function mapCustomerMessageRow(row: CustomerMessageRow): ChatMessage {
 /** `users` 行 → `UserRecord`（**刻意丢掉 `passwordHash`**） */
 export function mapUserRow(row: UserRow): UserRecord {
   return {
+    role: row.role,
     id: row.id,
     businessId: row.businessId,
     email: row.email,
@@ -531,6 +534,7 @@ export function mapUserRow(row: UserRow): UserRecord {
  */
 export function mapUserCredentialRow(row: UserRow): UserCredentialRecord {
   return {
+    role: row.role,
     id: row.id,
     businessId: row.businessId,
     email: row.email,

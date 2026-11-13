@@ -4,6 +4,14 @@ const nextConfig: NextConfig = {
   // 开发预览不显示 Next.js 的 N 悬浮按钮及 Rendering 状态胶囊。
   devIndicators: false,
   agentRules: false,
+  poweredByHeader: false,
+  async headers() {
+    return [{ source: "/:path*", headers: [
+      { key: "X-Content-Type-Options", value: "nosniff" },
+      { key: "X-Frame-Options", value: "DENY" },
+      { key: "Referrer-Policy", value: "no-referrer" },
+    ] }];
+  },
   /**
    * 开发期可信来源。
    *

@@ -1,13 +1,13 @@
-import { getServerEnv, getDataSource } from "@/lib/env";
+import { getDataSource } from "@/lib/env";
 import { AppError, attempt, type Result } from "@/lib/result";
-import { isAdminEmail, publicKnowledgeSchema } from "@/lib/admin";
+import { publicKnowledgeSchema } from "@/lib/admin";
 import { getPlatformRepository } from "@/repositories/platform";
 import { getCurrentAuthUser } from "./auth.service";
 import type { PublicKnowledgeDocument, PublicKnowledgeInput } from "@/types/admin";
 
 export async function requireAdmin() {
   const user = await getCurrentAuthUser();
-  if (!user || !isAdminEmail(user.email, getServerEnv().ADMIN_EMAILS)) throw new AppError({ code: "UNAUTHORIZED", message: "此功能仅限平台管理员使用", retryable: false });
+  if (!user || user.role !== "admin") throw new AppError({ code: "UNAUTHORIZED", message: "此功能仅限平台管理员使用", retryable: false });
   return user;
 }
 export async function getAdminOverview() {

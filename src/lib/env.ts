@@ -38,7 +38,13 @@ export type DataSourceId = (typeof DATA_SOURCES)[number];
 
 const serverEnvSchema = z.object({
   DATA_SOURCE: z.enum(DATA_SOURCES).default("mock"),
-  ADMIN_EMAILS: z.string().default(""),
+  APP_ORIGIN: z.url().optional(),
+  TRUSTED_PROXY_SECRET: z.string().min(32).optional(),
+  MAIL_MODE: z.enum(["off", "file", "resend"]).default("off"),
+  MAIL_API_KEY: z.string().optional(),
+  MAIL_FROM: z.string().optional(),
+  AI_DAILY_CALL_LIMIT: z.coerce.number().int().min(0).max(100000).default(100),
+  AI_CONCURRENT_CALL_LIMIT: z.coerce.number().int().min(1).max(50).default(2),
 
   // —— 数据层（本地 PGlite）——
   /**
@@ -46,6 +52,7 @@ const serverEnvSchema = z.object({
    * 相对路径按 `process.cwd()` 解析；填绝对路径则原样使用。
    */
   LOCAL_DB_DIR: z.string().min(1).optional(),
+  ASSET_DATA_DIR: z.string().min(1).optional(),
 
   // —— 数据层（Supabase PostgreSQL）——
   DATABASE_URL: z.string().min(1).optional(),
@@ -68,7 +75,7 @@ const serverEnvSchema = z.object({
   DASHSCOPE_API_KEY: z.string().min(1).optional(),
   DASHSCOPE_BASE_URL: z.string().min(1).optional(),
   /** 单次模型调用超时（毫秒）。视觉模型较慢，默认 90s */
-  AI_TIMEOUT_MS: z.coerce.number().int().positive().optional(),
+  AI_TIMEOUT_MS: z.coerce.number().int().positive().max(300000).optional(),
 
   // 海报创意背景：使用百炼原生接口，独立于文本兼容接口。
   WANXIANG_API_KEY: z.preprocess((v) => v === "" ? undefined : v, z.string().min(1).optional()),

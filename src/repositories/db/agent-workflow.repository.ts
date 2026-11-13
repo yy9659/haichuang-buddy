@@ -10,7 +10,7 @@
  * 与 `WorkflowRepository` 无关：那是驾驶舱的只读展示接口，本文件是编排层的持久化。
  */
 
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
 import { getDb } from "@/db";
 import { agentWorkflows } from "@/db/schema";
@@ -49,7 +49,7 @@ export function createDbAgentWorkflowRepository(): AgentWorkflowRepository {
     const rows = await getDb()
       .select()
       .from(agentWorkflows)
-      .where(eq(agentWorkflows.id, id))
+      .where(and(eq(agentWorkflows.id, id), eq(agentWorkflows.businessId, await resolvePrimaryBusinessId())))
       .limit(1);
     const row = rows[0];
     if (!row) {
@@ -104,7 +104,7 @@ export function createDbAgentWorkflowRepository(): AgentWorkflowRepository {
         summary: updated.summary,
         errorMessage: updated.errorMessage,
       })
-      .where(eq(agentWorkflows.id, id))
+      .where(and(eq(agentWorkflows.id, id), eq(agentWorkflows.businessId, await resolvePrimaryBusinessId())))
       .returning();
     const row = rows[0];
     if (!row) {
@@ -154,7 +154,7 @@ export function createDbAgentWorkflowRepository(): AgentWorkflowRepository {
         const rows = await getDb()
           .select()
           .from(agentWorkflows)
-          .where(eq(agentWorkflows.id, id))
+          .where(and(eq(agentWorkflows.id, id), eq(agentWorkflows.businessId, await resolvePrimaryBusinessId())))
           .limit(1);
         const row = rows[0];
         return row ? mapAgentWorkflowRow(row) : null;
@@ -168,7 +168,7 @@ export function createDbAgentWorkflowRepository(): AgentWorkflowRepository {
         const rows = await getDb()
           .select()
           .from(agentWorkflows)
-          .where(eq(agentWorkflows.status, "running"))
+          .where(and(eq(agentWorkflows.status, "running"), eq(agentWorkflows.businessId, await resolvePrimaryBusinessId())))
           .orderBy(desc(agentWorkflows.createdAt))
           .limit(1);
         const row = rows[0];
@@ -243,6 +243,7 @@ export function createDbAgentWorkflowRepository(): AgentWorkflowRepository {
         const rows = await getDb()
           .select()
           .from(agentWorkflows)
+          .where(eq(agentWorkflows.businessId, await resolvePrimaryBusinessId()))
           .orderBy(desc(agentWorkflows.createdAt))
           .limit(safeLimit);
         return rows.map(mapAgentWorkflowRow);

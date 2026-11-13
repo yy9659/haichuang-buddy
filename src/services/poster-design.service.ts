@@ -1,3 +1,6 @@
+import { WanxiangTerminalError } from "@/ai/provider/wanxiang";
+import { finishModelCall } from "./model-quota.service";
+import { takeRateSlot } from "@/repositories/db/security.repository";
 import { createHash, randomUUID } from "node:crypto";
 import { runPosterDesignAgent } from "@/ai/agents/poster-design-agent";
 import { getAIProviderStatus, createWanxiangImageProvider, getWanxiangStatus } from "@/ai/provider";
@@ -53,8 +56,8 @@ export async function startPosterBackground(input: PosterDesignRequest): Promise
       const existing = await findPendingPosterBackground(user.businessId, requestKey);
       if (existing) return { id: existing.id, status: existing.status as "pending" | "running" };
       const provider = createWanxiangImageProvider();
-      const taskId = await provider.create(request.previous.backgroundPrompt, request.size);
-      const job: PosterBackgroundJob = { id: randomUUID().replaceAll("-", ""), businessId: user.businessId, contentId: content.id, productId: request.slot.productId, taskId, model: provider.model, requestKey, status: "pending", createdAt: Date.now() };
+      const { taskId, leaseId } = await provider.create(request.previous.backgroundPrompt, request.size);
+      const job: PosterBackgroundJob = { id: randomUUID().replaceAll("-", ""), businessId: user.businessId, leaseId, contentId: content.id, productId: request.slot.productId, taskId, model: provider.model, requestKey, status: "pending", createdAt: Date.now() };
       await savePosterBackgroundJob(job);
       return { id: job.id, status: "pending" };
     } finally { working.delete(lock); }
@@ -68,14 +71,22 @@ export async function pollPosterBackground(id: string): Promise<Result<PosterBac
     if (!product || !await getRepositories().products.belongsToBusiness(user.businessId, job.productId)) throw new AppError({ code: "NOT_FOUND", message: "关联商品已不存在。" });
     if (job.status === "completed") return { id, status: "completed", imageUrl: job.imageUrl };
     if (job.status === "error" || Date.now() - job.createdAt > 24 * 60 * 60 * 1000) throw new AppError({ code: "MODEL_UNAVAILABLE", message: "本次背景任务已结束或过期，请重新生成。" });
+    const wait = await takeRateSlot(`poster-poll:${user.businessId}`, 60, 60);
+    if (wait) throw new AppError({ code: "RATE_LIMITED", message: `查询过于频繁，请 ${wait} 秒后重试。`, retryAfterSeconds: wait });
     let result: Awaited<ReturnType<ReturnType<typeof createWanxiangImageProvider>["poll"]>>;
     try { result = await createWanxiangImageProvider().poll(job.taskId); }
     catch (cause) {
-      if (cause instanceof AppError && !cause.retryable) await savePosterBackgroundJob({ ...job, status: "error" });
+      if (cause instanceof WanxiangTerminalError) {
+        if (job.leaseId) await finishModelCall(user.businessId, job.leaseId);
+        await savePosterBackgroundJob({ ...job, status: "error" });
+      }
       throw cause;
     }
     let imageUrl: string | undefined;
-    if (result.status === "completed" && result.imageUrl) imageUrl = await savePosterBackgroundImage(id, result.imageUrl);
+    if (result.status === "completed") {
+      if (job.leaseId) await finishModelCall(user.businessId, job.leaseId);
+      if (result.imageUrl) imageUrl = await savePosterBackgroundImage(id, result.imageUrl);
+    }
     await savePosterBackgroundJob({ ...job, status: result.status, ...(imageUrl ? { imageUrl } : {}) });
     return { id, status: result.status, ...(imageUrl ? { imageUrl } : {}) };
   }, (cause) => toAppError(cause, "MODEL_UNAVAILABLE", "背景查询未完成，请稍后继续查询。"));

@@ -17,6 +17,13 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:security": "vitest run tests/security.test.ts",
+    "test:browser": "tsx scripts/security-browser-smoke.ts",
+    "security:account": "tsx scripts/account-admin.ts",
+    "security:prune": "tsx scripts/account-admin.ts prune",
+    "data:backup": "tsx scripts/local-data.ts backup",
+    "data:restore": "tsx scripts/local-data.ts restore",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:check": "drizzle-kit check",
@@ -39,14 +46,14 @@
     "drizzle-orm": "^0.45.3",
     "lucide-react": "^1.47.0",
     "motion": "^13.4.2",
-    "next": "16.3.6",
+    "next": "16.4.6",
     "postgres": "^3.4.9",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "read-excel-file": "9.3.10",
     "recharts": "^3.10.1",
     "tailwind-merge": "^3.7.0",
-    "zod": "^4.6.5"
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -55,7 +62,9 @@
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.31.11",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "vitest": "5.0.1"
   },
   "packageManager": "pnpm@12.6.0"
 }

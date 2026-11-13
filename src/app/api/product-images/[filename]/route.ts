@@ -1,4 +1,6 @@
 import { readFile } from "node:fs/promises";
+import { getCurrentAuthUser } from "@/services/auth.service";
+import { ownsLocalProductImage } from "@/services/product-assets.service";
 
 import {
   localProductImageContentType,
@@ -19,12 +21,15 @@ export async function GET(
   }
 
   try {
+    const user = await getCurrentAuthUser();
+    if (!user) return new Response(null, { status: 401 });
+    if (!await ownsLocalProductImage(user.businessId, filename)) return new Response(null, { status: 404 });
     const image = await readFile(filePath);
     return new Response(new Uint8Array(image), {
       headers: {
         "Content-Type": contentType,
         "Content-Length": String(image.byteLength),
-        "Cache-Control": "public, max-age=31536000, immutable",
+        "Cache-Control": "private, no-store",
         "X-Content-Type-Options": "nosniff",
       },
     });

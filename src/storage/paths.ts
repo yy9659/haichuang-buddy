@@ -130,3 +130,16 @@ export function parseProductImagePath(value: string): string | null {
 
   return null;
 }
+
+/** Only recognize this configured project's own historical storage references. */
+export function trustedProductImagePath(value: string | null, project: string | undefined): string | null {
+  if (!value || !project) return null;
+  try {
+    const url = new URL(value);
+    if (url.origin !== new URL(project).origin || url.username || url.password || url.search || url.hash) return null;
+    const prefix = `/storage/v1/object/public/${PRODUCT_IMAGE_BUCKET}/`;
+    if (!url.pathname.startsWith(prefix)) return null;
+    const key = url.pathname.slice(prefix.length);
+    return /^products\/\d{4}\/\d{2}\/[a-z0-9-]+\.(?:jpg|jpeg|png|webp|avif)$/.test(key) ? key : null;
+  } catch { return null; }
+}

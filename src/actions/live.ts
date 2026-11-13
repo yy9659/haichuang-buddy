@@ -142,6 +142,7 @@ function sanitizeLiveAnalysis(result: Result<SubmitLiveCommentResult>): Result<S
         code: failure.code,
         message: failure.message,
         retryable: failure.retryable,
+        retryAfterSeconds: failure.retryAfterSeconds,
       },
     },
   };

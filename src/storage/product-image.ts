@@ -144,11 +144,12 @@ export async function ensureProductImageBucket(): Promise<
 
       const existing = await storage.getBucket(PRODUCT_IMAGE_BUCKET);
       if (!existing.error) {
+        if (existing.data.public) throw new AppError({ code: "STORAGE_ERROR", message: "商品图片存储必须设为私有。" });
         return { created: false };
       }
 
       const created = await storage.createBucket(PRODUCT_IMAGE_BUCKET, {
-        public: true,
+        public: false,
         fileSizeLimit: MAX_PRODUCT_IMAGE_BYTES,
         allowedMimeTypes: Object.keys(ALLOWED_PRODUCT_IMAGE_TYPES),
       });
@@ -195,6 +196,8 @@ export async function uploadProductImage(
 
   return attempt<UploadedProductImage>(
     async () => {
+      const ready = await ensureProductImageBucket();
+      if (!ready.ok) throw new AppError(ready.error);
       const { error } = await getSupabaseAdmin()
         .storage.from(PRODUCT_IMAGE_BUCKET)
         .upload(path, Buffer.from(input.data), {

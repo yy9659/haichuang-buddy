@@ -46,6 +46,7 @@ function resolveBusinessId(businessId?: string): string {
 
 function toUserRecord(user: StoredMockUser): UserRecord {
   return {
+    role: "merchant",
     id: user.id,
     businessId: user.businessId,
     email: user.email,
@@ -56,6 +57,7 @@ function toUserRecord(user: StoredMockUser): UserRecord {
 
 function toCredential(user: StoredMockUser): UserCredentialRecord {
   return {
+    role: "merchant",
     id: user.id,
     businessId: user.businessId,
     email: user.email,

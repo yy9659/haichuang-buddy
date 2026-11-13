@@ -195,7 +195,7 @@ export function createDbProductRepository(): ProductRepository {
         const rows = await getDb()
           .select()
           .from(products)
-          .where(eq(products.id, id))
+          .where(and(eq(products.id, id), eq(products.businessId, await resolvePrimaryBusinessId())))
           .limit(1);
         const row = rows[0];
         return row ? mapProductRow(row) : null;
@@ -350,4 +350,19 @@ export function createDbProductRepository(): ProductRepository {
       }
     },
   };
+}
+
+/** The URL itself is not authority; assets must still be referenced by this tenant. */
+export async function ownsLocalProductImage(businessId: string, filename: string): Promise<boolean> {
+  if (!isUuid(businessId)) return false;
+  const [row] = await getDb().select({ id: products.id }).from(products)
+    .where(and(eq(products.businessId, businessId), eq(products.imageUrl, "/api/product-images/" + filename))).limit(1);
+  return !!row;
+}
+
+export async function readOwnedProductImageReference(businessId: string, productId: string) {
+  if (!isUuid(businessId) || !isUuid(productId)) return null;
+  const [row] = await getDb().select({ reference: products.imageUrl }).from(products)
+    .where(and(eq(products.id, productId), eq(products.businessId, businessId))).limit(1);
+  return row?.reference ?? null;
 }

@@ -22,7 +22,7 @@ export function sanitizeNextPath(
   fallback: string = DEFAULT_AUTH_REDIRECT,
 ): string {
   const raw = Array.isArray(value) ? value[0] : value;
-  if (!raw || !raw.startsWith("/") || raw.startsWith("//") || raw.startsWith("/\\")) {
+  if (!raw || !raw.startsWith("/") || raw.startsWith("//") || /[\\\u0000-\u001f\u007f]/.test(raw)) {
     return fallback;
   }
   return raw;

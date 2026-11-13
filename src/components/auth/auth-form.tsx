@@ -63,7 +63,7 @@ export function AuthForm({ mode, nextPath }: AuthFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
+    <form method="post" onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
       {isRegister ? (
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="name" className="text-white">你的称呼</Label>
@@ -152,9 +152,10 @@ export function AuthForm({ mode, nextPath }: AuthFormProps) {
           }
           className="ml-1 font-medium text-white underline-offset-4 hover:underline"
         >
-          {isRegister ? "去登录" : "免费注册"}
+          {isRegister ? "去登录" : "注册账号"}
         </Link>
       </p>
+      {!isRegister && <Link href="/forgot-password" className="text-center text-sm text-white underline">忘记密码？</Link>}
     </form>
   );
 }

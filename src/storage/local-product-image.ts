@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, readFile, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { assetDataDirectory } from "./asset-directory";
 
 import { fail, ok, type Result } from "@/lib/result";
 
@@ -21,7 +22,7 @@ const IMAGE_MIME_BY_EXTENSION: Record<string, string> = {
 };
 
 export function localProductImageDirectory(): string {
-  return path.join(process.cwd(), ".data", "product-images");
+  return path.join(assetDataDirectory(), "product-images");
 }
 
 export function localProductImageFilename(url: string): string | null {

@@ -1,3 +1,4 @@
+import { reserveModelCall } from "@/services/model-quota.service";
 import { getServerEnv, resolveDashScopeApiKey } from "@/lib/env";
 import { AppError } from "@/lib/result";
 import type { PosterSize } from "@/lib/product-poster";
@@ -30,6 +31,12 @@ function responseError(status: number, code?: string): AppError {
   return new AppError({ code: "MODEL_UNAVAILABLE", message: "创意背景暂时未生成，请稍后重试；当前海报仍可使用。" });
 }
 
+export class WanxiangTerminalError extends AppError {
+  constructor() {
+    super({ code: "MODEL_UNAVAILABLE", message: "本次创意背景未生成，请调整要求后重新生成；当前海报仍可使用。", retryable: false });
+  }
+}
+
 export function createWanxiangImageProvider(fetcher: typeof fetch = fetch) {
   const config = configuration();
   async function call(path: string, init: RequestInit): Promise<TaskResponse> {
@@ -45,7 +52,9 @@ export function createWanxiangImageProvider(fetcher: typeof fetch = fetch) {
   }
   return {
     model: config.model,
-    async create(prompt: string, size: PosterSize): Promise<string> {
+    async create(prompt: string, size: PosterSize): Promise<{ taskId: string; leaseId: string }> {
+      // A successful submission continues running at the vendor, beyond the HTTP request.
+      const lease = await reserveModelCall(24 * 60 * 60 * 1000);
       const modern = config.model === "wan2.6-t2i";
       const text = `只生成一张纯环境背景照片或抽象纹理，不做海报、不做广告、不做文字排版。不含商品、不含食物、不含人物、不含任何汉字、英文字母、数字、标志或二维码。保持大面积干净留白。以下仅描述环境氛围：${prompt}`;
       const data = await call(modern ? "services/aigc/image-generation/generation" : "services/aigc/text2image/image-synthesis", {
@@ -54,7 +63,7 @@ export function createWanxiangImageProvider(fetcher: typeof fetch = fetch) {
       });
       const taskId = data.output?.task_id;
       if (!taskId || !/^[a-zA-Z0-9-]{10,100}$/.test(taskId)) throw responseError(502);
-      return taskId;
+      return { taskId, leaseId: lease.id };
     },
     async poll(taskId: string): Promise<{ status: "pending" | "running" | "completed"; imageUrl?: string }> {
       if (!/^[a-zA-Z0-9-]{10,100}$/.test(taskId)) throw responseError(400);
@@ -65,7 +74,7 @@ export function createWanxiangImageProvider(fetcher: typeof fetch = fetch) {
         if (!imageUrl) throw responseError(502);
         return { status: "completed", imageUrl };
       }
-      if (status === "FAILED" || status === "CANCELED" || status === "UNKNOWN") throw new AppError({ code: "MODEL_UNAVAILABLE", message: "本次创意背景未生成，请调整要求后重新生成；当前海报仍可使用。", retryable: false });
+      if (status === "FAILED" || status === "CANCELED") throw new WanxiangTerminalError();
       if (status !== "PENDING" && status !== "RUNNING") throw responseError(502, data.output?.code);
       return { status: status === "PENDING" ? "pending" : "running" };
     },

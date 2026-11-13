@@ -7,8 +7,6 @@ import { AppContent } from "@/components/layout/app-content";
 import { unwrapOrThrow } from "@/lib/result";
 import { getShellView } from "@/services";
 import { getCurrentAuthUser } from "@/services/auth.service";
-import { isAdminEmail } from "@/lib/admin";
-import { getServerEnv } from "@/lib/env";
 
 /**
  * Dashboard 全局布局
@@ -46,7 +44,7 @@ export default async function AppLayout({
     redirect("/login");
   }
 
-  const isAdmin = isAdminEmail(user.email, getServerEnv().ADMIN_EMAILS);
+  const isAdmin = user.role === "admin";
   if (isAdmin) redirect("/admin");
   const shell = unwrapOrThrow(await getShellView());
 

@@ -1,30 +1,12 @@
-/**
- * 账号服务（S7）—— 注册 / 登录 / 退出 / 当前用户
- *
- * ## 为什么服务层不写 cookie
- *
- * 「建会话」与「写 cookie」是两件事。前者是数据（库里的 `sessions` 行），
- * 后者是 HTTP 响应的一部分。Next.js 只在 Server Action / Route Handler 里
- * 允许写 cookie，而服务层要保持「可被脚本、测试、其它 Action 复用」。
- * 所以本模块**只负责生成 token 并落库**，把明文 token 交给调用方去写 cookie，
- * 并且保证它除了「写 cookie」之外不会被用在任何地方（不落库、不进日志）。
- *
- * ## 为什么注册要先建商家再建账号
- *
- * `users.business_id` 非空 —— 账号必须一出生就属于某个商家，否则登录进去
- * 每个页面都会撞「尚未创建商家档案」。所以顺序是固定的：
- * 查重 → 判断是否首账号 → 开通商家（认领 / 新建）+ 起步数据 → 建账号 → 发会话。
- *
- * 注册步骤分次持久化；发生异常时由 `attempt` 收敛成 `Result`，
- * 只有账号创建成功后才签发会话。本流程未提供跨步骤的事务回滚。
- */
-
 import { getRepositories } from "@/repositories";
 import { hashPassword, verifyPassword } from "@/lib/password";
 import { AppError, attempt, type Result } from "@/lib/result";
 import { createSessionToken, hashSessionToken, sessionExpiresAt } from "@/lib/session";
 import type { LoginInput, RegisterInput } from "@/schemas/auth";
 
+import { createMerchantAccount, issueVerifiedSession } from "@/repositories/db/security.repository";
+import { getDataSource } from "@/lib/env";
+import { enforceAuthLimit } from "./security-limits.service";
 import { provisionBusinessForNewAccount } from "./business-provisioning.service";
 
 /** 可以安全地交给界面的账号视图（**不含任何凭据**） */
@@ -33,6 +15,7 @@ export interface AuthUserView {
   email: string;
   name: string;
   businessId: string;
+  role: "merchant" | "admin";
 }
 
 /**
@@ -71,116 +54,49 @@ function toAuthUser(user: {
   email: string;
   name: string;
   businessId: string;
+  role: "merchant" | "admin";
 }): AuthUserView {
   return {
     id: user.id,
     email: user.email,
     name: user.name,
     businessId: user.businessId,
+    role: user.role,
   };
 }
 
-/** 生成 token → 落库 → 返回明文（仅用于写 cookie） */
-async function issueSession(
-  userId: string,
-): Promise<{ token: string; expiresAt: Date }> {
-  const token = createSessionToken();
-  const expiresAt = sessionExpiresAt();
-
-  await getRepositories().sessions.create({
-    userId,
-    tokenHash: hashSessionToken(token),
-    expiresAt,
-  });
-
-  return { token, expiresAt };
-}
-
-/**
- * 判断一个仓储异常是不是「邮箱已占用」。
- *
- * 正常路径上我们已经先 `findByEmail` 查过一次；这里兜的是**并发注册**
- * （两个请求同时通过了查重）—— 那一次会撞唯一索引，归一化后是
- * `DB_ERROR` + detail 里带约束名。把它翻译成和查重一致的提示，
- * 用户不会看到「数据已存在，请勿重复提交」这种不知道在说什么的文案。
- */
-function isDuplicateEmailError(cause: unknown): boolean {
-  if (!(cause instanceof AppError)) {
-    return false;
-  }
-  const haystack = `${cause.detail ?? ""} ${cause.message}`;
-  return /users_email_unique|duplicate key|已存在|已被占用/.test(haystack);
-}
-
-/**
- * 注册。
- *
- * 校验本身由调用方（Server Action）用 `registerSchema` 完成 ——
- * 服务层再次信任入参类型，不重复解析。这里只做业务规则。
- */
-export async function register(
-  input: RegisterInput,
-): Promise<Result<IssuedSession>> {
+/** Atomic account creation; a public signup never claims any pre-existing business. */
+export async function register(input: RegisterInput, requestHeaders?: Pick<Headers, "get">): Promise<Result<IssuedSession>> {
   return attempt(async () => {
-    const repositories = getRepositories();
-
-    const existing = await repositories.users.findByEmail(input.email);
-    if (existing) {
-      throw new AppError({
-        code: "VALIDATION_FAILED",
-        message: "该邮箱已被注册，请直接登录",
-        retryable: false,
-      });
-    }
-
-    // 「是不是第一个账号」决定要不要认领已有的演示商家。只能服务端判断 ——
-    // 让用户自己选归属商家等于允许任何人认领任意商家。
-    const isFirstAccount = (await repositories.users.count()) === 0;
-
-    const provisioned = await provisionBusinessForNewAccount({
-      accountName: input.name,
-      isFirstAccount,
-    });
-    if (!provisioned.ok) {
-      throw new AppError(provisioned.error);
-    }
-
+    await enforceAuthLimit("register", input.email, requestHeaders);
+    const token = createSessionToken();
+    const expiresAt = sessionExpiresAt();
+    const session = { tokenHash: hashSessionToken(token), expiresAt };
     const passwordHash = await hashPassword(input.password);
-
-    let created;
-    try {
-      created = await repositories.users.create({
-        email: input.email,
-        name: input.name,
-        passwordHash,
-        businessId: provisioned.data.businessId,
+    if (getDataSource() !== "mock") {
+      const user = await createMerchantAccount({
+        email: input.email, name: input.name, passwordHash, session,
       });
-    } catch (cause) {
-      if (isDuplicateEmailError(cause)) {
-        throw new AppError({
-          code: "VALIDATION_FAILED",
-          message: "该邮箱已被注册，请直接登录",
-          retryable: false,
-        });
-      }
-      throw cause;
+      return { user: toAuthUser(user), token, expiresAt };
     }
 
-    const session = await issueSession(created.id);
-
-    return {
-      user: toAuthUser(created),
-      token: session.token,
-      expiresAt: session.expiresAt,
-      claimedExistingBusiness: provisioned.data.claimedExisting,
-    };
+    const repositories = getRepositories();
+    if (await repositories.users.findByEmail(input.email)) {
+      throw new AppError({ code: "VALIDATION_FAILED", message: "无法创建账号，请核对信息。" });
+    }
+    const business = await provisionBusinessForNewAccount({ accountName: input.name, isFirstAccount: false });
+    if (!business.ok) throw new AppError(business.error);
+    const user = await repositories.users.create({ email: input.email, name: input.name, passwordHash, businessId: business.data.businessId });
+    await repositories.sessions.create({ userId: user.id, ...session });
+    return { user: toAuthUser(user), token, expiresAt };
   });
 }
 
 /** 登录 */
-export async function login(input: LoginInput): Promise<Result<IssuedSession>> {
+export async function login(input: LoginInput, requestHeaders?: Pick<Headers, "get">): Promise<Result<IssuedSession>> {
   return attempt(async () => {
     const repositories = getRepositories();
+    await enforceAuthLimit("login", input.email, requestHeaders);
     const credential = await repositories.users.findByEmail(input.email);
 
     /**
@@ -203,12 +119,16 @@ export async function login(input: LoginInput): Promise<Result<IssuedSession>> {
       throw invalidCredentials;
     }
 
-    const session = await issueSession(credential.id);
+    const token = createSessionToken();
+    const expiresAt = sessionExpiresAt();
+    const session = { tokenHash: hashSessionToken(token), expiresAt };
+    if (getDataSource() === "mock") await repositories.sessions.create({ userId: credential.id, ...session });
+    else await issueVerifiedSession(credential.id, credential.passwordHash, session);
 
     return {
       user: toAuthUser(credential),
-      token: session.token,
-      expiresAt: session.expiresAt,
+      token,
+      expiresAt,
     };
   });
 }

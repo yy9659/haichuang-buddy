@@ -29,7 +29,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { SESSION_COOKIE_NAMES } from "@/lib/session-cookie";
 
 /** 不需要登录即可访问的路径（精确匹配） */
-const PUBLIC_PATHS = new Set(["/login", "/register"]);
+const PUBLIC_PATHS = new Set(["/login", "/register", "/forgot-password", "/reset-password"]);
 
 export function proxy(request: NextRequest): NextResponse {
   const { pathname } = request.nextUrl;
@@ -45,7 +45,7 @@ export function proxy(request: NextRequest): NextResponse {
    * 两个可能的 cookie 名都看。
    *
    * 「该用哪个名字（`__Host-` 还是普通名）」取决于这次请求是不是 HTTPS，
-   * 判据在 `@/lib/session-cookie` 的 `isSecureContext()`。这一层**不复制那份判断**：
+   * 判据来自服务端可信 APP_ORIGIN。这一层**不复制那份判断**：
    * 复制就会漂，而漂的表现是「已经登录了，却被说成没登录」——
    * 用户看到自己刚登录就被踢回登录页。对这里来说，
    * 任意一个名字有值就等于「带了会话」，剩下的交给能做真实校验的布局层。

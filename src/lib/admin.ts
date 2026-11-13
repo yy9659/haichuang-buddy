@@ -1,10 +1,6 @@
 import { z } from "zod";
 import { PUBLIC_KNOWLEDGE_CATEGORIES, type PlatformTask, type PlatformTrendPoint } from "@/types/admin";
 
-export function isAdminEmail(email: string, allowlist: string): boolean {
-  return allowlist.split(/[,;，；\s]+/).filter(Boolean).some(value => value.toLowerCase() === email.trim().toLowerCase());
-}
-
 export const publicKnowledgeSchema = z.object({
   title: z.string().trim().min(2, "请填写知识标题").max(100),
   category: z.enum(PUBLIC_KNOWLEDGE_CATEGORIES),

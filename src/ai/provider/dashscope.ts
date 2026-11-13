@@ -1,3 +1,4 @@
+import { meteredModelFetch } from "@/services/model-quota.service";
 /**
  * DashScope（阿里云百炼 · 通义千问）Provider
  *
@@ -590,7 +591,7 @@ export function createDashScopeProvider(
   options: DashScopeProviderOptions = {},
 ): AIProvider {
   const config = resolveConfig(options);
-  const doFetch = options.fetchImpl ?? globalThis.fetch.bind(globalThis);
+  const doFetch = options.fetchImpl ?? meteredModelFetch;
 
   function modelFor(tier: ModelTier): string {
     return config.models[tier];
@@ -642,7 +643,7 @@ export function createDashScopeProvider(
           throw cause;
         }
         // 进程被禁止联网时重试也无法成功，直接给出明确原因。
-        if (networkPermissionCode(cause)) throw cause;
+        if (cause instanceof AppError || networkPermissionCode(cause)) throw cause;
         await new Promise<void>((resolve) => setTimeout(resolve, 250));
         if (controller.signal.aborted) {
           throw cause;
@@ -767,7 +768,7 @@ export function createDashScopeProvider(
       } catch (cause) {
         // Only retry a transport failure once, within the original timeout budget.
         // Permissions, cancellation and HTTP errors cannot be repaired by retrying.
-        if (controller.signal.aborted || networkPermissionCode(cause) ||
+        if (controller.signal.aborted || cause instanceof AppError || networkPermissionCode(cause) ||
             (cause instanceof Error && cause.name === "AbortError")) throw cause;
         await new Promise((resolve) => setTimeout(resolve, 250));
         response = await doFetch(url, init);
@@ -896,6 +897,7 @@ export function createDashScopeProvider(
         });
       } catch (cause) {
         cleanup();
+        if (cause instanceof AppError) throw cause;
         if (timedOut) {
           throw providerError(
             "MODEL_TIMEOUT",

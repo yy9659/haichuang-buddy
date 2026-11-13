@@ -13,7 +13,8 @@
 import { and, desc, eq } from "drizzle-orm";
 
 import { getDb } from "@/db";
-import { agentTasks } from "@/db/schema";
+import { resolvePrimaryBusinessId } from "./shared";
+import { agentTasks, agentWorkflows, products } from "@/db/schema";
 import { isUuid } from "@/lib/id";
 import { AppError } from "@/lib/result";
 import type { AgentId } from "@/types";
@@ -56,9 +57,19 @@ export function createDbAgentTaskRepository(): AgentTaskRepository {
         });
       }
       try {
+        const businessId = await resolvePrimaryBusinessId();
+        if (input.productId && !(await getDb().select({ id: products.id }).from(products)
+          .where(and(eq(products.id, input.productId), eq(products.businessId, businessId)))).length) {
+          throw new AppError({ code: "NOT_FOUND", message: "商品不存在" });
+        }
+        if (input.workflowId && !(await getDb().select({ id: agentWorkflows.id }).from(agentWorkflows)
+          .where(and(eq(agentWorkflows.id, input.workflowId), eq(agentWorkflows.businessId, businessId)))).length) {
+          throw new AppError({ code: "NOT_FOUND", message: "工作流不存在" });
+        }
         const rows = await getDb()
           .insert(agentTasks)
           .values({
+            businessId,
             agentType: input.agentType,
             title: input.title,
             status: input.status ?? "queued",
@@ -92,13 +103,14 @@ export function createDbAgentTaskRepository(): AgentTaskRepository {
       }
       try {
         const db = getDb();
+        const scope = eq(agentTasks.businessId, await resolvePrimaryBusinessId());
 
         // 先读后写：completedAt 的「首次终态时间优先」规则需要当前值，
         // 在几十条任务的小表上多一次 SELECT 换来的是一致性与可读性。
         const existing = await db
           .select()
           .from(agentTasks)
-          .where(eq(agentTasks.id, id))
+          .where(and(eq(agentTasks.id, id), scope))
           .limit(1);
 
         const currentRow = existing[0];
@@ -139,7 +151,7 @@ export function createDbAgentTaskRepository(): AgentTaskRepository {
         const rows = await db
           .update(agentTasks)
           .set(values)
-          .where(eq(agentTasks.id, id))
+          .where(and(eq(agentTasks.id, id), scope))
           .returning();
 
         const row = rows[0];
@@ -167,6 +179,7 @@ export function createDbAgentTaskRepository(): AgentTaskRepository {
           .from(agentTasks)
           .where(
             and(
+              eq(agentTasks.businessId, await resolvePrimaryBusinessId()),
               eq(agentTasks.productId, productId),
               eq(agentTasks.agentType, agentType),
             ),
@@ -194,6 +207,7 @@ export function createDbAgentTaskRepository(): AgentTaskRepository {
           .from(agentTasks)
           .where(
             and(
+              eq(agentTasks.businessId, await resolvePrimaryBusinessId()),
               eq(agentTasks.productId, productId),
               eq(agentTasks.agentType, agentType),
             ),
@@ -211,7 +225,7 @@ export function createDbAgentTaskRepository(): AgentTaskRepository {
         const rows = await getDb()
           .select()
           .from(agentTasks)
-          .where(eq(agentTasks.agentType, agentType))
+          .where(and(eq(agentTasks.agentType, agentType), eq(agentTasks.businessId, await resolvePrimaryBusinessId())))
           .orderBy(desc(agentTasks.createdAt))
           .limit(1);
         const row = rows[0];
@@ -233,7 +247,7 @@ export function createDbAgentTaskRepository(): AgentTaskRepository {
         const rows = await getDb()
           .select()
           .from(agentTasks)
-          .where(eq(agentTasks.workflowId, workflowId))
+          .where(and(eq(agentTasks.workflowId, workflowId), eq(agentTasks.businessId, await resolvePrimaryBusinessId())))
           .orderBy(desc(agentTasks.createdAt))
           .limit(safeLimit);
         return rows.map(mapAgentTaskRow);
@@ -255,6 +269,7 @@ export function createDbAgentTaskRepository(): AgentTaskRepository {
         const rows = await getDb()
           .select()
           .from(agentTasks)
+          .where(eq(agentTasks.businessId, await resolvePrimaryBusinessId()))
           .orderBy(desc(agentTasks.createdAt))
           .limit(safeLimit);
         return rows.map(mapAgentTaskRow);

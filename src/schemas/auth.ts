@@ -7,8 +7,8 @@
 
 import { z } from "zod";
 
-/** 密码长度下限。8 位是行业通行的底线；再低不值得写进产品 */
-export const PASSWORD_MIN_LENGTH = 8;
+/** 新设密码至少 15 字符；不限制存量账号登录的旧密码长度。 */
+export const PASSWORD_MIN_LENGTH = 15;
 
 /**
  * 密码长度上限。
@@ -30,10 +30,11 @@ const NAME_MAX_LENGTH = 32;
  *   是因为「邮箱大小写不敏感」是一条**业务规则**，不是存储细节。
  * - 刻意**不**用「允许列表」去限制邮箱域名：那只会挡住合法的企业邮箱。
  */
-const emailField = z
+export const emailField = z
   .string()
   .trim()
   .toLowerCase()
+  .max(254)
   .pipe(z.email("请输入有效的邮箱地址"));
 
 export const registerSchema = z.object({
@@ -65,3 +66,8 @@ export const loginSchema = z.object({
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;
+
+export const resetPasswordSchema = z.object({
+  token: z.string().regex(/^[A-Za-z0-9_-]{43}$/, "重设链接无效"),
+  password: registerSchema.shape.password,
+});

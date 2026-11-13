@@ -20,15 +20,13 @@ import { cookies } from "next/headers";
 
 import { fail, type Result } from "@/lib/result";
 import { resolveSessionCookiePolicy } from "@/lib/session";
-import { isAdminEmail } from "@/lib/admin";
 import { resolveRoleRedirect } from "@/lib/auth-redirect";
-import { getServerEnv } from "@/lib/env";
 import { loginSchema, registerSchema } from "@/schemas/auth";
 import { login, logout, register, type AuthUserView } from "@/services/auth.service";
 
 type AuthActionUserView = AuthUserView & { redirectTo: string };
 function authActionView(user: AuthUserView, formData: FormData): AuthActionUserView {
-  return { ...user, redirectTo: resolveRoleRedirect(readField(formData, "next"), isAdminEmail(user.email, getServerEnv().ADMIN_EMAILS)) };
+  return { ...user, redirectTo: resolveRoleRedirect(readField(formData, "next"), user.role === "admin") };
 }
 
 function readField(formData: FormData, key: string): string {
@@ -84,7 +82,7 @@ export async function registerAction(
 
   const result = await register(parsed.data);
   if (!result.ok) {
-    return { ok: false, error: result.error };
+    return { ok: false, error: { ...result.error, detail: undefined } };
   }
 
   await writeSessionCookie(result.data.token, result.data.expiresAt);
@@ -109,7 +107,7 @@ export async function loginAction(
 
   const result = await login(parsed.data);
   if (!result.ok) {
-    return { ok: false, error: result.error };
+    return { ok: false, error: { ...result.error, detail: undefined } };
   }
 
   await writeSessionCookie(result.data.token, result.data.expiresAt);

@@ -775,7 +775,7 @@ export function createDbKnowledgeChunkRepository(): KnowledgeChunkRepository {
       try {
         const rows = await getDb()
           .delete(knowledgeChunks)
-          .where(eq(knowledgeChunks.documentId, documentId))
+          .where(and(eq(knowledgeChunks.documentId, documentId), eq(knowledgeChunks.businessId, await resolvePrimaryBusinessId())))
           .returning({ id: knowledgeChunks.id });
         return rows.length;
       } catch (cause) {
@@ -791,7 +791,7 @@ export function createDbKnowledgeChunkRepository(): KnowledgeChunkRepository {
         const rows = await getDb()
           .select()
           .from(knowledgeChunks)
-          .where(eq(knowledgeChunks.documentId, documentId))
+          .where(and(eq(knowledgeChunks.documentId, documentId), eq(knowledgeChunks.businessId, await resolvePrimaryBusinessId())))
           .orderBy(asc(knowledgeChunks.chunkIndex));
         return rows.map(mapKnowledgeChunkRow);
       } catch (cause) {
@@ -884,7 +884,7 @@ export function createDbKnowledgeChunkRepository(): KnowledgeChunkRepository {
         const rows = await getDb()
           .select({ total: count() })
           .from(knowledgeChunks)
-          .where(eq(knowledgeChunks.documentId, documentId));
+          .where(and(eq(knowledgeChunks.documentId, documentId), eq(knowledgeChunks.businessId, await resolvePrimaryBusinessId())));
         const total = Number(rows[0]?.total ?? 0);
         return Number.isFinite(total) ? total : 0;
       } catch (cause) {

@@ -1,12 +1,13 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { assetDataDirectory } from "./asset-directory";
 import { z } from "zod";
 import { AppError } from "@/lib/result";
 
 export const POSTER_ASSET_ID = /^[a-f0-9]{32}$/;
-const root = () => path.join(process.cwd(), ".data", "poster-backgrounds");
-const JobSchema = z.object({ id: z.string().regex(POSTER_ASSET_ID), businessId: z.string(), contentId: z.string(), productId: z.string(), taskId: z.string(), createdAt: z.number(), model: z.string(), requestKey: z.string().optional(), status: z.enum(["pending", "running", "completed", "error"]), imageUrl: z.string().optional() });
+const root = () => path.join(assetDataDirectory(), "poster-backgrounds");
+const JobSchema = z.object({ id: z.string().regex(POSTER_ASSET_ID), businessId: z.string(), contentId: z.string(), productId: z.string(), taskId: z.string(), createdAt: z.number(), model: z.string(), requestKey: z.string().optional(), leaseId: z.uuid().optional(), status: z.enum(["pending", "running", "completed", "error"]), imageUrl: z.string().optional() });
 export type PosterBackgroundJob = z.infer<typeof JobSchema>;
 
 export async function savePosterBackgroundJob(job: PosterBackgroundJob): Promise<void> {

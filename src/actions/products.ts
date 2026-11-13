@@ -1,5 +1,8 @@
 "use server";
 
+import { getCurrentAuthUser } from "@/services/auth.service";
+import { getRepositories } from "@/repositories";
+
 /**
  * 商品中心的 Server Actions
  *
@@ -88,6 +91,7 @@ async function resolveImageUrl(
 export async function createProductAction(
   formData: FormData,
 ): Promise<Result<Product>> {
+  if (!await getCurrentAuthUser()) return fail("UNAUTHORIZED", "请先登录");
   const values = parseProductForm(formData);
   if (!values.ok) {
     return values;
@@ -117,6 +121,8 @@ export async function createProductAction(
 export async function updateProductAction(
   formData: FormData,
 ): Promise<Result<Product>> {
+  const user = await getCurrentAuthUser();
+  if (!user) return fail("UNAUTHORIZED", "请先登录");
   const productId = parseProductId(readField(formData, "productId"));
   if (!productId.ok) {
     return productId;
@@ -127,6 +133,7 @@ export async function updateProductAction(
     return values;
   }
 
+  if (!await getRepositories().products.belongsToBusiness(user.businessId, productId.data)) return fail("NOT_FOUND", "商品不存在");
   const image = await resolveImageUrl(formData, values.data.name, "update");
   if (!image.ok) {
     return image;

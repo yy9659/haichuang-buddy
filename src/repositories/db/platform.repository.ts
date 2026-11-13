@@ -16,7 +16,7 @@ function taskQuery() {
   return getDb().select(taskFields).from(agentTasks)
     .leftJoin(agentWorkflows, eq(agentTasks.workflowId, agentWorkflows.id))
     .leftJoin(products, eq(agentTasks.productId, products.id))
-    .leftJoin(businesses, sql`${businesses.id}::text = coalesce(${agentWorkflows.businessId}::text, ${products.businessId}::text, ${agentTasks.input}->>'businessId')`);
+    .leftJoin(businesses, sql`${businesses.id}::text = coalesce(${agentTasks.businessId}::text, ${agentWorkflows.businessId}::text, ${products.businessId}::text, ${agentTasks.input}->>'businessId')`);
 }
 function mapTask(row: Omit<PlatformTask, "createdAt" | "completedAt"> & { createdAt: Date; completedAt: Date | null }): PlatformTask {
   return { ...row, createdAt: row.createdAt.toISOString(), completedAt: row.completedAt?.toISOString() ?? null, errorSummary: redactTaskError(row.errorSummary) };

@@ -28,9 +28,9 @@
 import { randomBytes, scrypt as scryptCallback, timingSafeEqual } from "node:crypto";
 
 /** scrypt 参数。N 必须是 2 的幂 */
-const SCRYPT_N = 16_384;
+const SCRYPT_N = 32_768;
 const SCRYPT_R = 8;
-const SCRYPT_P = 1;
+const SCRYPT_P = 3;
 /** 派生密钥长度（字节） */
 const KEY_LENGTH = 64;
 /** 盐长度（字节） */
@@ -38,7 +38,7 @@ const SALT_LENGTH = 16;
 /**
  * 显式给足内存上限。
  *
- * scrypt 的内存开销约为 `128 * N * r` = 128 × 16384 × 8 = **16 MB**，
+ * scrypt 的内存开销约为 `128 * N * r` = 128 × 32768 × 8 = **32 MB**，
  * 而 Node 的默认 `maxmem` 是 32 MB —— 看起来够，但默认值随 Node 版本变动过，
  * 且一旦 `maxmem` 不够，scrypt 会直接抛 `ERR_CRYPTO_INVALID_SCRYPT_PARAMS`，
  * 表现为「注册功能突然坏了」。这里留一倍余量写死，杜绝这类环境差异。

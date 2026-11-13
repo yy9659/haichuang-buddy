@@ -30,6 +30,7 @@ import { migrate } from "drizzle-orm/pglite/migrator";
 import { getServerEnv } from "@/lib/env";
 
 import * as schema from "./schema";
+import { lockLocalDirectory } from "./local-lock";
 
 /** 本地 Drizzle 实例类型（带 schema，便于使用 db.query.*） */
 export type LocalDatabase = PgliteDatabase<typeof schema>;
@@ -42,6 +43,7 @@ const globalForLocal = globalThis as unknown as {
   __haichuangLocalDb?: LocalDatabase;
   __haichuangLocalReady?: Promise<void>;
   __haichuangLocalMigrationTag?: string;
+  __haichuangLocalUnlock?: () => void;
 };
 
 /** 解析本地数据目录为绝对路径 */
@@ -88,7 +90,11 @@ export function getLocalClient(): PGlite {
   const dir = resolveLocalDbDir();
   fs.mkdirSync(dir, { recursive: true });
 
-  const client = new PGlite(dir);
+  const unlock = lockLocalDirectory(dir);
+  let client: PGlite;
+  try { client = new PGlite(dir); }
+  catch (cause) { unlock(); throw cause; }
+  globalForLocal.__haichuangLocalUnlock = unlock;
   globalForLocal.__haichuangLocalClient = client;
   return client;
 }
@@ -157,7 +163,9 @@ export function ensureLocalDatabaseReady(): Promise<void> {
     if (failedClient && globalForLocal.__haichuangLocalClient === failedClient) {
       globalForLocal.__haichuangLocalClient = undefined;
       globalForLocal.__haichuangLocalDb = undefined;
-      void failedClient.close().catch(() => undefined);
+      const unlock = globalForLocal.__haichuangLocalUnlock;
+      globalForLocal.__haichuangLocalUnlock = undefined;
+      void failedClient.close().catch(() => undefined).finally(() => unlock?.());
     }
   });
 
@@ -170,11 +178,13 @@ export function ensureLocalDatabaseReady(): Promise<void> {
  */
 export async function closeLocalDb(): Promise<void> {
   const client = globalForLocal.__haichuangLocalClient;
+  const unlock = globalForLocal.__haichuangLocalUnlock;
+  globalForLocal.__haichuangLocalUnlock = undefined;
   globalForLocal.__haichuangLocalClient = undefined;
   globalForLocal.__haichuangLocalDb = undefined;
   globalForLocal.__haichuangLocalReady = undefined;
   globalForLocal.__haichuangLocalMigrationTag = undefined;
   if (client) {
-    await client.close();
+    try { await client.close(); } finally { unlock?.(); }
   }
 }

@@ -1,15 +1,26 @@
 <div align="center">
 
-<img src="docs/images/readme-banner.png" alt="海创Buddy：一个人，也可以拥有一支 AI 经营团队" width="100%" />
+![海创Buddy：一个人，也可以拥有一支 AI 经营团队](docs/images/readme-banner.png)
 
 # 海创Buddy · Haichuang Buddy
 
 ### 一个人，也可以拥有一支 AI 经营团队。
 
-面向海产小商户与 OPC 个体经营者的 AI 经营工作台。<br />
+面向海产小商户与 OPC 个体经营者的 AI 经营工作台。
+
 用一个经营目标，连接商品、品牌、推广、答疑、直播准备与销售复盘。
 
-[![CI](https://github.com/yy9659/haichuang-buddy/actions/workflows/ci.yml/badge.svg)](https://github.com/yy9659/haichuang-buddy/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-22D3EE?style=flat-square)](LICENSE) ![Next.js](https://img.shields.io/badge/Next.js-16-111827?style=flat-square&logo=nextdotjs) ![React](https://img.shields.io/badge/React-19-149ECA?style=flat-square&logo=react) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![CI](https://github.com/yy9659/haichuang-buddy/actions/workflows/ci.yml/badge.svg)
+
+![License: MIT](https://img.shields.io/badge/License-MIT-22D3EE?style=flat-square)
+
+![Next.js](https://img.shields.io/badge/Next.js-16-111827?style=flat-square\&logo=nextdotjs)
+
+![React](https://img.shields.io/badge/React-19-149ECA?style=flat-square\&logo=react)
+
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square\&logo=typescript\&logoColor=white)
+
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square\&logo=tailwindcss\&logoColor=white)
 
 [界面预览](#界面预览) · [核心功能](#核心功能) · [快速启动](#快速启动) · [部署指南](docs/DEPLOYMENT.md) · [技术架构](#技术架构)
 
@@ -34,6 +45,7 @@
 ![商户工作台：AI 经营大脑、当前经营目标与六岗位入口](docs/images/dashboard.png)
 
 <details>
+
 <summary><strong>查看营销海报工作区</strong> · 文案编辑、设计预览与 PNG 下载</summary>
 
 ![推广素材：商品实拍、海报文案、档案价格与海报预览](docs/images/poster-studio.png)
@@ -48,11 +60,12 @@
 
 ![注册页面：海洋背景、品牌标识与创建账号表单](docs/images/register.png)
 
-新用户可创建账号，并通过登录进入自己的经营空间。截图展示未填写的注册表单，页面同时提供已有账号的登录入口。
+新用户可自行创建账号，并通过登录进入自己的经营空间。截图展示未填写的注册表单，页面同时提供已有账号的登录入口。
 
 </details>
 
 <details>
+
 <summary><strong>查看平台管理端</strong> · 指挥大屏、运行监控与公共知识管理</summary>
 
 ![平台管理指挥大屏：海产品类、任务与渠道的可视化展示](docs/images/admin-dashboard.png)
@@ -65,14 +78,14 @@
 
 ### 一个经营大脑，六类专业岗位
 
-| 岗位 | 主要能力 | 页面 |
-| :--- | :--- | :--- |
-| **商品经理** | 管理图片、价格、规格与库存；生成商品理解、卖点、人群与使用场景 | `/products` |
-| **品牌经理** | 整理店铺定位与店主表达偏好，生成可编辑、可确认的品牌档案 | `/brand` |
-| **内容运营** | 按渠道与形式生成文案、分镜、口播或图文建议；设计并下载营销海报 | `/content` |
-| **智能客服** | 模拟顾客提问，检索商户知识并展示来源；记录资料不足与人工确认需求 | `/customer-service` |
-| **直播导演** | 模拟观众问题、提供回答建议，保存练习口播并生成文字评分与改进建议 | `/live` |
-| **经营分析师** | 汇总销售、商品与渠道表现，生成附数据依据的 AI 建议与下一步入口 | `/analytics` |
+| 岗位        | 主要能力                              | 页面                  |
+| :-------- | :-------------------------------- | :------------------ |
+| **商品经理**  | 管理图片、价格、规格与库存；生成商品理解、卖点、人群与使用场景   | `/products`         |
+| **品牌经理**  | 整理店铺定位与店主表达偏好，生成可编辑、可确认的品牌档案      | `/brand`            |
+| **内容运营**  | 按渠道与形式生成文案、分镜、口播或图文建议；设计并下载营销海报   | `/content`          |
+| **智能客服**  | 模拟顾客提问，检索商户知识并展示来源；记录资料不足与人工确认需求  | `/customer-service` |
+| **直播导演**  | 模拟观众问题、提供回答建议，保存练习口播并生成文字评分与改进建议  | `/live`             |
+| **经营分析师** | 汇总销售、商品与渠道表现，生成附数据依据的 AI 建议与下一步入口 | `/analytics`        |
 
 工作台使用岗位名称，侧栏使用业务模块名称，两者指向同一页面。
 
@@ -147,13 +160,14 @@ fi
 ```dotenv
 DATA_SOURCE=local
 AI_PROVIDER=mock
+APP_ORIGIN=http://localhost:3000
 ```
 
 ```bash
-pnpm dev
+pnpm dev --hostname localhost
 ```
 
-打开 **[http://localhost:3000](http://localhost:3000)**，注册并登录。全新本地数据库会自动建表；随后填写店铺、商品与品牌资料。下次只需执行 `pnpm dev`，按 `Ctrl+C` 停止。
+打开 **<http://localhost:3000>**，注册并登录。注册无需邀请码，也无需配置邮件。全新本地数据库会自动建表；随后填写店铺、商品与品牌资料。下次只需执行 `pnpm dev`，按 `Ctrl+C` 停止。
 
 `local` 模式默认把业务记录保存在 `.data/pgdata`，商品照片保存在 `.data/product-images`。`mock` 模型模式无需联网，新生成内容会带演示标记。常规启动无需执行种子或数据库重置命令。
 
@@ -168,22 +182,18 @@ DASHSCOPE_API_KEY=your-dashscope-api-key
 
 已接入阿里云百炼 / 通义千问的文本、图像理解与向量化能力。可选通义万相用于海报创意背景；具体模型、接口地域与超时配置见 [环境模板](.env.example) 和 [技术与使用指南](docs/技术与使用指南.md#ai-模型)。真实调用需要有效密钥、相应模型权限、额度与服务端网络。
 
-| 配置 | 可用选项 | 作用 |
-| :--- | :--- | :--- |
+| 配置            | 可用选项                    | 作用                            |
+| :------------ | :---------------------- | :---------------------------- |
 | `DATA_SOURCE` | `mock` / `local` / `db` | 内存示例、本地 PGlite 或远程 PostgreSQL |
-| `AI_PROVIDER` | `mock` / `dashscope` | 确定性示例或真实通义千问输出 |
+| `AI_PROVIDER` | `mock` / `dashscope`    | 确定性示例或真实通义千问输出                |
 
 这两组配置相互独立。其他模型提供方名称目前仅预留，尚未实现，调用会明确提示。
 
 ### 管理员入口
 
-先注册账号，然后配置白名单并重启：
+管理员由数据库角色决定。先在仅操作者可访问的环境准备账号，再用 `pnpm security:account lookup <邮箱>` 查找已存在的账号，按[首次授予步骤](docs/DEPLOYMENT.md#首次授予管理员)核对并授予。原有账号仍可登录；旧 `ADMIN_EMAILS` 不再授权任何账号。
 
-```dotenv
-ADMIN_EMAILS=your-admin@example.com
-```
-
-管理员登录进入 `/admin`。多个邮箱以逗号分隔；页面和服务端操作均校验管理员权限。
+公网开放前请完成 HTTPS、邮件投递、反代来源验证、数据库迁移和恢复演练。用户可直接在 `/register` 注册，注册有频率限制。只有经过核验的邮箱可以通过邮件重设密码。真实 AI 受商户每日次数和并发限制。
 
 ## 部署
 
@@ -203,14 +213,14 @@ pnpm start
 
 ## 技术架构
 
-| 层级 | 技术 |
-| :--- | :--- |
-| 全栈框架 | Next.js 16 App Router、React 19、TypeScript |
-| 界面 | Tailwind CSS 4、Radix UI、Lucide、Recharts、Motion |
-| AI 与校验 | DashScope 通义千问、可选通义万相、Zod 结构化输出 |
-| 编排与检索 | 经营目标规划、工作流依赖与复用、失败重试、知识切片与向量检索、引用校验 |
-| 数据与存储 | Drizzle ORM、PGlite / PostgreSQL、本地文件 / Supabase Storage |
-| 安装与构建 | pnpm、TypeScript、GitHub Actions |
+| 层级     | 技术                                                      |
+| :----- | :------------------------------------------------------ |
+| 全栈框架   | Next.js 16 App Router、React 19、TypeScript               |
+| 界面     | Tailwind CSS 4、Radix UI、Lucide、Recharts、Motion          |
+| AI 与校验 | DashScope 通义千问、可选通义万相、Zod 结构化输出                         |
+| 编排与检索  | 经营目标规划、工作流依赖与复用、失败重试、知识切片与向量检索、引用校验                     |
+| 数据与存储  | Drizzle ORM、PGlite / PostgreSQL、本地文件 / Supabase Storage |
+| 安装与构建  | pnpm、TypeScript、GitHub Actions                          |
 
 ```text
 src/
@@ -238,30 +248,31 @@ docs/                功能、部署与资源说明
 
 ```bash
 pnpm typecheck
+pnpm test:security
 pnpm build
 ```
 
-GitHub Actions 在主分支提交与 Pull Request 时检查类型与生产构建，使用 Mock 模式，无需仓库配置真实模型密钥。问题与建议欢迎通过 [GitHub Issues](https://github.com/yy9659/haichuang-buddy/issues) 提交。
+GitHub Actions 在主分支提交与 Pull Request 时检查类型、安全集成测试与生产构建，使用 Mock 模式，无需仓库配置真实模型密钥。问题与建议欢迎通过 [GitHub Issues](https://github.com/yy9659/haichuang-buddy/issues) 提交。
 
 ## 项目文档
 
-| 文档 | 内容 |
-| :--- | :--- |
+| 文档                         | 内容                         |
+| :------------------------- | :------------------------- |
 | [技术与使用指南](docs/技术与使用指南.md) | 页面能力、海报、销售、模型配置、管理端口径与故障排查 |
-| [部署指南](docs/DEPLOYMENT.md) | 本地生产运行、服务器部署、数据持久化、迁移与备份 |
-| [资源说明](docs/ASSETS.md) | 品牌文件、真实截图与替换方式 |
-| [环境变量模板](.env.example) | 配置项与默认模型；真实密钥填写在本地配置 |
-| [MIT 许可证](LICENSE) | 使用、修改与分发项目代码的许可条款 |
+| [部署指南](docs/DEPLOYMENT.md) | 本地生产运行、服务器部署、数据持久化、迁移与备份   |
+| [资源说明](docs/ASSETS.md)     | 品牌文件、真实截图与替换方式             |
+| [环境变量模板](.env.example)     | 配置项与默认模型；真实密钥填写在本地配置       |
+| [MIT 许可证](LICENSE)         | 使用、修改与分发项目代码的许可条款          |
 
 ## 当前边界与后续方向
 
-| 当前能力边界 | 后续方向 |
-| :--- | :--- |
-| 销售来自记账、粘贴或导入 | 对接获得授权的订单与销售系统 |
-| 客服与直播使用站内模拟 | 对接真实消息与评论，完善人工接管 |
-| 公共资料可查阅，未自动进入私有检索 | 资料订阅、索引与来源版本管理 |
+| 当前能力边界              | 后续方向             |
+| :------------------ | :--------------- |
+| 销售来自记账、粘贴或导入        | 对接获得授权的订单与销售系统   |
+| 客服与直播使用站内模拟         | 对接真实消息与评论，完善人工接管 |
+| 公共资料可查阅，未自动进入私有检索   | 资料订阅、索引与来源版本管理   |
 | 彩排评分读取口播文字，摄像头为本地预览 | 更丰富的练习反馈与明确的数据授权 |
-| 尚无实际增收、转化或节省成本的验证 | 真实商户试用与使用效果评估 |
+| 尚无实际增收、转化或节省成本的验证   | 真实商户试用与使用效果评估    |
 
 ## 许可证
 

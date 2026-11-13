@@ -1,3 +1,5 @@
+import { getCurrentAuthUser } from "./auth.service";
+import { readOwnedProductImageReference } from "./product-assets.service";
 /**
  * 商品服务层
  *
@@ -298,6 +300,13 @@ export async function deleteProduct(
     return existing;
   }
 
+  const reference = existing.data?.imageUrl?.startsWith("/api/product-assets/")
+    ? await attempt(async () => {
+        const user = await getCurrentAuthUser();
+        return user ? await readOwnedProductImageReference(user.businessId, productId.data) : null;
+      }, (cause) => toAppError(cause, "DB_ERROR", "加载图片引用失败"))
+    : ok(existing.data?.imageUrl ?? null);
+  if (!reference.ok) return reference;
   const removed = await attempt(
     () => repositories.products.delete(productId.data),
     (cause) => toAppError(cause, "DB_ERROR", "删除商品失败"),
@@ -307,7 +316,7 @@ export async function deleteProduct(
   }
 
   let imageCleanup: ImageCleanupResult = "skipped";
-  const imageUrl = existing.data?.imageUrl;
+  const imageUrl = reference.data;
   if (imageUrl) {
     const cleaned = await deleteProductImage(imageUrl);
     imageCleanup = cleaned.ok ? "deleted" : "failed";
@@ -325,6 +334,7 @@ export async function uploadImage(
   file: ProductImageFileInput,
   options: { name: string },
 ): Promise<Result<UploadedProductImage>> {
+  if (!await getCurrentAuthUser()) return fail("UNAUTHORIZED", "请先登录后上传图片");
   const parsed: Result<ParsedProductImage> = await parseProductImageFile(file);
   if (!parsed.ok) {
     return parsed;

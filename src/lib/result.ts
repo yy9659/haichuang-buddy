@@ -74,6 +74,7 @@ export interface AppErrorShape {
   detail?: string;
   /** 是否可重试 */
   retryable: boolean;
+  retryAfterSeconds?: number;
 }
 
 /** 可抛出的业务错误，携带错误码与可重试标记 */
@@ -81,6 +82,7 @@ export class AppError extends Error {
   readonly code: ErrorCode;
   readonly detail?: string;
   readonly retryable: boolean;
+  readonly retryAfterSeconds?: number;
 
   constructor(shape: Omit<AppErrorShape, "retryable"> & { retryable?: boolean }, options?: { cause?: unknown }) {
     super(shape.message, options);
@@ -88,6 +90,7 @@ export class AppError extends Error {
     this.code = shape.code;
     this.detail = shape.detail;
     this.retryable = shape.retryable ?? RETRYABLE_BY_CODE[shape.code];
+    this.retryAfterSeconds = shape.retryAfterSeconds;
   }
 
   toShape(): AppErrorShape {
@@ -96,6 +99,7 @@ export class AppError extends Error {
       message: this.message,
       detail: this.detail,
       retryable: this.retryable,
+      retryAfterSeconds: this.retryAfterSeconds,
     };
   }
 }

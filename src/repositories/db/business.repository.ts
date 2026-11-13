@@ -10,7 +10,7 @@
 import { asc, desc, eq } from "drizzle-orm";
 
 import { getDb } from "@/db";
-import { agentTasks, agentWorkflows, businesses, ownerProfiles } from "@/db/schema";
+import { agentTasks, businesses, ownerProfiles } from "@/db/schema";
 import { formatRelativeTime } from "@/lib/datetime";
 import { AGENT_NAME_LABEL, AGENT_STATUS_META } from "@/lib/status-meta";
 import { AppError } from "@/lib/result";
@@ -214,7 +214,7 @@ export function createDbBusinessRepository(): BusinessRepository {
             completedAt: agentTasks.completedAt,
           })
           .from(agentTasks)
-          .innerJoin(agentWorkflows, eq(agentTasks.workflowId, agentWorkflows.id))
+          .where(eq(agentTasks.businessId, await resolvePrimaryBusinessId()))
           .orderBy(desc(agentTasks.createdAt))
           .limit(NOTIFICATION_LIMIT);
 

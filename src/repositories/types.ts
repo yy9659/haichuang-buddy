@@ -1103,6 +1103,7 @@ export interface Repositories {
  * 序列化、日志、调试输出到处跑，而它一次都不需要在那些地方出现。
  */
 export interface UserRecord {
+  role: "merchant" | "admin";
   id: string;
   businessId: string;
   email: string;
@@ -1112,6 +1113,7 @@ export interface UserRecord {
 
 /** 仅用于登录校验：唯一一处会读到密码哈希的地方 */
 export interface UserCredentialRecord {
+  role: "merchant" | "admin";
   id: string;
   businessId: string;
   email: string;

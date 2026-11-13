@@ -1,3 +1,4 @@
+import { readProductVisionImage } from "./product-assets.service";
 /**
  * Product Agent 业务闭环服务（S2-2）
  *
@@ -369,7 +370,15 @@ export async function analyzeProduct(
   }
 
   // 6. 调用 Product Agent（模型调用与结构化校验都在 Agent 内部完成）
-  const run = await runProductAgent(toProductAgentInput(product), {
+  const visual = hasImage && imageUrl.startsWith("/api/product-assets/")
+    ? await attempt(() => readProductVisionImage(id), (cause) => toAppError(cause, "STORAGE_ERROR", "商品图片暂时无法读取"))
+    : ok(product.imageUrl);
+  if (!visual.ok) {
+    await closeTask(repositories, taskId, { status: "failed", errorMessage: visual.error.message, durationMs: Date.now() - startedAt });
+    await markProductStatus(repositories, id, "failed");
+    return visual;
+  }
+  const run = await runProductAgent(toProductAgentInput({ ...product, imageUrl: visual.data }), {
     ...(options.provider ? { provider: options.provider } : {}),
     skipVision: !hasImage,
     ...(options.signal ? { signal: options.signal } : {}),

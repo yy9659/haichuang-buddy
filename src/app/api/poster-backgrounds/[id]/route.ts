@@ -7,6 +7,6 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
   if (!user) return new Response(null, { status: 401 });
   try {
     const image = await readPosterBackgroundImage((await params).id, user.businessId);
-    return new Response(image as Uint8Array<ArrayBuffer>, { headers: { "Content-Type": "image/png", "Cache-Control": "private, max-age=86400", "X-Content-Type-Options": "nosniff" } });
+    return new Response(image as Uint8Array<ArrayBuffer>, { headers: { "Content-Type": "image/png", "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff" } });
   } catch { return new Response(null, { status: 404 }); }
 }
