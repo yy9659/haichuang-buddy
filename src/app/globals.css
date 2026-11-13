@@ -64,6 +64,7 @@
 
   /* 侧边栏（比内容区更深，压出层次） */
   --sidebar: #04101f;
+  --sidebar-surface: linear-gradient(180deg, #061628, var(--sidebar) 32%);
   --sidebar-foreground: #8ea8c5;
   --sidebar-primary: #2f8cff;
   --sidebar-primary-foreground: #fff;
@@ -154,14 +155,20 @@
   --chart-axis: oklch(0.35 0.04 240 / 0.3);
   --chart-tick: #546a84;
 
-  /* 侧边栏：带海雾蓝调的白玻璃 */
-  --sidebar: oklch(0.99 0.008 225 / 0.78);
+  /* 侧边栏：海雾白玻璃（比内容区略灰半档，让卡片浮、侧栏沉） */
+  --sidebar: oklch(0.965 0.014 228 / 0.88);
+  /* 上白下雾的纵向渐变，消解「一整块死白」的板感 */
+  --sidebar-surface: linear-gradient(
+    180deg,
+    oklch(0.995 0.006 225 / 0.92),
+    oklch(0.955 0.018 230 / 0.9)
+  );
   --sidebar-foreground: #546a84;
   --sidebar-primary: #2563eb;
   --sidebar-primary-foreground: #fff;
   --sidebar-accent: oklch(0.55 0.17 252 / 0.1);
   --sidebar-accent-foreground: #0f172a;
-  --sidebar-border: oklch(0.55 0.06 245 / 0.12);
+  --sidebar-border: oklch(0.5 0.06 242 / 0.16);
 
   /* ── 海岸白昼 · 毛玻璃与光晕 ──────────────────── */
   --glass-bg: oklch(1 0 0 / 0.82);

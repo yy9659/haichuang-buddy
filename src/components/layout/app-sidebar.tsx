@@ -14,7 +14,7 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="glass-bar sticky top-0 hidden h-screen w-[232px] shrink-0 flex-col border-r lg:flex" style={{ background: "var(--sidebar)" }}>
+    <aside className="glass-bar sticky top-0 hidden h-screen w-[232px] shrink-0 flex-col border-r lg:flex" style={{ background: "var(--sidebar-surface)" }}>
       <div className="flex h-14 items-center border-b border-sidebar-border px-4">
         <Link href="/dashboard" className="outline-none">
           <BrandMark showSubtitle={false} adaptive />
