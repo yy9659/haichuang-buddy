@@ -109,8 +109,8 @@
 .light {
   color-scheme: light;
 
-  /* 海岸白昼：海雾蓝基底（与白卡拉出明度差，页面不再「一片白」） */
-  --background: #e2ebf4;
+  /* 海岸白昼：中性冷白基底（去蓝雾，白卡才干净） */
+  --background: #edf1f6;
   --foreground: #0f172a;
   --card: oklch(1 0 0 / 0.86);
   --card-foreground: #0f172a;
@@ -166,7 +166,7 @@
   /* ── 海岸白昼 · 毛玻璃与光晕 ──────────────────── */
   --glass-bg: oklch(1 0 0 / 0.82);
   /* 描边带一线海蓝且更实，玻璃层次在亮底上也立得住 */
-  --glass-border: oklch(0.72 0.05 225 / 0.7);
+  --glass-border: oklch(0.74 0.04 228 / 0.62);
   --glass-shadow: 0 20px 44px -24px oklch(0.5 0.09 232 / 0.35),
     0 1px 3px oklch(0.55 0.06 232 / 0.16);
   --glass-sheen: linear-gradient(
@@ -175,13 +175,13 @@
     oklch(1 0 0 / 0.25) 38%,
     transparent
   );
-  /* 晨光三原色：右上青潮、左下暖沙、远处蓝雾 */
-  --glow-cyan: oklch(0.85 0.1 208 / 0.6);
-  --glow-blue: oklch(0.7 0.12 248 / 0.32);
-  --glow-warm: oklch(0.92 0.06 92 / 0.6);
-  /* 内容区：暖沙白 → 海雾蓝 */
+  /* 晨光三原色：右上青潮、左下暖沙、远处蓝雾（点到为止，不洗全页） */
+  --glow-cyan: oklch(0.85 0.1 208 / 0.42);
+  --glow-blue: oklch(0.7 0.12 248 / 0.2);
+  --glow-warm: oklch(0.92 0.06 92 / 0.5);
+  /* 内容区：暖沙白 → 淡海雾 */
   --surface-top: #fdf8f1;
-  --surface-bottom: #cfe0f0;
+  --surface-bottom: #e2eaf2;
 
   --shadow-card: 0 1px 2px oklch(0.55 0.06 238 / 0.08),
     0 16px 36px -22px oklch(0.55 0.08 232 / 0.3);

@@ -84,7 +84,7 @@ export function BusinessBrainCard({
           status === "error" ? "任务需处理" : "等待指令";
 
   return (
-    <Card className="relative isolate flex h-full min-h-0 flex-col overflow-hidden border-slate-900/10 bg-slate-900/[0.03] shadow-md shadow-slate-900/10 dark:border-white/10 dark:bg-white/[0.05] dark:shadow-black/20">
+    <Card className="relative isolate flex h-full min-h-0 flex-col overflow-hidden border-[var(--glass-border)] bg-white/70 shadow-card dark:border-white/10 dark:bg-white/[0.05] dark:shadow-black/20">
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-cyan-500" />
 
       <div className="flex min-h-56 flex-1 flex-col xl:min-h-0">
@@ -160,7 +160,7 @@ export function BusinessBrainCard({
 
       {/* 与两侧 grid-rows-2 的第二排同高；减去一半的 1rem 行间距。 */}
       <div className="flex flex-col gap-2 px-4 pt-2 pb-3 xl:basis-[calc(50%_-_0.5rem)] xl:shrink-0 xl:justify-between">
-        <section className="w-full min-w-0 rounded-2xl border border-slate-900/10 bg-slate-900/[0.03] px-3 py-2 dark:border-white/10 dark:bg-white/[0.04]" aria-label="当前经营目标">
+        <section className="w-full min-w-0 rounded-2xl border border-slate-900/8 bg-white/60 px-3 py-2 dark:border-white/10 dark:bg-white/[0.04]" aria-label="当前经营目标">
           <p className="text-xs font-semibold tracking-wide text-cyan-700 dark:text-cyan-300">当前经营目标</p>
           <p className="mt-0.5 line-clamp-2 text-xs font-medium leading-4 text-slate-900 dark:text-slate-100" title={brain.goal ?? undefined}>
             {goal.summary ?? "已准备就绪，点击上方按钮制定目标"}
@@ -181,7 +181,7 @@ export function BusinessBrainCard({
           ) : null}
         </section>
 
-        <div className="relative w-full rounded-2xl border border-slate-900/10 bg-slate-900/[0.03] px-3 py-1.5 dark:border-white/10 dark:bg-white/[0.04]" aria-label="经营工作阶段">
+        <div className="relative w-full rounded-2xl border border-slate-900/8 bg-white/60 px-3 py-1.5 dark:border-white/10 dark:bg-white/[0.04]" aria-label="经营工作阶段">
           <div aria-hidden="true" className={cn(
             "absolute inset-x-[12.5%] top-4 h-px",
             status === "completed" ? "bg-blue-600/40 dark:bg-blue-400/50" : "bg-cyan-600/20 dark:bg-cyan-400/20",

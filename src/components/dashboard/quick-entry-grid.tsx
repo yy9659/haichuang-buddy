@@ -25,7 +25,7 @@ export function QuickEntryGrid() {
           {NAV_ITEMS.filter((item) => item.href !== "/dashboard").map((item) => {
             const Icon = item.icon;
             return (
-              <Link key={item.href} href={item.href} className="group min-w-0 rounded-2xl border border-slate-900/10 bg-slate-900/[0.03] p-4 shadow-md shadow-slate-900/10 backdrop-blur-md transition-[box-shadow,border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-cyan-600/40 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400 dark:border-white/10 dark:bg-white/[0.05] dark:shadow-black/20 dark:hover:border-cyan-400/30">
+              <Link key={item.href} href={item.href} className="group min-w-0 rounded-2xl border border-[var(--glass-border)] bg-white/70 p-4 shadow-card backdrop-blur-xl transition-[box-shadow,border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-cyan-600/40 hover:shadow-float focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400 dark:border-white/10 dark:bg-white/[0.05] dark:shadow-black/20 dark:hover:border-cyan-400/30">
                 <div className="mb-3 flex items-center justify-between">
                   <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600/15 to-cyan-600/10 text-cyan-700 dark:from-blue-400/20 dark:to-cyan-400/15 dark:text-cyan-300">
                     <Icon className="size-5" strokeWidth={1.8} />

@@ -35,7 +35,7 @@ function SummaryMetric({ title, value, unit, description, href, icon: Icon, tone
   tone: "blue" | "cyan" | "violet";
 }) {
   return (
-    <Link href={href} className="group flex flex-col rounded-2xl border border-slate-900/10 bg-slate-900/[0.03] p-4 shadow-md shadow-slate-900/10 backdrop-blur-md transition-[box-shadow,border-color] duration-200 hover:border-slate-900/20 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400 dark:border-white/10 dark:bg-white/[0.05] dark:shadow-black/20 dark:hover:border-white/20">
+    <Link href={href} className="group flex flex-col rounded-2xl border border-[var(--glass-border)] bg-white/70 p-4 shadow-card backdrop-blur-xl transition-[box-shadow,border-color] duration-300 hover:border-cyan-600/30 hover:shadow-float focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400 dark:border-white/10 dark:bg-white/[0.05] dark:shadow-black/20 dark:hover:border-white/20">
       <div className="flex items-center justify-between gap-2">
         <span className={cn("flex size-10 shrink-0 items-center justify-center rounded-xl", tone === "blue" && "bg-blue-600/10 text-blue-700 dark:bg-blue-400/15 dark:text-blue-300", tone === "cyan" && "bg-cyan-600/10 text-cyan-700 dark:bg-cyan-400/15 dark:text-cyan-300", tone === "violet" && "bg-violet-600/10 text-violet-700 dark:bg-violet-400/15 dark:text-violet-300")}>
           <Icon className="size-5" strokeWidth={1.8} />
