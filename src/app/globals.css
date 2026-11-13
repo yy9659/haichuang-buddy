@@ -91,8 +91,12 @@
   --surface-bottom: #051324;
 
   --shadow-card: 0 1px 2px oklch(0 0 0 / 0.3),
-    0 12px 32px -20px oklch(0 0 0 / 0.6);
-  --shadow-float: 0 20px 50px -20px oklch(0 0 0 / 0.7);
+    0 12px 32px -20px oklch(0 0 0 / 0.6),
+    inset 0 1px 0 0 oklch(1 0 0 / 0.07);
+  --shadow-float: 0 20px 50px -20px oklch(0 0 0 / 0.7),
+    inset 0 1px 0 0 oklch(1 0 0 / 0.09);
+  /* 表面纹理：暗色不需要 */
+  --surface-texture: none;
 
   /* 主题切换胶囊（月亮面） */
   --toggle-track: oklch(1 0 0 / 0.08);
@@ -113,7 +117,8 @@
   /* 海岸白昼：中性冷白基底（去蓝雾，白卡才干净） */
   --background: #edf1f6;
   --foreground: #0f172a;
-  --card: oklch(1 0 0 / 0.86);
+  /* 72% 透明：让 backdrop-blur 咬到底下的波点纹理，玻璃感才显形 */
+  --card: oklch(1 0 0 / 0.72);
   --card-foreground: #0f172a;
   --popover: #ffffff;
   --popover-foreground: #0f172a;
@@ -191,8 +196,17 @@
   --surface-bottom: #e2eaf2;
 
   --shadow-card: 0 1px 2px oklch(0.55 0.06 238 / 0.08),
-    0 16px 36px -22px oklch(0.55 0.08 232 / 0.3);
-  --shadow-float: 0 24px 54px -26px oklch(0.48 0.09 232 / 0.36);
+    0 16px 36px -22px oklch(0.55 0.08 232 / 0.3),
+    /* iOS 玻璃的天际线：顶部 1px 内高光 */
+    inset 0 1px 0 0 oklch(1 0 0 / 0.75);
+  --shadow-float: 0 24px 54px -26px oklch(0.48 0.09 232 / 0.36),
+    inset 0 1px 0 0 oklch(1 0 0 / 0.8);
+  /* 表面波点纹理：给卡片的毛玻璃一点「可模糊的东西」 */
+  --surface-texture: radial-gradient(
+    circle at 1px 1px,
+    oklch(0.4 0.05 240 / 0.055) 1px,
+    transparent 1.4px
+  );
 
   /* 主题切换胶囊（太阳面） */
   --toggle-track: oklch(0.55 0.06 245 / 0.1);
@@ -376,6 +390,15 @@
         var(--surface-bottom)
       );
     background-attachment: fixed;
+  }
+  /* 波点纹理层：垫在内容下，透过卡片的 backdrop-blur 呈现磨砂颗粒感 */
+  .app-surface::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: var(--surface-texture);
+    background-size: 22px 22px;
+    pointer-events: none;
   }
 
   /**
