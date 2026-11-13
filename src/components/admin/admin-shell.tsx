@@ -17,7 +17,9 @@ export function AdminShell({ children, user }: { children: ReactNode; user: { na
   useEffect(() => { const update = () => setClock(new Intl.DateTimeFormat("zh-CN", { timeZone: "Asia/Shanghai", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }).format(new Date())); update(); const timer = setInterval(update, 1000); return () => clearInterval(timer); }, []);
   useEffect(() => { const timer = setInterval(() => { if (document.visibilityState === "visible" && pathname !== "/admin/knowledge") startTransition(() => router.refresh()); }, 30000); return () => clearInterval(timer); }, [pathname, router]);
   async function fullscreen() { try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); } catch { setNotice("当前浏览器未开启全屏，可按 F11 查看大屏。"); } }
-  return <div className="relative min-h-screen overflow-x-clip bg-[#040f20] text-slate-100">
+  // theme-locked：管理端是恒深色的指挥大屏，不随商户端亮暗主题切换；
+  // 同时让内部的 token 组件（Select/Input 等）始终按深色变量渲染。
+  return <div className="theme-locked relative min-h-screen overflow-x-clip bg-[#040f20] text-slate-100">
     <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(14,165,233,0.18),transparent_65%)]" />
     <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.035] [background-image:linear-gradient(#38bdf8_1px,transparent_1px),linear-gradient(90deg,#38bdf8_1px,transparent_1px)] [background-size:40px_40px]" />
     <header className="relative flex flex-wrap items-center justify-between gap-4 border-b border-cyan-400/15 bg-[#07182c]/85 px-5 py-5 xl:px-8">
