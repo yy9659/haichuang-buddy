@@ -109,10 +109,10 @@
 .light {
   color-scheme: light;
 
-  /* 海岸白昼：海雾蓝基底（略深半档，让白玻璃浮起来） */
-  --background: #e9f1f7;
+  /* 海岸白昼：海雾蓝基底（与白卡拉出明度差，页面不再「一片白」） */
+  --background: #e2ebf4;
   --foreground: #0f172a;
-  --card: oklch(1 0 0 / 0.82);
+  --card: oklch(1 0 0 / 0.86);
   --card-foreground: #0f172a;
   --popover: #ffffff;
   --popover-foreground: #0f172a;
@@ -139,8 +139,8 @@
   --warning: oklch(0.62 0.12 65);
   --info: oklch(0.55 0.12 235);
 
-  --border: oklch(0.48 0.05 240 / 0.12);
-  --input: oklch(0.45 0.05 240 / 0.2);
+  --border: oklch(0.48 0.05 240 / 0.14);
+  --input: oklch(0.45 0.05 240 / 0.22);
   --ring: #0ea5e9;
 
   /* 数据可视化色板（亮底：深海军蓝 + 清透蓝） */
@@ -164,11 +164,11 @@
   --sidebar-border: oklch(0.55 0.06 245 / 0.12);
 
   /* ── 海岸白昼 · 毛玻璃与光晕 ──────────────────── */
-  --glass-bg: oklch(1 0 0 / 0.8);
-  /* 描边带一线海蓝，玻璃才不会「灰扑扑」 */
-  --glass-border: oklch(0.76 0.05 225 / 0.6);
-  --glass-shadow: 0 20px 44px -24px oklch(0.55 0.08 232 / 0.32),
-    0 1px 3px oklch(0.6 0.06 232 / 0.14);
+  --glass-bg: oklch(1 0 0 / 0.82);
+  /* 描边带一线海蓝且更实，玻璃层次在亮底上也立得住 */
+  --glass-border: oklch(0.72 0.05 225 / 0.7);
+  --glass-shadow: 0 20px 44px -24px oklch(0.5 0.09 232 / 0.35),
+    0 1px 3px oklch(0.55 0.06 232 / 0.16);
   --glass-sheen: linear-gradient(
     180deg,
     oklch(1 0 0 / 0.7),
@@ -176,16 +176,16 @@
     transparent
   );
   /* 晨光三原色：右上青潮、左下暖沙、远处蓝雾 */
-  --glow-cyan: oklch(0.85 0.1 208 / 0.55);
-  --glow-blue: oklch(0.7 0.12 248 / 0.3);
-  --glow-warm: oklch(0.92 0.06 92 / 0.55);
+  --glow-cyan: oklch(0.85 0.1 208 / 0.6);
+  --glow-blue: oklch(0.7 0.12 248 / 0.32);
+  --glow-warm: oklch(0.92 0.06 92 / 0.6);
   /* 内容区：暖沙白 → 海雾蓝 */
   --surface-top: #fdf8f1;
-  --surface-bottom: #d9e9f4;
+  --surface-bottom: #cfe0f0;
 
-  --shadow-card: 0 1px 2px oklch(0.55 0.06 238 / 0.07),
-    0 14px 34px -22px oklch(0.55 0.08 232 / 0.26);
-  --shadow-float: 0 24px 54px -26px oklch(0.5 0.09 232 / 0.34);
+  --shadow-card: 0 1px 2px oklch(0.55 0.06 238 / 0.08),
+    0 16px 36px -22px oklch(0.55 0.08 232 / 0.3);
+  --shadow-float: 0 24px 54px -26px oklch(0.48 0.09 232 / 0.36);
 
   /* 主题切换胶囊（太阳面） */
   --toggle-track: oklch(0.55 0.06 245 / 0.1);

@@ -32,8 +32,10 @@ export function HostTeleprompter({ session, teleprompter, showStage = true }: Ho
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
       {/* 直播画面占位（本轮无真实推流） */}
-      {showStage ? <div className="relative aspect-16/9 w-full overflow-hidden rounded-xl border border-border bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 shadow-card">
-        <div className="absolute inset-0 opacity-20 [background-image:radial-gradient(80%_60%_at_20%_10%,white,transparent_60%)]" />
+      {showStage ? <div className="relative aspect-16/9 w-full overflow-hidden rounded-xl border border-white/10 bg-[radial-gradient(ellipse_at_center,#12395d_0%,#0a2544_55%,#051324_100%)] shadow-card">
+        <div className="absolute inset-0 opacity-25 [background-image:radial-gradient(80%_60%_at_20%_10%,rgba(125,211,252,0.6),transparent_60%)]" />
+        <div aria-hidden="true" className="pointer-events-none absolute -bottom-16 -right-16 size-52 rounded-full border border-cyan-300/10" />
+        <div aria-hidden="true" className="pointer-events-none absolute -left-16 -top-12 size-48 rounded-full border border-blue-300/10" />
         <div className="absolute top-3 left-3 flex items-center gap-2">
           {session.status === "live" ? (
             <Badge variant="danger" className="gap-1.5">

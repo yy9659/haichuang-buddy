@@ -244,12 +244,16 @@ export function LiveRehearsalPanel({
           {cameraOn ? <CameraOff /> : <Camera />}{cameraOn ? "关闭摄像头" : "打开摄像头"}
         </Button>
       </div>
-      <div className="relative aspect-video overflow-hidden rounded-xl bg-slate-950">
+      <div className="relative aspect-video overflow-hidden rounded-xl border border-white/10 bg-[radial-gradient(ellipse_at_center,#12395d_0%,#0a2544_55%,#051324_100%)] shadow-inner">
+        {/* 深海舞台装饰：两层水波圆环，让未开播的画面也是设计过的留白 */}
+        <div aria-hidden="true" className="pointer-events-none absolute -bottom-14 -right-14 size-48 rounded-full border border-cyan-300/10" />
+        <div aria-hidden="true" className="pointer-events-none absolute -left-16 -top-10 size-44 rounded-full border border-blue-300/10" />
         <video ref={videoRef} autoPlay playsInline muted className={cameraOn ? "size-full object-cover" : "hidden"} />
-        {!cameraOn ? <div className="absolute inset-0 flex items-center justify-center text-[12px] text-white/65">
+        {!cameraOn ? <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-[12px] text-white/65">
+          <Camera className="size-6 text-cyan-300/70" strokeWidth={1.6} />
           点击打开摄像头预览
         </div> : null}
-        <div className="absolute bottom-3 left-3 rounded-lg bg-black/45 px-2.5 py-1.5 text-[12px] text-white/90 backdrop-blur-sm">
+        <div className="absolute bottom-3 left-3 rounded-lg bg-slate-950/55 px-2.5 py-1.5 text-[12px] text-white/90 backdrop-blur-sm">
           {session.productName} · {active ? "彩排中" : "可预览镜头"}
         </div>
       </div>

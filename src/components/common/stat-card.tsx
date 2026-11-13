@@ -37,7 +37,7 @@ export function StatCard({
           </span>
           <span
             className={cn(
-              "flex size-8 items-center justify-center rounded-lg [&_svg]:size-4",
+              "flex size-8 items-center justify-center rounded-lg shadow-sm ring-1 ring-inset ring-current/15 [&_svg]:size-4",
               classes.icon,
             )}
           >
