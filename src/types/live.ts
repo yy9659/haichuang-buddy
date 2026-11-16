@@ -183,9 +183,6 @@ export interface LiveRealMetrics {
  * 与 `MAX_CUSTOMER_QUESTION_LENGTH` 放在 `types/conversation.ts` 是同一个理由。
  */
 export const MAX_LIVE_COMMENT_LENGTH = 500;
-export const MAX_REHEARSAL_QUESTIONS = 5;
-export const MAX_HOST_TRANSCRIPT_LENGTH = 5000;
-export const AI_REHEARSAL_AUTHOR = "AI 模拟观众";
 
 export interface LiveComment {
   id: string;

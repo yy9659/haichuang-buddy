@@ -43,9 +43,9 @@ export const NAV_ITEMS: NavItem[] = [
     icon: FileText,
   },
   {
-    title: "直播彩排",
+    title: "直播导演",
     href: "/live",
-    description: "模拟提问与话术练习",
+    description: "实战演练与证据复盘",
     icon: Video,
   },
   {

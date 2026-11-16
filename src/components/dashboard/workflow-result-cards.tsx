@@ -182,8 +182,14 @@ function resolveResultLink(
     }
     case "customer_service_agent":
       return { href: "/customer-service", label: "查看客服预演" };
-    case "live_agent":
-      return { href: "/live", label: "查看直播建议" };
+    case "live_agent": {
+      const step = steps.find((item) => item.outputRef) ?? steps[0];
+      const query = new URLSearchParams();
+      if (step?.productId) query.set("productId", step.productId);
+      if (step?.outputRef) query.set("suggestionId", step.outputRef);
+      const search = query.toString();
+      return { href: search ? `/live?${search}` : "/live", label: step?.outputRef ? "查看备播建议" : "进入直播演练" };
+    }
     case "analytics_agent":
       return { href: "/analytics", label: "查看经营报告" };
     default:

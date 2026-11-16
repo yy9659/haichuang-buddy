@@ -63,8 +63,8 @@ const GOAL_TEMPLATES: readonly {
 }[] = [
   { id: "promotion", label: "推广素材", goal: "为这件商品准备可发布的推广素材", channels: ["douyin"] },
   { id: "service", label: "客服答疑", goal: "预演这件商品的常见顾客问题，检查回答依据", channels: [] },
-  { id: "live", label: "直播彩排", goal: "围绕这件商品预演直播提问和主播回答", channels: [] },
-  { id: "full_chain", label: "六岗位全链路", goal: "完成六岗位全链路：商品理解、品牌、推广素材、客服答疑、直播彩排与工作复盘", channels: ["douyin"] },
+  { id: "live", label: "直播备播", goal: "围绕这件商品预演直播提问和主播回答", channels: [] },
+  { id: "full_chain", label: "六岗位全链路", goal: "完成六岗位全链路：商品理解、品牌、推广素材、客服答疑、直播备播与工作复盘", channels: ["douyin"] },
 ];
 
 export interface BusinessGoalDialogProps {

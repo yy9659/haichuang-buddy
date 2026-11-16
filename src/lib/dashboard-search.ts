@@ -34,7 +34,7 @@ const shortcuts: (SearchItem & { keywords: string })[] = [
   { id: "poster", kind: "action", title: "制作营销海报", description: "选择商品，生成海报文案与可下载海报", href: "/content?format=poster-copy", keywords: "推广素材 内容运营 海报 营销文案 设计 下载" },
   { id: "video", kind: "action", title: "生成短视频脚本", description: "为商品准备分镜和视频旁白", href: "/content?format=short-video", keywords: "推广素材 内容运营 抖音 视频 脚本 分镜 旁白" },
   { id: "sales", kind: "action", title: "记录销售与查看经营建议", description: "记一笔销售、导入流水、分析成本和收入", href: "/analytics#sales-import", keywords: "经营复盘 经营分析师 销售 记录 流水 Excel CSV 导入 收入 成本 利润 建议" },
-  { id: "live", kind: "action", title: "练习直播话术", description: "模拟观众提问，准备直播回答", href: "/live", keywords: "直播导演 直播彩排 练习 话术 提问" },
+  { id: "live", kind: "action", title: "AI 实战演练", description: "应对模拟观众，复盘与专项复练", href: "/live", keywords: "直播导演 直播彩排 练习 话术 提问" },
   { id: "service", kind: "action", title: "准备顾客回复", description: "根据商品与知识资料回答顾客问题", href: "/customer-service", keywords: "智能客服 答疑助手 客服 回答 回复 顾客 咨询" },
   { id: "brand", kind: "action", title: "完善品牌介绍", description: "准备店铺定位与老板故事", href: "/brand", keywords: "品牌经理 品牌中心 店铺 介绍 定位 老板 故事" },
 ];

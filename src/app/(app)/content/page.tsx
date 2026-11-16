@@ -10,7 +10,8 @@ import { ContentGenerationPanel } from "@/components/content/content-generation-
 import { CONTENT_GENERATION_STATUS_META } from "@/components/content/content-status";
 import { ContentWorkspace } from "@/components/content/content-workspace";
 import { Badge } from "@/components/ui/badge";
-import type { RawSearchParams } from "@/lib/search-params";
+import { readParam, type RawSearchParams } from "@/lib/search-params";
+import { isContentAngle } from "@/lib/content-options";
 import { unwrapOrThrow } from "@/lib/result";
 import { DATA_SOURCE_LABEL } from "@/lib/status-meta";
 import { parseContentSlotQuery } from "@/schemas/content";
@@ -42,8 +43,10 @@ interface ContentPageProps {
  * `ContentGenerationPanel`，本页不重复一遍。
  */
 export default async function ContentPage({ searchParams }: ContentPageProps) {
+  const params = await searchParams;
+  const angle = readParam(params, "angle");
   const view = unwrapOrThrow(
-    await getContentView(parseContentSlotQuery(await searchParams)),
+    await getContentView(parseContentSlotQuery(params)),
   );
   const { contents, sourceProducts, summary, dataSource, slot, slotState, basis } =
     view;
@@ -118,6 +121,8 @@ export default async function ContentPage({ searchParams }: ContentPageProps) {
         icon={<Sparkles className="size-4 text-primary" />}
       >
         <ContentGenerateForm
+          key={angle || "default"}
+          initialAngle={isContentAngle(angle) ? angle : undefined}
           sourceProducts={sourceProducts}
           slot={slot}
           slotState={slotState}

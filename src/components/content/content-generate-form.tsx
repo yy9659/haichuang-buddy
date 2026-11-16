@@ -55,6 +55,7 @@ function toSlotKey(
 }
 
 interface ContentGenerateFormProps {
+  initialAngle?: ContentAngle;
   sourceProducts: ContentSourceProduct[];
   /** 当前槽位；为 null 表示一件商品都没有 */
   slot: ContentSlot | null;
@@ -68,6 +69,7 @@ interface ContentGenerateFormProps {
 }
 
 export function ContentGenerateForm({
+  initialAngle = "selling-point",
   sourceProducts,
   slot,
   slotState,
@@ -77,7 +79,7 @@ export function ContentGenerateForm({
 }: ContentGenerateFormProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const [angle, setAngle] = useState<ContentAngle>("selling-point");
+  const [angle, setAngle] = useState<ContentAngle>(initialAngle);
 
   const productId = slot?.productId ?? "";
   const platform = slot?.platform ?? DEFAULT_CONTENT_PLATFORM;

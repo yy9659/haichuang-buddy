@@ -644,6 +644,8 @@ export interface LiveRepository {
   listComments(sessionId?: string): Promise<LiveComment[]>;
   /** 某场次的 AI 建议，按时间**倒序**（最新在前）；不传 sessionId 取最近一场 */
   listSuggestions(sessionId?: string): Promise<LiveSuggestion[]>;
+  /** 工作台产出深链：仅返回当前商家的只读建议。 */
+  findSuggestionById(id: string): Promise<{ productId: string; suggestion: LiveSuggestion } | null>;
 
   /* ---------------- S6：写操作 ---------------- */
 

@@ -13,6 +13,7 @@
 
 import { formatDateTime, formatDuration, formatTime } from "@/lib/datetime";
 import { createLocalId } from "@/lib/id";
+import { MOCK_BUSINESS } from "@/lib/mock";
 import { AppError } from "@/lib/result";
 import type { LiveComment, LiveSession, LiveSuggestion } from "@/types";
 
@@ -137,6 +138,15 @@ export function createMockLiveRepository(): LiveRepository {
     async listSuggestions(sessionId) {
       const target = sessionId ?? requireLatestSessionId();
       return listStoredLiveSuggestions(target).map(toDomainSuggestion);
+    },
+
+    async findSuggestionById(id) {
+      for (const session of listStoredLiveSessions()) {
+        if (session.businessId !== MOCK_BUSINESS.id) continue;
+        const item = listStoredLiveSuggestions(session.id).find((row) => row.id === id);
+        if (item) return { productId: session.productId, suggestion: toDomainSuggestion(item) };
+      }
+      return null;
     },
 
     async createSession(input) {

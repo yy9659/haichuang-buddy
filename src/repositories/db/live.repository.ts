@@ -18,6 +18,7 @@ import { and, desc, eq, inArray, sql } from "drizzle-orm";
 
 import { ensureLocalDatabaseReady, getDb, isLocalDataSource } from "@/db";
 import { liveComments, liveSessions, liveSuggestions } from "@/db/schema";
+import { isUuid } from "@/lib/id";
 import { AppError } from "@/lib/result";
 import type { LiveComment, LiveSession, LiveSuggestion } from "@/types";
 
@@ -357,6 +358,19 @@ export function createDbLiveRepository(): LiveRepository {
       } catch (cause) {
         throw mapDatabaseError(cause, "追加直播建议");
       }
+    },
+
+    async findSuggestionById(id) {
+      if (!isUuid(id)) return null;
+      const businessId = await resolvePrimaryBusinessId();
+      const [row] = await getDb()
+        .select({ productId: liveSessions.productId, suggestion: liveSuggestions })
+        .from(liveSuggestions)
+        .innerJoin(liveComments, eq(liveComments.id, liveSuggestions.commentId))
+        .innerJoin(liveSessions, eq(liveSessions.id, liveComments.sessionId))
+        .where(and(eq(liveSessions.businessId, businessId), eq(liveSuggestions.id, id)))
+        .limit(1);
+      return row ? { productId: row.productId, suggestion: mapLiveSuggestionRow(row.suggestion) } : null;
     },
 
     async findSuggestionByComment(commentId: string): Promise<LiveSuggestion | null> {

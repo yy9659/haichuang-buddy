@@ -32,6 +32,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import type { AnalyticsReport, AnalyticsSnapshot, KnowledgeSource, LiveRehearsalReport } from "@/types";
+import type { ArenaState } from "@/lib/live-arena/types";
 
 /* ------------------------------------------------------------------ */
 /* 枚举                                                                */
@@ -1201,6 +1202,18 @@ export const businessReports = pgTable(
 );
 
 /** 商户录入的销售明细。演示数据单独标记，避免和真实导入记录混算。 */
+export const liveArenas = pgTable("live_arenas", {
+  id: uuid("id").primaryKey(),
+  businessId: uuid("business_id").notNull().references(() => businesses.id, { onDelete: "cascade" }),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  version: integer("version").notNull().default(0),
+  active: boolean("active").notNull().default(true),
+  state: jsonb("state").$type<ArenaState>().notNull(),
+}, (table) => [
+  uniqueIndex("live_arenas_one_active_idx").on(table.businessId).where(sql`${table.active}`),
+  index("live_arenas_history_idx").on(table.businessId, table.updatedAt.desc()),
+]);
+
 export const salesRecords = pgTable(
   "sales_records",
   {

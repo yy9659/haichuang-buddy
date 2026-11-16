@@ -35,6 +35,8 @@ jobs:
         run: pnpm typecheck
       - name: Security integration tests
         run: pnpm test:security
+      - name: Live arena tests
+        run: pnpm exec vitest run tests/live-arena.test.ts
       - name: Production dependency audit
         run: pnpm audit --prod
       - name: Production build

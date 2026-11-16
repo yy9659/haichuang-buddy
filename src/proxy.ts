@@ -39,7 +39,7 @@ export function proxy(request: NextRequest): NextResponse {
   }
 
   // 搜索接口自行校验完整会话，并返回 JSON 401，避免弹出登录页 HTML。
-  if (pathname === "/api/search") return NextResponse.next();
+  if (pathname === "/api/search" || pathname === "/api/live-arena/answer") return NextResponse.next();
 
   /**
    * 两个可能的 cookie 名都看。

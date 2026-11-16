@@ -135,7 +135,7 @@ export const EXECUTOR_AGENT_PROFILES: readonly AgentProfile[] = [
     id: "live_agent",
     name: "AI直播导演",
     role: "直播策略 · 主播话术",
-    description: "实时分析直播评论，检测热点问题并给主播生成即时建议与异议话术。",
+    description: "准备有依据的直播话术，模拟观众追问并复盘主播应答。",
     icon: Megaphone,
     accent: "rose",
     skills: ["评论分类", "热点检测", "异议处理"],

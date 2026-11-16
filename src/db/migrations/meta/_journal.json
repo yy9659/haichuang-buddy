@@ -99,6 +99,13 @@
       "when": 1794441600000,
       "tag": "0013_public_security",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1794614400000,
+      "tag": "0014_live_arena",
+      "breakpoints": true
     }
   ]
 }

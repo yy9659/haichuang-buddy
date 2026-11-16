@@ -20,6 +20,7 @@
     "test": "vitest run",
     "test:security": "vitest run tests/security.test.ts",
     "test:browser": "tsx scripts/security-browser-smoke.ts",
+    "test:arena:browser": "tsx scripts/security-browser-smoke.ts --arena",
     "security:account": "tsx scripts/account-admin.ts",
     "security:prune": "tsx scripts/account-admin.ts prune",
     "data:backup": "tsx scripts/local-data.ts backup",
